@@ -18,7 +18,7 @@ client = OpenAI()
 
 from utils import *
 
-st.set_page_config(page_title="AI MedReview: FFT")
+st.set_page_config(page_title="AI MedReview")
 
 # Assuming this HTML is for styling and doesn't need changes
 html = """
@@ -32,11 +32,11 @@ html = """
     font-weight: bold;
 }
 </style>
-<div class="gradient-text">AI MedReview: FFT</div>
+<div class="gradient-text">AI MedReview</div>
 """
 
 # Define a list of PCN names
-pcn_names = ["Brompton-Health-PCN", "Oakwood-PCN"]
+pcn_names = [ "Demo-PCN", "Brompton-Health-PCN"]
 
 # Initialize session state for PCN if not present
 if "pcn" not in st.session_state:
