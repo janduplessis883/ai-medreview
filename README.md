@@ -1,6 +1,6 @@
 ![Image](https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/fftestabout.png?raw=true)
 
-### Revolutionizing Patient Feedback Analysis in Healthcare
+### Patient Feedback Analysis in Healthcare
 Welcome to **AI MedReview**, your powerful new dashboard for elevating healthcare providers' understanding and utilization of patient feedback. Our cutting-edge solution focuses on the essential Friends and Family Test (FFT), empowering you to extract deeper insights from this invaluable data source.
 At the core of AI MedReview lies a transformative approach that goes beyond mere quantitative metrics. By leveraging advanced natural language processing and machine learning techniques, we unlock the nuanced sentiments behind patient responses. Our dashboard assigns detailed scores to each piece of feedback, painting a more comprehensive picture of patient satisfaction levels.
 
@@ -17,4 +17,4 @@ Explore the AI MedReview dashboard today and experience the transformative power
 Visit [AI MedReview on GitHub](https://github.com/janduplessis883/friends-and-family-test-analysis), where collaboration and contributions are warmly welcomed.
 
 
-# [View the Streamlit App](https://friends-and-family-test-analysis-pqev4j3c9katnrlv8kktnb.streamlit.app/)
+# ![Streamlit](https://img.icons8.com/ios/100/streamlit.png) [View the Streamlit App](https://friends-and-family-test-analysis-pqev4j3c9katnrlv8kktnb.streamlit.app/)
