@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load the .env file
 load_dotenv()
 
-secret_path = os.getenv("SECRET_PATH")
+secret_path = "/Users/janduplessis/code/janduplessis883/ai-medreview/secret/google_sheets_secret.json"
 
 
 class SheetHelper:

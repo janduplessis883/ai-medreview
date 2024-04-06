@@ -20,12 +20,12 @@ from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_
 
 from ai_medreview.params import *
 from ai_medreview.utils import *
-from ai_medreview.auto_git.git_merge import *
+from ai_medreview.automation.git_merge import *
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 init(autoreset=True)
 warnings.filterwarnings("ignore")
-secret_path = os.getenv("SECRET_PATH")
+
 from sheethelper import *
 
 from loguru import logger
@@ -39,12 +39,12 @@ classification_model = "facebook/bart-large-mnli"
 @time_it
 def load_google_sheet():
     sh = SheetHelper(
-        sheet_url="https://docs.google.com/spreadsheets/d/1K2d32XmZQMdGLslNzv2ZZoUquARl6yiKRT5SjUkTtIY/edit#gid=1323317089",
+        sheet_url="https://docs.google.com/spreadsheets/d/1c-811fFJYT9ulCneTZ7Z8b4CK4feEDRheR0Zea5--d0/edit#gid=0",
         sheet_id=0,
     )
     data = sh.gsheet_to_df()
-    data.columns = ["time", "rating", "free_text", "do_better", "surgery"]
-    data["time"] = pd.to_datetime(data["time"], format="%d/%m/%Y %H:%M:%S")
+    data.columns = ["submission_id", "respondent-id", "time", "rating", "free_text", "do_better", "pcn", "surgery"]
+    data["time"] = pd.to_datetime(data["time"], format="%Y/%m/%d %H:%M:%S")
     data.sort_values(by="time", inplace=True)
     return data
 

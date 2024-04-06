@@ -6,6 +6,7 @@ DATA_PATH = os.path.join(
     "code",
     "janduplessis883",
     "ai-medreview",
+    "ai_medreview",
     "data",
 )
 
@@ -15,3 +16,5 @@ LOCAL_GIT_REPO = os.path.join(
     "janduplessis883",
     "ai-medreview",
 )
+
+
