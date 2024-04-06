@@ -17,4 +17,4 @@ Explore the AI MedReview dashboard today and experience the transformative power
 Visit [AI MedReview on GitHub](https://github.com/janduplessis883/friends-and-family-test-analysis), where collaboration and contributions are warmly welcomed.
 
 
-# ![Streamlit](https://img.icons8.com/ios/100/streamlit.png) [View the Streamlit App](https://friends-and-family-test-analysis-pqev4j3c9katnrlv8kktnb.streamlit.app/)
+# ![Streamlit](https://img.icons8.com/ios/50/streamlit.png) [View the Streamlit App](https://friends-and-family-test-analysis-pqev4j3c9katnrlv8kktnb.streamlit.app/)
