@@ -35,12 +35,12 @@ repeat:
 
 git_merge:
 	$(MAKE) clean
-	@python ai_medreview/auto_git/git_merge.py
+	@python ai_medreview/automation/git_merge.py
 
 git_push:
 	$(MAKE) clean
 	$(MAKE) lint
-	@python ai_medreview/auto_git/git_push.py
+	@python ai_medreview/automation/git_push.py
 
 
 lint:

@@ -40,17 +40,20 @@ html = """
 pcn_names = ["Brompton Health PCN", "Oakwood PCN"]
 
 # Check if the 'pcn' session state variable exists, if not, initialize it
-if 'pcn' not in st.session_state:
+if "pcn" not in st.session_state:
     st.session_state.pcn = None
+
 
 # Create a function to update the 'pcn' session state variable
 # This function now doesn't take selected_pcn as an argument directly
 def update_pcn():
-    selected_pcn = st.session_state.pcn_selector  # Access the selected value directly from session state
+    selected_pcn = (
+        st.session_state.pcn_selector
+    )  # Access the selected value directly from session state
     st.session_state.pcn = selected_pcn
     st.success(f"PCN set to: {st.session_state.pcn}")
-    
-    
+
+
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # --Defining dataframe loading and manipulation to cache all for performance improvment -----
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -82,12 +85,15 @@ monthly_avg_df.columns = ["Month", "Average Rating"]
 st.sidebar.markdown(html, unsafe_allow_html=True)
 st.sidebar.image("images/transparent2.png")
 
-selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selector", on_change=update_pcn)  # Removed the problematic args
+selected_pcn = st.sidebar.selectbox(
+    "Select a PCN:", pcn_names, key="pcn_selector", on_change=update_pcn
+)  # Removed the problematic args
+
 
 @st.cache_data(ttl=3600)
 def get_surgery_data(data, selected_surgery):
 
-    pcn_data = data[data['pcn'] == selected_pcn]
+    pcn_data = data[data["pcn"] == selected_pcn]
     surgery_list = pcn_data["surgery"].unique()
     # Filtering the dataset based on the selected surgery type
     surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
@@ -184,7 +190,7 @@ if page not in ["PCN Dashboard", "About"]:
 
 # == DASHBOARD ======================================================================================= Surgery Dashboard
 if page == "Surgery Dashboard":
-    
+
     st.title(f"{selected_surgery}")
 
     surgery_tab_selector = ui.tabs(
@@ -445,14 +451,15 @@ if page == "Surgery Dashboard":
 
 # == PCN Dashboard ======================================================================================= PCN Dashboard
 elif page == "PCN Dashboard":
-    
 
     # Load custom content based on the selected PCN
     if st.session_state.pcn:
-        
+
         st.title(f"{st.session_state.pcn}")
-        st.markdown("""Aggregating and analyzing the **collective patient feedback data** received by member practices.  
-    """)
+        st.markdown(
+            """Aggregating and analyzing the **collective patient feedback data** received by member practices.  
+    """
+        )
         st.write("")
         tab_selector = ui.tabs(
             options=[
@@ -475,7 +482,11 @@ elif page == "PCN Dashboard":
             daily_count_df.columns = ["Date", "Daily Count"]
             fig, ax = plt.subplots(figsize=(12, 5))
             sns.lineplot(
-                data=daily_count_df, x="Date", y="Daily Count", color="#558387", linewidth=2
+                data=daily_count_df,
+                x="Date",
+                y="Daily Count",
+                color="#558387",
+                linewidth=2,
             )
 
             ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
@@ -619,7 +630,9 @@ elif page == "PCN Dashboard":
                 autopct="%1.1f%%",
                 startangle=140,
             )
-            ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+            ax1.axis(
+                "equal"
+            )  # Equal aspect ratio ensures that pie is drawn as a circle.
             centre_circle = plt.Circle((0, 0), 0.50, fc="white")
             ax1.add_artist(centre_circle)
             ax1.set_title("Cum Sentiment - Feedback")
@@ -675,7 +688,11 @@ elif page == "PCN Dashboard":
             monthly_sentiment_means_adjusted.fillna(0, inplace=True)
 
             # Define colors for each sentiment
-            colors = {"negative": "#ae4f4d", "neutral": "#edeadc", "positive": "#7b94a6"}
+            colors = {
+                "negative": "#ae4f4d",
+                "neutral": "#edeadc",
+                "positive": "#7b94a6",
+            }
 
             # Creating the plot for monthly sentiment scores
             fig, ax = plt.subplots(figsize=(12, 5))
@@ -745,7 +762,11 @@ elif page == "PCN Dashboard":
             monthly_sentiment_means_adjusted.fillna(0, inplace=True)
 
             # Define colors for each sentiment
-            colors = {"negative": "#ae4f4d", "neutral": "#edeadc", "positive": "#7b94a6"}
+            colors = {
+                "negative": "#ae4f4d",
+                "neutral": "#edeadc",
+                "positive": "#7b94a6",
+            }
 
             # Creating the plot for monthly sentiment scores
             fig, ax = plt.subplots(figsize=(12, 5))
@@ -824,11 +845,16 @@ elif page == "PCN Dashboard":
             data_sorted = data.sort_values("time")
 
             # Group by 'surgery' and 'time', then calculate the cumulative count
-            data_sorted["cumulative_count"] = data_sorted.groupby("surgery").cumcount() + 1
+            data_sorted["cumulative_count"] = (
+                data_sorted.groupby("surgery").cumcount() + 1
+            )
 
             # Pivot the table to have surgeries as columns and their cumulative counts as values
             data_pivot = data_sorted.pivot_table(
-                index="time", columns="surgery", values="cumulative_count", aggfunc="first"
+                index="time",
+                columns="surgery",
+                values="cumulative_count",
+                aggfunc="first",
             )
 
             # Forward fill the NaN values to maintain the cumulative nature
@@ -871,7 +897,9 @@ elif page == "PCN Dashboard":
                     mirror=True,
                 ),
                 plot_bgcolor="white",
-                legend=dict(title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"),
+                legend=dict(
+                    title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"
+                ),
                 width=750,  # Set the width to 750 pixels
                 height=750,  # Set the height to 850 pixels
             )
@@ -1002,7 +1030,9 @@ elif page == "PCN Dashboard":
                 )
 
                 # Converting the period index back to a timestamp for compatibility with Plotly
-                monthly_feedback_counts.index = monthly_feedback_counts.index.to_timestamp()
+                monthly_feedback_counts.index = (
+                    monthly_feedback_counts.index.to_timestamp()
+                )
 
                 # Plotting the data using Plotly Express
                 fig1 = px.line(
@@ -1021,13 +1051,23 @@ elif page == "PCN Dashboard":
                 fig1.update_layout(
                     width=900,
                     legend=dict(
-                        title="Feedback Labels", x=1.05, y=1, xanchor="left", yanchor="top"
+                        title="Feedback Labels",
+                        x=1.05,
+                        y=1,
+                        xanchor="left",
+                        yanchor="top",
                     ),
                     xaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     yaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     plot_bgcolor="white",
                 )
@@ -1073,10 +1113,16 @@ elif page == "PCN Dashboard":
                         yanchor="top",
                     ),
                     xaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     yaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     plot_bgcolor="white",
                 )
@@ -1092,7 +1138,9 @@ elif page == "PCN Dashboard":
                 hue_order = ["negative", "neutral", "positive"]
 
                 # Create a cross-tabulation of feedback labels and sentiment categories
-                crosstab = pd.crosstab(data["feedback_labels"], data["sentiment_free_text"])
+                crosstab = pd.crosstab(
+                    data["feedback_labels"], data["sentiment_free_text"]
+                )
                 crosstab = crosstab.reindex(columns=hue_order)
 
                 # Sort the feedback labels by total counts in descending order
@@ -1169,7 +1217,9 @@ elif page == "PCN Dashboard":
                             gridwidth=0.5,
                             showgrid=True,
                         ),
-                        yaxis=dict(title="Improvement Suggestion Labels", showgrid=False),
+                        yaxis=dict(
+                            title="Improvement Suggestion Labels", showgrid=False
+                        ),
                         barmode="stack",
                         plot_bgcolor="white",
                         showlegend=True,
@@ -1181,10 +1231,7 @@ elif page == "PCN Dashboard":
 
                 # Streamlit function to display Plotly figures
                 st.plotly_chart(fig)
-                
-                
 
-        
     else:
         st.subheader("Please select a PCN to see custom content.")
 
@@ -2315,8 +2362,8 @@ elif page == "Feedback Timeline":
         for _, row in filtered_data.iterrows():
             free_text = row["free_text"]
             do_better = row["do_better"]
-            feedback_labels = row['feedback_labels']
-            imp_labels = row['improvement_labels']
+            feedback_labels = row["feedback_labels"]
+            imp_labels = row["improvement_labels"]
             time = row["time"]
             rating = row["rating"]
 
