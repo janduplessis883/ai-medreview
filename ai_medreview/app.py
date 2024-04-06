@@ -36,7 +36,7 @@ html = """
 """
 
 # Define a list of PCN names
-pcn_names = ["Brompton Health PCN", "Oakwood PCN"]
+pcn_names = ["Brompton-Health-PCN", "Oakwood-PCN"]
 
 # Initialize session state for PCN if not present
 if "pcn" not in st.session_state:
