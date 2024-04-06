@@ -18,7 +18,7 @@ client = OpenAI()
 
 from utils import *
 
-st.set_page_config(page_title="AI MedReview")
+st.set_page_config(page_title="AI MedReview v2")
 
 # Assuming this HTML is for styling and doesn't need changes
 html = """
@@ -32,10 +32,10 @@ html = """
     font-weight: bold;
 }
 </style>
-<div class="gradient-text">AI MedReview</div>
+<div class="gradient-text">AI MedReview v2</div>
 """
 
-# Define a list of PCN names
+# ----------------------------------------------------------------------------------------------- Define a list of PCN'S
 pcn_names = [ "Demo-PCN", "Brompton-Health-PCN"]
 
 # Initialize session state for PCN if not present
@@ -48,15 +48,24 @@ def update_pcn():
     st.session_state.pcn = st.session_state.pcn_selector
 
 
-# Load data
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=3600)  # -------------------------------------------------------------------------------  Load 'data'
 def load_data():
     df = pd.read_csv("ai_medreview/data/data.csv")
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
 
-
 data = load_data()
+
+@st.cache_data(ttl=3600) # ----------------------------------------------------------------------------  Load 'pcn_data'
+def load_pcn_data(pcn_name):
+    df = pd.read_csv("ai_medreview/data/data.csv")
+    df["time"] = pd.to_datetime(df["time"], dayfirst=True)
+    # Filter based on the selected PCN
+    pcn_specific_df = df[df["pcn"] == pcn_name]
+    return pcn_specific_df
+
+# Assume 'selected_pcn' is determined from user selection as shown in your provided code
+pcn_data = load_pcn_data(st.session_state.pcn)
 
 
 # Sidebar content with PCN selection
@@ -77,7 +86,7 @@ def get_surgeries_by_pcn(data, selected_pcn):
     return sorted(surgeries)  # Return a sorted list
 
 
-# Only get and display the surgery list if not on the PCN Dashboard or About pages
+# Only get and display the surgery list if not on the PCN Dashboard or About pages ---------------------- define SIDEBAR
 page = st.sidebar.radio(
     "Select a Page",
     [
@@ -86,10 +95,10 @@ page = st.sidebar.radio(
         "Feedback Classification",
         "Improvement Suggestions",
         "Feedback Timeline",
-        "GPT4 Summary",
-        "Word Cloud",
         "GPT-4 Summary",
+        "Word Cloud",
         "Dataframe",
+        "Reports",
         "About",
     ],
 )
@@ -103,19 +112,26 @@ if page not in ["PCN Dashboard", "About"]:
             (data["pcn"] == selected_pcn) & (data["surgery"] == selected_surgery)
         ]
 
-        if not surgery_data.empty:
-            start_date = surgery_data["time"].dt.date.min()
-            end_date = surgery_data["time"].dt.date.max()
+    if not surgery_data.empty:   # ----------------------------------------------------------------------  Define Slider
+        start_date = surgery_data["time"].dt.date.min()
+        end_date = surgery_data["time"].dt.date.max()
 
+        # Check if the start date is the same as the end date
+        if start_date == end_date:
+            start_date -= timedelta(days=1)  # Subtract one day from start_date
+            
+        try:
             # Ensure the dates are datetime.date objects; no need for to_pydatetime conversion
             selected_date_range = st.slider(
-                f"**{selected_surgery}** Date Range:",
+                f"{st.session_state.pcn} - **{selected_surgery}**",
                 min_value=start_date,
                 max_value=end_date,
                 value=(start_date, end_date),
                 format="MM/DD/YYYY",
             )
-
+        except ValueError as e:  # Replace ValueError with RangeError or the appropriate error if different
+            st.error(f"Cannot display slider: {str(e)}")
+                
             @st.cache_data(ttl=3600)
             def filter_data_by_date_range(data, date_range):
                 return data[
@@ -132,7 +148,7 @@ else:
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "PCN Dashboard":
-    st.title(f"{selected_pcn}")
+    st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} ")
     st.markdown(
         """Aggregating and analyzing the **collective patient feedback data** received by member practices.  
 """
@@ -151,10 +167,10 @@ if page == "PCN Dashboard":
         key="tab3",
     )
 
-    if tab_selector == "PCN Responses":
+    if tab_selector == "PCN Responses":  # ---------------------------------------------------------- PCN Responses ----
         st.subheader("PCN Response Rate")
         st.markdown("**Dialy FFT Responses**")
-        pcn_data = data[(data['pcn'] == selected_pcn)]
+
         daily_count = pcn_data.resample("D", on="time").size()
         daily_count_df = daily_count.reset_index()
         daily_count_df.columns = ["Date", "Daily Count"]
@@ -189,7 +205,7 @@ if page == "PCN Dashboard":
         st.markdown("**Monthly FFT Responses**")
         with st.container(border=False):
             # Monthly Totals Plot
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+
             monthly_count_filtered = pcn_data.resample("M", on="time").size()
             monthly_count_filtered_df = monthly_count_filtered.reset_index()
             monthly_count_filtered_df.columns = ["Month", "Monthly Count"]
@@ -246,7 +262,7 @@ if page == "PCN Dashboard":
 
             # alldata_date_range = filter_data_by_date_range(data, selected_date_range)
             
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+
             pivot_data = pcn_data.pivot_table(
                 index="surgery", columns="rating", aggfunc="size", fill_value=0
             )
@@ -288,7 +304,7 @@ if page == "PCN Dashboard":
             # Display the ordered percentage heatmap
             st.pyplot(plt)
 
-    elif tab_selector == "Sentiment A.":
+    elif tab_selector == "Sentiment A.":   # --------------------------------------------------- Sentiment Analysis ----
         st.subheader("Sentiment Analysis")
         # Assuming 'data' is already defined and processed
         # Define labels and colors outside since they are the same for both plots
@@ -298,7 +314,7 @@ if page == "PCN Dashboard":
 
         # Create a subplot with 1 row and 2 columns
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-        pcn_data = data[(data['pcn'] == selected_pcn)]
+
         # First pie chart - Cum Sentiment - Feedback
         sentiment_totals_feedback = pcn_data.groupby("sentiment_free_text")[
             "sentiment_score_free_text"
@@ -317,7 +333,7 @@ if page == "PCN Dashboard":
         centre_circle = plt.Circle((0, 0), 0.50, fc="white")
         ax1.add_artist(centre_circle)
         ax1.set_title("Cum Sentiment - Feedback")
-        pcn_data = data[(data['pcn'] == selected_pcn)]
+ 
         # Second pie chart - Cum Sentiment - Improvement Suggestions
         sentiment_totals_improvement = pcn_data.groupby("sentiment_do_better")[
             "sentiment_score_do_better"
@@ -340,15 +356,15 @@ if page == "PCN Dashboard":
 
         st.markdown("---")
         st.markdown("Average Monthly **Sentiment Analysis Score** - Feedback")
-        data["time"] = pd.to_datetime(data["time"])
-        data.set_index("time", inplace=True)
+        pcn_data["time"] = pd.to_datetime(pcn_data["time"])
+        pcn_data.set_index("time", inplace=True)
 
         # Assuming filtered_data is your DataFrame and 'sentiment_score' is the column with the scores
         # Also assuming that 'time' column has been converted to datetime and set as the index
 
         # Calculate the standard deviation for each month and sentiment
         monthly_sentiment_std = (
-            data.groupby("sentiment_free_text")
+            pcn_data.groupby("sentiment_free_text")
             .resample("M")["sentiment_score_free_text"]
             .std()
             .unstack(level=0)
@@ -422,7 +438,7 @@ if page == "PCN Dashboard":
             "Average Monthly **Sentiment Analysis Score** - Improvement Suggestions"
         )
         monthly_sentiment_std = (
-            data.groupby("sentiment_do_better")
+            pcn_data.groupby("sentiment_do_better")
             .resample("M")["sentiment_score_do_better"]
             .std()
             .unstack(level=0)
@@ -492,10 +508,10 @@ if page == "PCN Dashboard":
         # Show the plot (or use st.pyplot(plt) if you are using Streamlit)
         st.pyplot(plt)
 
-    elif tab_selector == "Surgery Responses":
+    elif tab_selector == "Surgery Responses":  # ----------------------------------------------- Surgery Responses------
         st.subheader("Surgery Responses")
         with st.container(border=False):
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+      
             fig, ax = plt.subplots(figsize=(12, 6))
             sns.countplot(y="surgery", data=pcn_data, color="#59646b")
             for p in ax.patches:
@@ -523,7 +539,7 @@ if page == "PCN Dashboard":
             st.pyplot(plt)
 
         st.markdown("---")
-        pcn_data = data[(data['pcn'] == selected_pcn)]
+     
         data_sorted = pcn_data.sort_values("time")
 
         # Group by 'surgery' and 'time', then calculate the cumulative count
@@ -563,7 +579,7 @@ if page == "PCN Dashboard":
                 gridcolor="#888888",
                 gridwidth=0.5,
                 showgrid=True,
-                showline=False,  # Show the bottom spine
+                showline=True,  # Make the bottom spine visible
                 linewidth=1,
                 linecolor="black",
                 mirror=True,
@@ -573,7 +589,7 @@ if page == "PCN Dashboard":
                 gridcolor="#888888",
                 gridwidth=0.5,
                 showgrid=True,
-                showline=False,  # Show the left spine
+                showline=True,  # Make the left spine visible
                 linewidth=1,
                 linecolor="black",
                 mirror=True,
@@ -592,85 +608,97 @@ if page == "PCN Dashboard":
 
     elif (
         tab_selector == "PCN Rating"
-    ):  # ----------------------------------------------------- PCN Rating
+    ):  # ------------------------------------------------------------------------------------- PCN Rating -------------
         st.subheader("PCN Rating")
         st.markdown("**Average Monthly Rating**")
-        with st.container(border=False):
-            # Convert 'time' to datetime and extract the date
-            data["date"] = pd.to_datetime(data["time"]).dt.date
-            pcn_data = data[(data['pcn'] == selected_pcn)]
-            # Group by the new 'date' column and calculate the mean 'rating_score' for each day
-            daily_mean_rating = (
-                pcn_data.groupby("date")["rating_score"].mean().reset_index()
-            )
-            # Ensure the 'date' column is in datetime format for resampling
-            daily_mean_rating["date"] = pd.to_datetime(daily_mean_rating["date"])
+        
+        try:
+            with st.container(border=False):
+                # Convert 'time' to datetime and extract the date
+                pcn_data["date"] = pd.to_datetime(pcn_data["time"]).dt.date
 
-            # Set the 'date' column as the index
-            daily_mean_rating.set_index("date", inplace=True)
+                # Group by the new 'date' column and calculate the mean 'rating_score' for each day
+                daily_mean_rating = (
+                    pcn_data.groupby("date")["rating_score"].mean().reset_index()
+                )
+                # Ensure the 'date' column is in datetime format for resampling
+                daily_mean_rating["date"] = pd.to_datetime(daily_mean_rating["date"])
 
-            # Resample the data by week and calculate the mean 'rating_score' for each week
-            weekly_mean_rating = (
-                daily_mean_rating["rating_score"].resample("M").mean().reset_index()
-            )
+                # Set the 'date' column as the index
+                daily_mean_rating.set_index("date", inplace=True)
 
-            # Create a seaborn line plot for weekly mean rating scores
-            fig, ax = plt.subplots(figsize=(12, 5))
-            weekly_lineplot = sns.lineplot(
-                x="date",
-                y="rating_score",
-                data=weekly_mean_rating,
-                color="#d2b570",
-                linewidth=4,
-            )
-
-            for index, row in weekly_mean_rating.iterrows():
-                ax.annotate(
-                    f'{row["rating_score"]:.2f}',
-                    (row["date"], row["rating_score"]),
-                    textcoords="offset points",
-                    xytext=(0, 10),
-                    ha="center",
-                    fontsize=12,  # Adjust this value as needed
+                # Resample the data by week and calculate the mean 'rating_score' for each week
+                weekly_mean_rating = (
+                    daily_mean_rating["rating_score"].resample("M").mean().reset_index()
                 )
 
-            plt.xlabel("Month")
-            plt.ylabel("Mean Rating Score")
-            plt.xticks(rotation=45)
-            ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-            ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-            ax.spines["top"].set_visible(False)
-            ax.spines["right"].set_visible(False)
-            ax.spines["left"].set_visible(False)
-            # Set title to the right
-            ax_title = ax.set_title(
-                "Mean Monthly Rating Score - Brompton Health PCN", loc="right"
-            )
-            plt.tight_layout()
-            st.pyplot(plt)
+                # Create a seaborn line plot for weekly mean rating scores
+                fig, ax = plt.subplots(figsize=(12, 5))
+                weekly_lineplot = sns.lineplot(
+                    x="date",
+                    y="rating_score",
+                    data=weekly_mean_rating,
+                    color="#d2b570",
+                    linewidth=4,
+                )
 
-            st.markdown("---")
-            st.markdown("**Rating Count**")
-            fig, ax = plt.subplots(figsize=(12, 5))
-            sns.countplot(data=pcn_data, x="rating_score", color="#616884")
+                for index, row in weekly_mean_rating.iterrows():
+                    ax.annotate(
+                        f'{row["rating_score"]:.2f}',
+                        (row["date"], row["rating_score"]),
+                        textcoords="offset points",
+                        xytext=(0, 10),
+                        ha="center",
+                        fontsize=12,  # Adjust this value as needed
+                    )
 
-            # Get the current Matplotlib figure
-            ax.spines["top"].set_visible(False)
-            ax.spines["right"].set_visible(False)
-            ax.spines["left"].set_visible(False)
-            ax.xaxis.grid(False)
-            ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-            plt.title("Rating Score Count")
-            plt.xlabel("Rating")
-            plt.ylabel("Count")
-            plt.tight_layout()
+                plt.xlabel("Month")
+                plt.ylabel("Mean Rating Score")
+                plt.xticks(rotation=45)
+                ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+                ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+                ax.spines["top"].set_visible(False)
+                ax.spines["right"].set_visible(False)
+                ax.spines["left"].set_visible(False)
+                # Set title to the right
+                ax_title = ax.set_title(
+                    "Mean Monthly Rating Score - Brompton Health PCN", loc="right"
+                )
+                plt.tight_layout()
+                st.pyplot(plt)
+        except KeyError as e:
+            st.warning(f"Error plotting: {e}")
+            
+        st.markdown("---")
+        st.markdown("**Rating Count**")
+        fig, ax = plt.subplots(figsize=(12, 5))
+        sns.countplot(data=pcn_data, x="rating_score", color="#616884")
 
-            # Display the figure in Streamlit
-            st.pyplot(fig)
+        total = len(pcn_data)  # Total number of observations
+
+        # Annotate each bar
+        for p in ax.patches:
+            percentage = '{:.1f}%'.format(100 * p.get_height() / total)  # Calculate percentage
+            x = p.get_x() + p.get_width() / 2
+            y = p.get_height()
+            ax.annotate(percentage, (x, y), ha='center', va='bottom')
+
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.xaxis.grid(False)
+        ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+        plt.title("Rating Score Count")
+        plt.xlabel("Rating")
+        plt.ylabel("Count")
+        plt.tight_layout()
+
+        # Display the figure in Streamlit
+        st.pyplot(fig)
 
     elif (
         tab_selector == "Topic A."
-    ):  # ----------------------------------------------------- Topic Analysis
+    ):  # ------------------------------------------------------------------------------------------ Topic Analysis ----
         st.subheader("Topic Analysis")
         toggle = ui.switch(
             default_checked=False, label="Time Series", key="switch_dash_pcn"
@@ -687,29 +715,28 @@ if page == "PCN Dashboard":
             )
 
             if radio_value == "pos":
-                data = data[
+                pcn_data = pcn_data[
                     (
-                        (data["sentiment_free_text"] == "neutral")
-                        | (data["sentiment_free_text"] == "positive")
+                        (pcn_data["sentiment_free_text"] == "neutral")
+                        | (pcn_data["sentiment_free_text"] == "positive")
                     )
                 ]
             elif radio_value == "neg":
-                pcn_data = data[(data['pcn'] == selected_pcn)]
-                data = pcn_data[(data["sentiment_free_text"] == "negative")]
-            else:
-                pcn_data = data[(data['pcn'] == selected_pcn)]
-                data = pcn_data
 
-            data["time"] = pd.to_datetime(data["time"])
+                pcn_data = pcn_data[(pcn_data["sentiment_free_text"] == "negative")]
+            else:
+                pcn_pcn_data = pcn_data[(pcn_data['pcn'] == selected_pcn)]
+
+            pcn_data["time"] = pd.to_datetime(pcn_data["time"])
             # Setting the 'time' column as the index
-            data.set_index("time", inplace=True)
+            pcn_data.set_index("time", inplace=True)
 
             # Grouping by month and 'feedback_labels' and then counting the occurrences
             # Converting the time index to a period index for monthly resampling
-            data.index = data.index.to_period("M")
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+            pcn_data.index = pcn_data.index.to_period("M")
+  
             monthly_feedback_counts = (
-                pcn_data.groupby([data.index, "feedback_labels"])
+                pcn_data.groupby([pcn_data.index, "feedback_labels"])
                 .size()
                 .unstack(fill_value=0)
             )
@@ -763,9 +790,9 @@ if page == "PCN Dashboard":
             st.markdown("---")
 
             # Grouping by month and 'improvement_labels' and then counting the occurrences
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+   
             monthly_improvement_counts = (
-                pcn_data.groupby([data.index, "improvement_labels"])
+                pcn_data.groupby([pcn_data.index, "improvement_labels"])
                 .size()
                 .unstack(fill_value=0)
             )
@@ -824,9 +851,9 @@ if page == "PCN Dashboard":
             hue_order = ["negative", "neutral", "positive"]
 
             # Create a cross-tabulation of feedback labels and sentiment categories
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+
             crosstab = pd.crosstab(
-                pcn_data["feedback_labels"], data["sentiment_free_text"]
+                pcn_data["feedback_labels"], pcn_data["sentiment_free_text"]
             )
             crosstab = crosstab.reindex(columns=hue_order)
 
@@ -836,7 +863,7 @@ if page == "PCN Dashboard":
             # Create a horizontal stacked bar chart using Plotly
 
             fig = go.Figure(
-                pcn_data=[
+                data=[
                     go.Bar(
                         y=crosstab_sorted.index,
                         x=crosstab_sorted[sentiment],
@@ -877,9 +904,9 @@ if page == "PCN Dashboard":
             hue_order = ["negative", "neutral", "positive"]
 
             # Create a cross-tabulation of feedback labels and sentiment categories
-            pcn_data = data[(data['pcn'] == selected_pcn)]
+ 
             crosstab = pd.crosstab(
-                pcn_data["improvement_labels"], data["sentiment_do_better"]
+                pcn_data["improvement_labels"], pcn_data["sentiment_do_better"]
             )
             crosstab = crosstab.reindex(columns=hue_order)
 
@@ -926,39 +953,44 @@ if page == "PCN Dashboard":
 
 # -- Surgery Dashboard ------------------------------------------------------------------------------- Surgery Dashboard
 elif page == "Surgery Dashboard":
-    st.title(f"{selected_surgery}")
+    st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}")
 
 
 # -- Feedback Classification ------------------------------------------------------------------- Feedback Classification
 elif page == "Feedback Classification":
-    st.title("Feedback Classification")
+    st.markdown("# ![Feedback](https://img.icons8.com/ios/50/thumbs-up-down.png) Feedback Classification")
 
 
-# -- Improvement Suggestion --------------------------------------------------------------------- Improvement Suggestion
-elif page == "Improvement Suggestion":
-    st.title("Improvement Suggestion")
+# -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
+elif page == "Improvement Suggestions":
+    st.markdown("# ![Improvement](https://img.icons8.com/ios/50/improvement.png) Improvement Suggestions")
 
 
 # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
 elif page == "Feedback Timeline":
-    st.title("Feedback Timeline")
+    st.markdown("# ![Timeline](https://img.icons8.com/dotty/80/timeline.png) Feedback Timeline")
 
 
 # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
 elif page == "Word Cloud":
-    st.title("Word Cloud")
+    st.markdown("# ![Word CLoud](https://img.icons8.com/ios/50/cloud-refresh--v1.png) Word Cloud")
 
 
 # -- GPT4 Summary ----------------------------------------------------------------------------------------- GPT4 Summary
 elif page == "GPT-4 Summary":
-    st.title("GPT-4 Summary")
+    st.markdown("# ![GPT-4](https://img.icons8.com/ios/50/chatgpt.png) GPT-4 Summary")
 
 
 # -- Dataframe ----------------------------------------------------------------------------------------------- Dataframe
 elif page == "Dataframe":
-    st.title("Dataframe")
+    st.markdown("# ![Dataframe](https://img.icons8.com/ios/50/new-spreadsheet.png) Dataframe")
 
 
+# -- Reports --------------------------------------------------------------------------------------------------- Reports
+elif page == "Reports":
+    st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
+    
+    
 # -- About ------------------------------------------------------------------------------------------------------- About
 elif page == "About":
-    st.title("About")
+    st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
