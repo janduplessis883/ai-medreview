@@ -57,4 +57,4 @@ wordcloud
 requests
 nlpretext
 plotly
-
+reportlab

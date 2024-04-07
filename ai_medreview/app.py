@@ -13,6 +13,8 @@ import streamlit_shadcn_ui as ui
 import requests
 import plotly.graph_objects as go
 import plotly.express as px
+import os 
+
 
 client = OpenAI()
 
@@ -49,6 +51,8 @@ def load_data():
     df = pd.read_csv("ai_medreview/data/data.csv")
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
+
+data = load_data()
 
 # Function to load PCN specific data
 @st.cache_data(ttl=3600)
@@ -2251,6 +2255,88 @@ elif page == "Reports":
     st.write("")
     ui.badges(badge_list=[("NEW", "destructive"), ("coming soon...", "outline")], class_name="flex gap-2", key="badges_soon")
     
+    
+    # S Tips Plot --------------------------------------------------------------------------------------- Tips Plot ----
+    
+    # Path for the generated report
+    report_path = "tips_report.pdf"
+
+    # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
+    if page not in ["PCN Dashboard", "About"] and selected_surgery:
+        surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
+
+        if not surgery_data.empty:
+            # Find the earliest and latest dates in the data
+            min_date = surgery_data['time'].min().to_pydatetime()
+            max_date = surgery_data['time'].max().to_pydatetime()
+
+            # Generate a list of years and months based on the data range
+            years = list(range(min_date.year, max_date.year + 1))
+            months = [datetime.strftime(datetime(2000, i, 1), "%B") for i in range(1, 13)]
+
+            # Create two columns for selectors
+            col1, col2 = st.columns(2)
+
+            # Create year and month selectors inside the columns
+            with col1:
+                selected_year = st.selectbox("Select the Year", options=years, index=years.index(max_date.year))
+            
+            # Adjust month options based on selected year
+            if selected_year == min_date.year:
+                months = months[min_date.month - 1:]
+            if selected_year == max_date.year:
+                months = months[:max_date.month]
+
+            with col2:
+                selected_month = st.selectbox("Select the Month", options=months, index=0)
+
+            # Convert selected month to number
+            selected_month_number = datetime.strptime(selected_month, "%B").month
+
+            # Filter data based on the selected month and year
+            filtered_data = surgery_data[
+                (surgery_data['time'].dt.year == selected_year) & 
+                (surgery_data['time'].dt.month == selected_month_number)
+            ]
+        
+     
+    from reports import generate_cqrs_report
+
+    # Your existing setup code...
+
+    if st.button('Generate CQRS Report'):
+        generate_cqrs_report(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
+        st.success('CQRS Report generated!')
+
+        # Provide a download link for the generated PDF
+        with open("cqrs_report.pdf", "rb") as file:
+            st.download_button(label="Download CQRS Report", data=file, file_name="cqrs_report.pdf", mime="application/pdf")   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 # -- About ------------------------------------------------------------------------------------------------------- About
 elif page == "About":
     st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
@@ -2272,13 +2358,14 @@ Explore the AI MedReview dashboard today and experience the transformative power
 
 Visit ![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/friends-and-family-test-analysis), where collaboration and contributions are warmly welcomed."""
     )
-    st.write("")
 
+    form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
+    iframe_code = f'<iframe src="{form_url}" width="100%" height="400"></iframe>'
+    st.markdown(iframe_code, unsafe_allow_html=True)
 
     debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
     if debug_toggle:
         st.dataframe(data.tail(50))
-
     st.markdown("---")
 
     col1, col2, col3 = st.columns(3)
