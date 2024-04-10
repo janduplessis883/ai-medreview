@@ -48,7 +48,7 @@ selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selecto
 # Function to load data
 @st.cache_data(ttl=3600)
 def load_data():
-    df = pd.read_csv("ai_medreview/data/data.csv")
+    df = pd.read_parquet("ai_medreview/data/data.parquet")
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
 
