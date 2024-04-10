@@ -18,10 +18,30 @@ import os
 
 client = OpenAI()
 
+def display_load_time(start_time, position='top'):
+    """
+    Display the page load time in milliseconds.
+
+    Parameters:
+    - start_time: float, the timestamp when the script started executing.
+    - position: str, where to display the load time ('top' or 'bottom').
+    """
+    end_time = time.time()
+    load_time = (end_time - start_time) * 1000  # Convert to milliseconds
+    load_time_message = f"Loaded in {load_time:.2f} milliseconds."
+
+    if position == 'top':
+        st.sidebar.write(load_time_message)
+    elif position == 'bottom':
+        st.empty()  # Placeholder to potentially use for positioning
+        st.sidebar.write(load_time_message)  # Alternatively, use st.write() for main page display.
+
+# Place this at the very start of your Streamlit app script
+start_time = time.time()
 from utils import *
 
 st.set_page_config(page_title="AI MedReview v2")
-
+display_load_time(start_time, 'top')
 # Styling with HTML
 html = """
 <style>

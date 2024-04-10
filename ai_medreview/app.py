@@ -131,7 +131,7 @@ else:
 if page == "PCN Dashboard":
     st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} ")
     st.markdown(
-        """Aggregating and analyzing the **collective patient feedback data** received by member practices.  
+        """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
     )
     st.write("")
