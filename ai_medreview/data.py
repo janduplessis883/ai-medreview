@@ -352,10 +352,10 @@ def clean_data(df):
 
 @time_it
 def concat_save_final_df(processed_df, new_df):
-    logger.info("💾 Concat Dataframes to data.csv successfully")
+    logger.info("💾 Concat Dataframes to data.parquet successfully")
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
     combined_data.sort_values(by="time", inplace=True, ascending=True)
-    combined_data.to_csv(f"{DATA_PATH}/data.csv", index=False)
+    combined_data.to_parquet(f"{DATA_PATH}/data.parquet", index=False)
     print(f"💾 data.csv saved to: {DATA_PATH}")
 
 
