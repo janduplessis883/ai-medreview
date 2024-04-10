@@ -937,7 +937,7 @@ elif page == "Surgery Dashboard":
     st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}")
     st.write("")
     surgery_tab_selector = ui.tabs(
-        options=["Surgery Rating", "Surgery Responses", "Feedback Word Count"],
+        options=["Surgery Rating", "Surgery Responses", "Feedback Length", "Total Word Count", "Missing Data"],
         default_value="Surgery Rating",
         key="tab4",
     )
@@ -1160,7 +1160,7 @@ elif page == "Surgery Dashboard":
         plt.tight_layout()
         st.pyplot(fig)
 
-    elif surgery_tab_selector == "Feedback Word Count":
+    elif surgery_tab_selector == "Feedback Length":
         fig, ax = plt.subplots(
             1, 2, figsize=(12, 6)
         )  # figsize can be adjusted as needed
@@ -1190,7 +1190,38 @@ elif page == "Surgery Dashboard":
         # Show the plots next to each other
         plt.tight_layout()
         st.pyplot(plt)
+        
+    elif surgery_tab_selector == "Total Word Count":
+        filtered_data["prompt"] = (
+            filtered_data["free_text"].fillna("")
+            + " "
+            + filtered_data["do_better"].fillna("")
+        )
+    
+        # Step 2: Drop NaN values (now unnecessary as we handled NaNs during concatenation)
+        filtered_data.dropna(subset=["prompt"], inplace=True)
 
+        # Step 3: Join all rows to form one large corpus of words
+        text = " ".join(filtered_data["prompt"])
+        words = text.split()
+        word_count = len(words)
+        
+        cols = st.columns(2)
+        with cols[0]:
+            ui.metric_card(
+                title="Total Feedback Word Count",
+                content=f"{word_count}",
+                description=f"",
+                key="totalwords",
+            )
+        with cols[1]:
+            pass
+        
+    elif surgery_tab_selector == "Missing Data":   
+        plt.figure(figsize=(12, 5))
+        sns.heatmap(filtered_data.isnull(), cbar=False, cmap='Blues', yticklabels=False)
+        plt.title('Heatmap of Missing Values in Data')
+        st.pyplot(plt)
 # -- Feedback Classification ------------------------------------------------------------------- Feedback Classification
 elif page == "Feedback Classification":
     st.markdown("# ![Feedback](https://img.icons8.com/ios/50/thumbs-up-down.png) Feedback Classification")
