@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdatesf
+import matplotlib.dates as mdates
 from wordcloud import WordCloud
 import seaborn as sns
 from datetime import datetime, timedelta
@@ -108,7 +108,7 @@ if page not in ["PCN Dashboard", "About"]:
                     min_value=start_date,
                     max_value=end_date,
                     value=(start_date, end_date),
-                    format="DD/MM/YYYY",
+                    format="MM/DD/YYYY",
                 )
             except ValueError as e:
                 st.error(f"Cannot display slider: {str(e)}")
