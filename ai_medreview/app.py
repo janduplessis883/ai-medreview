@@ -2305,13 +2305,16 @@ elif page == "Reports":
     # Your existing setup code...
 
     if st.button('Generate CQRS Report'):
+        # Call the function with the parameters from Streamlit widgets
         generate_cqrs_report(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
+    
+        # Inform the user of success
         st.success('CQRS Report generated!')
 
         # Provide a download link for the generated PDF
         with open("cqrs_report.pdf", "rb") as file:
-            st.download_button(label="Download CQRS Report", data=file, file_name="cqrs_report.pdf", mime="application/pdf")   
-    
+            st.download_button(label="Download CQRS Report", data=file, file_name="cqrs_report.pdf", mime="application/pdf")
+        
     
     
     
