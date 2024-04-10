@@ -2334,20 +2334,20 @@ elif page == "Reports":
             ]
         
      
-    from reports import generate_cqrs_report
+    from reports import simple_pdf
 
     # Your existing setup code...
 
     if st.button('Generate CQRS Report'):
         # Call the function with the parameters from Streamlit widgets
-        generate_cqrs_report(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
+        simple_pdf(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
     
         # Inform the user of success
         ui.badges(badge_list=[("Report Generated Successfully!", "default")], class_name="flex gap-2", key="badges_success")
 
         # Provide a download link for the generated PDF
-        with open("cqrs_report.pdf", "rb") as file:
-            st.download_button(label="Download CQRS Report", data=file, file_name="cqrs_report.pdf", mime="application/pdf")
+        with open("report.pdf", "rb") as file:
+            st.download_button(label="Download CQRS Report", data=file, file_name="report.pdf", mime="application/pdf")
         
     
     
