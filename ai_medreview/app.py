@@ -1209,7 +1209,7 @@ elif page == "Surgery Dashboard":
         cols = st.columns(2)
         with cols[0]:
             ui.metric_card(
-                title="Total Feedback Word Count",
+                title="Total Word Count",
                 content=f"{word_count}",
                 description=f"",
                 key="totalwords",
@@ -2280,6 +2280,9 @@ Rows are labeled with an Index, which you can think of as the address of the dat
 
     # Display the filtered DataFrame
     st.dataframe(filtered_data)
+    
+   
+    
 # -- Reports --------------------------------------------------------------------------------------------------- Reports
 elif page == "Reports":
     st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
@@ -2340,7 +2343,7 @@ elif page == "Reports":
         generate_cqrs_report(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
     
         # Inform the user of success
-        st.success('CQRS Report generated!')
+        ui.badges(badge_list=[("Report Generated Successfully!", "default")], class_name="flex gap-2", key="badges_success")
 
         # Provide a download link for the generated PDF
         with open("cqrs_report.pdf", "rb") as file:

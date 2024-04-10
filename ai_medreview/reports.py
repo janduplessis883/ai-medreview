@@ -8,7 +8,7 @@ def generate_cqrs_report(data, month, year, surgery, pcn, filename="cqrs_report.
     a4_width_inch = 8.27  # A4 width
     margin_inch = 2  # Margin width
     plot_width = a4_width_inch - 2 * margin_inch  # Width of the plot
-    plot_height = 6  # Explicitly setting plot height to 6 inches
+    plot_height = 5  # Explicitly setting plot height to 6 inches
 
     # Initialize the figure with the specified width and height
     plt.figure(figsize=(plot_width, plot_height))
