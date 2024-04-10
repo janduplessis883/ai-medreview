@@ -2359,7 +2359,7 @@ This comprehensive suite of advanced analytics empowers healthcare providers lik
 
 Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare. Join us on our mission to revolutionize the way patient feedback is leveraged to deliver exceptional care.
 
-Visit ![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/friends-and-family-test-analysis), where collaboration and contributions are warmly welcomed."""
+Visit ![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed."""
     )
 
     form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
