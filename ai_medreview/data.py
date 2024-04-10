@@ -379,7 +379,7 @@ def text_preprocessing(text):
     # preprocessor.pipe(remove_stopwords, args={'lang': 'en'})
     preprocessor.pipe(remove_punct)
     preprocessor.pipe(normalize_whitespace)
-    preprocessor.pipe(replace_phone_numbers, args={'country_to_detect': 'EN'})
+    preprocessor.pipe(replace_phone_numbers, args={'country_to_detect': ['GB', 'FR'], 'replace_with': '*PHONE*'})
     text = preprocessor.run(text)
 
     return text
