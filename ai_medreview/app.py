@@ -19,6 +19,7 @@ import os
 client = OpenAI()
 
 from utils import *
+from reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
 
@@ -2334,7 +2335,7 @@ elif page == "Reports":
             ]
         
      
-    from reports import simple_pdf
+    
 
     # Your existing setup code...
 

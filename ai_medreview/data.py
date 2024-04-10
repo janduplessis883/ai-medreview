@@ -362,7 +362,7 @@ def concat_save_final_df(processed_df, new_df):
 
 @time_it
 def load_local_data():
-    df = pd.read_csv(f"{DATA_PATH}/data.csv")
+    df = pd.read_parquet(f"{DATA_PATH}/data.parquet")
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
 
