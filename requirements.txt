@@ -58,4 +58,4 @@ requests
 nlpretext
 plotly
 reportlab
-markdown2pdf
+fpdf
