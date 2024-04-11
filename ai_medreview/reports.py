@@ -3,6 +3,8 @@ from fpdf import FPDF
 def simple_pdf(df, selected_month, selected_year, selected_surgery, selected_pcn):
     pdf = FPDF()
     pdf.add_page()
+    
+    count = df['rating'].value_counts()
 
     # Header "AI MedReview" with Inter in bold
     pdf.set_font('Arial', 'B', 16)
