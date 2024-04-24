@@ -41,7 +41,7 @@ st.sidebar.markdown(html, unsafe_allow_html=True)
 st.sidebar.image("images/transparent2.png")
 
 # Define a list of PCNs
-pcn_names = ["Demo-PCN", "Brompton-Health-PCN"]
+pcn_names = ["Brompton-Health-PCN", "Demo-PCN"]
 
 # PCN selection in sidebar
 selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selector")
