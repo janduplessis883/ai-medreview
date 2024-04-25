@@ -59,4 +59,4 @@ nlpretext
 plotly
 reportlab
 fpdf
-loguru
+
