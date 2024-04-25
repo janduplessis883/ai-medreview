@@ -44,7 +44,16 @@ def load_google_sheet():
         sheet_id=0,
     )
     data = sh.gsheet_to_df()
-    data.columns = ["submission_id", "respondent-id", "time", "rating", "free_text", "do_better", "pcn", "surgery"]
+    data.columns = [
+        "submission_id",
+        "respondent-id",
+        "time",
+        "rating",
+        "free_text",
+        "do_better",
+        "pcn",
+        "surgery",
+    ]
     data["time"] = pd.to_datetime(data["time"], format="%Y/%m/%d %H:%M:%S")
     data.sort_values(by="time", inplace=True)
     return data
@@ -380,7 +389,10 @@ def text_preprocessing(text):
     # preprocessor.pipe(remove_stopwords, args={'lang': 'en'})
     preprocessor.pipe(remove_punct)
     preprocessor.pipe(normalize_whitespace)
-    preprocessor.pipe(replace_phone_numbers, args={'country_to_detect': ['GB', 'FR'], 'replace_with': '*PHONE*'})
+    preprocessor.pipe(
+        replace_phone_numbers,
+        args={"country_to_detect": ["GB", "FR"], "replace_with": "*PHONE*"},
+    )
     text = preprocessor.run(text)
 
     return text

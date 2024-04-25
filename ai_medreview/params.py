@@ -16,5 +16,3 @@ LOCAL_GIT_REPO = os.path.join(
     "janduplessis883",
     "ai-medreview",
 )
-
-

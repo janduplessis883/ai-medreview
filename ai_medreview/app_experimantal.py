@@ -13,12 +13,13 @@ import streamlit_shadcn_ui as ui
 import requests
 import plotly.graph_objects as go
 import plotly.express as px
-import os 
+import os
 
 
 client = OpenAI()
 
-def display_load_time(start_time, position='top'):
+
+def display_load_time(start_time, position="top"):
     """
     Display the page load time in milliseconds.
 
@@ -30,18 +31,21 @@ def display_load_time(start_time, position='top'):
     load_time = (end_time - start_time) * 1000  # Convert to milliseconds
     load_time_message = f"Loaded in {load_time:.2f} milliseconds."
 
-    if position == 'top':
+    if position == "top":
         st.sidebar.write(load_time_message)
-    elif position == 'bottom':
+    elif position == "bottom":
         st.empty()  # Placeholder to potentially use for positioning
-        st.sidebar.write(load_time_message)  # Alternatively, use st.write() for main page display.
+        st.sidebar.write(
+            load_time_message
+        )  # Alternatively, use st.write() for main page display.
+
 
 # Place this at the very start of your Streamlit app script
 start_time = time.time()
 from utils import *
 
 st.set_page_config(page_title="AI MedReview v2")
-display_load_time(start_time, 'top')
+display_load_time(start_time, "top")
 # Styling with HTML
 html = """
 <style>
@@ -73,11 +77,12 @@ pcn_names = list(pcn_pins.keys())
 selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selector")
 
 # Initialize session state for PIN verification if it doesn't exist
-if 'pin_verified' not in st.session_state:
-    st.session_state['pin_verified'] = {}
+if "pin_verified" not in st.session_state:
+    st.session_state["pin_verified"] = {}
 
-if selected_pcn not in st.session_state['pin_verified']:
-    st.session_state['pin_verified'][selected_pcn] = False
+if selected_pcn not in st.session_state["pin_verified"]:
+    st.session_state["pin_verified"][selected_pcn] = False
+
 
 # Load data function
 @st.cache_data(ttl=3600)
@@ -86,20 +91,21 @@ def load_data():
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
 
+
 data = load_data()
 
 # Request PIN if required for the selected PCN
-if pcn_pins[selected_pcn] and not st.session_state['pin_verified'][selected_pcn]:
+if pcn_pins[selected_pcn] and not st.session_state["pin_verified"][selected_pcn]:
     pin = st.sidebar.text_input("Enter PIN:", type="password", key="pin_input")
     if pin == pcn_pins[selected_pcn]:
-        st.session_state['pin_verified'][selected_pcn] = True
+        st.session_state["pin_verified"][selected_pcn] = True
     elif pin:
         st.sidebar.error("Incorrect PIN. Please try again.")
 else:
-    st.session_state['pin_verified'][selected_pcn] = True
+    st.session_state["pin_verified"][selected_pcn] = True
 
 # Now, define the page selection here, after the PIN verification logic
-if st.session_state['pin_verified'][selected_pcn]:
+if st.session_state["pin_verified"][selected_pcn]:
     # Page selection with radio buttons
     page = st.sidebar.radio(
         "Select a Page",
@@ -116,7 +122,7 @@ if st.session_state['pin_verified'][selected_pcn]:
             "Reports",
             "About",
         ],
-        key="page_selector"
+        key="page_selector",
     )
 
     # Load PCN specific data if the correct pin is entered or no pin is required
@@ -127,7 +133,10 @@ if st.session_state['pin_verified'][selected_pcn]:
     if page not in ["PCN Dashboard", "About"]:
         surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
         if len(surgery_list) > 0:
-            selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list, key="surgery_selector")
+            selected_surgery = st.sidebar.selectbox(
+                "Select Surgery", surgery_list, key="surgery_selector"
+            )
+
 
 # Define the function to get surgeries by PCN outside the conditional block
 @st.cache_data(ttl=3600)
@@ -136,11 +145,14 @@ def get_surgeries_by_pcn(data, pcn):
     surgeries = sorted(filtered_data["surgery"].unique())
     return surgeries
 
+
 # Content Start ========================================================================================== Content Start
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "PCN Dashboard":
-    st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} ")
+    st.markdown(
+        f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
+    )
     st.markdown(
         """Aggregating and analyzing the **collective patient feedback data** received by member practices.  
 """
@@ -159,7 +171,9 @@ if page == "PCN Dashboard":
         key="tab3",
     )
 
-    if tab_selector == "PCN Responses":  # ---------------------------------------------------------- PCN Responses ----
+    if (
+        tab_selector == "PCN Responses"
+    ):  # ---------------------------------------------------------- PCN Responses ----
         st.subheader("PCN Response Rate")
         st.markdown("**Dialy FFT Responses**")
 
@@ -247,13 +261,14 @@ if page == "PCN Dashboard":
             plt.tight_layout()
             st.pyplot(fig)
 
-    elif tab_selector == "Surgery Ratings":  # --------------------------------------------------- Surgery Ratings -----
+    elif (
+        tab_selector == "Surgery Ratings"
+    ):  # --------------------------------------------------- Surgery Ratings -----
         st.subheader("Surgery Ratings")
 
         with st.container(border=False):
 
             # alldata_date_range = filter_data_by_date_range(data, selected_date_range)
-            
 
             pivot_data = pcn_data.pivot_table(
                 index="surgery", columns="rating", aggfunc="size", fill_value=0
@@ -296,7 +311,9 @@ if page == "PCN Dashboard":
             # Display the ordered percentage heatmap
             st.pyplot(plt)
 
-    elif tab_selector == "Sentiment A.":   # --------------------------------------------------- Sentiment Analysis ----
+    elif (
+        tab_selector == "Sentiment A."
+    ):  # --------------------------------------------------- Sentiment Analysis ----
         st.subheader("Sentiment Analysis")
         # Assuming 'data' is already defined and processed
         # Define labels and colors outside since they are the same for both plots
@@ -319,13 +336,11 @@ if page == "PCN Dashboard":
             autopct="%1.1f%%",
             startangle=140,
         )
-        ax1.axis(
-            "equal"
-        )  # Equal aspect ratio ensures that pie is drawn as a circle.
+        ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
         centre_circle = plt.Circle((0, 0), 0.50, fc="white")
         ax1.add_artist(centre_circle)
         ax1.set_title("Cum Sentiment - Feedback")
- 
+
         # Second pie chart - Cum Sentiment - Improvement Suggestions
         sentiment_totals_improvement = pcn_data.groupby("sentiment_do_better")[
             "sentiment_score_do_better"
@@ -500,10 +515,12 @@ if page == "PCN Dashboard":
         # Show the plot (or use st.pyplot(plt) if you are using Streamlit)
         st.pyplot(plt)
 
-    elif tab_selector == "Surgery Responses":  # ----------------------------------------------- Surgery Responses------
+    elif (
+        tab_selector == "Surgery Responses"
+    ):  # ----------------------------------------------- Surgery Responses------
         st.subheader("Surgery Responses")
         with st.container(border=False):
-      
+
             fig, ax = plt.subplots(figsize=(12, 6))
             sns.countplot(y="surgery", data=pcn_data, color="#59646b")
             for p in ax.patches:
@@ -531,13 +548,11 @@ if page == "PCN Dashboard":
             st.pyplot(plt)
 
         st.markdown("---")
-     
+
         data_sorted = pcn_data.sort_values("time")
 
         # Group by 'surgery' and 'time', then calculate the cumulative count
-        data_sorted["cumulative_count"] = (
-            data_sorted.groupby("surgery").cumcount() + 1
-        )
+        data_sorted["cumulative_count"] = data_sorted.groupby("surgery").cumcount() + 1
 
         # Pivot the table to have surgeries as columns and their cumulative counts as values
         data_pivot = data_sorted.pivot_table(
@@ -587,9 +602,7 @@ if page == "PCN Dashboard":
                 mirror=True,
             ),
             plot_bgcolor="white",
-            legend=dict(
-                title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"
-            ),
+            legend=dict(title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"),
             width=750,  # Set the width to 750 pixels
             height=750,  # Set the height to 850 pixels
         )
@@ -603,7 +616,7 @@ if page == "PCN Dashboard":
     ):  # ------------------------------------------------------------------------------------- PCN Rating -------------
         st.subheader("PCN Rating")
         st.markdown("**Average Monthly Rating**")
-        
+
         try:
             with st.container(border=False):
                 # Convert 'time' to datetime and extract the date
@@ -660,7 +673,7 @@ if page == "PCN Dashboard":
                 st.pyplot(plt)
         except KeyError as e:
             st.warning(f"Error plotting: {e}")
-            
+
         st.markdown("---")
         st.markdown("**Rating Count**")
         fig, ax = plt.subplots(figsize=(12, 5))
@@ -670,10 +683,12 @@ if page == "PCN Dashboard":
 
         # Annotate each bar
         for p in ax.patches:
-            percentage = '{:.1f}%'.format(100 * p.get_height() / total)  # Calculate percentage
+            percentage = "{:.1f}%".format(
+                100 * p.get_height() / total
+            )  # Calculate percentage
             x = p.get_x() + p.get_width() / 2
             y = p.get_height()
-            ax.annotate(percentage, (x, y), ha='center', va='bottom')
+            ax.annotate(percentage, (x, y), ha="center", va="bottom")
 
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
@@ -717,7 +732,7 @@ if page == "PCN Dashboard":
 
                 pcn_data = pcn_data[(pcn_data["sentiment_free_text"] == "negative")]
             else:
-                pcn_pcn_data = pcn_data[(pcn_data['pcn'] == selected_pcn)]
+                pcn_pcn_data = pcn_data[(pcn_data["pcn"] == selected_pcn)]
 
             pcn_data["time"] = pd.to_datetime(pcn_data["time"])
             # Setting the 'time' column as the index
@@ -726,7 +741,7 @@ if page == "PCN Dashboard":
             # Grouping by month and 'feedback_labels' and then counting the occurrences
             # Converting the time index to a period index for monthly resampling
             pcn_data.index = pcn_data.index.to_period("M")
-  
+
             monthly_feedback_counts = (
                 pcn_data.groupby([pcn_data.index, "feedback_labels"])
                 .size()
@@ -734,9 +749,7 @@ if page == "PCN Dashboard":
             )
 
             # Converting the period index back to a timestamp for compatibility with Plotly
-            monthly_feedback_counts.index = (
-                monthly_feedback_counts.index.to_timestamp()
-            )
+            monthly_feedback_counts.index = monthly_feedback_counts.index.to_timestamp()
 
             # Plotting the data using Plotly Express
             fig1 = px.line(
@@ -782,7 +795,7 @@ if page == "PCN Dashboard":
             st.markdown("---")
 
             # Grouping by month and 'improvement_labels' and then counting the occurrences
-   
+
             monthly_improvement_counts = (
                 pcn_data.groupby([pcn_data.index, "improvement_labels"])
                 .size()
@@ -896,7 +909,7 @@ if page == "PCN Dashboard":
             hue_order = ["negative", "neutral", "positive"]
 
             # Create a cross-tabulation of feedback labels and sentiment categories
- 
+
             crosstab = pd.crosstab(
                 pcn_data["improvement_labels"], pcn_data["sentiment_do_better"]
             )
@@ -925,9 +938,7 @@ if page == "PCN Dashboard":
                         gridwidth=0.5,
                         showgrid=True,
                     ),
-                    yaxis=dict(
-                        title="Improvement Suggestion Labels", showgrid=False
-                    ),
+                    yaxis=dict(title="Improvement Suggestion Labels", showgrid=False),
                     barmode="stack",
                     plot_bgcolor="white",
                     showlegend=True,
@@ -941,11 +952,11 @@ if page == "PCN Dashboard":
             st.plotly_chart(fig)
 
 
-
-
 # -- Surgery Dashboard ------------------------------------------------------------------------------- Surgery Dashboard
 elif page == "Surgery Dashboard":
-    st.markdown(f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}")
+    st.markdown(
+        f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}"
+    )
     st.write("")
     surgery_tab_selector = ui.tabs(
         options=["Surgery Rating", "Surgery Responses", "Feedback Word Count"],
@@ -1204,7 +1215,9 @@ elif page == "Surgery Dashboard":
 
 # -- Feedback Classification ------------------------------------------------------------------- Feedback Classification
 elif page == "Feedback Classification":
-    st.markdown("# ![Feedback](https://img.icons8.com/ios/50/thumbs-up-down.png) Feedback Classification")
+    st.markdown(
+        "# ![Feedback](https://img.icons8.com/ios/50/thumbs-up-down.png) Feedback Classification"
+    )
     st.markdown("Responses to **FFT Q1**: Please tell us why you feel this way?")
 
     toggle = ui.switch(default_checked=False, label="Time Series", key="switch_dash")
@@ -1408,7 +1421,9 @@ elif page == "Feedback Classification":
 
 # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
 elif page == "Improvement Suggestions":
-    st.markdown("# ![Improvement](https://img.icons8.com/ios/50/improvement.png) Improvement Suggestions")
+    st.markdown(
+        "# ![Improvement](https://img.icons8.com/ios/50/improvement.png) Improvement Suggestions"
+    )
     st.markdown(
         "Responses to **FFT Q2**: Is there anything that would have made your experience better?"
     )
@@ -1639,8 +1654,10 @@ elif page == "Improvement Suggestions":
 
 # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
 elif page == "Feedback Timeline":
-    st.markdown("# ![Timeline](https://img.icons8.com/dotty/80/timeline.png) Feedback Timeline")
-    
+    st.markdown(
+        "# ![Timeline](https://img.icons8.com/dotty/80/timeline.png) Feedback Timeline"
+    )
+
     daily_count = filtered_data.resample("D", on="time").size()
     daily_count_df = daily_count.reset_index()
     daily_count_df.columns = ["Date", "Daily Count"]
@@ -1672,8 +1689,8 @@ elif page == "Feedback Timeline":
         for _, row in filtered_data.iterrows():
             free_text = row["free_text"]
             do_better = row["do_better"]
-            feedback_labels = row['feedback_labels']
-            imp_labels = row['improvement_labels']
+            feedback_labels = row["feedback_labels"]
+            imp_labels = row["improvement_labels"]
             time = row["time"]
             rating = row["rating"]
 
@@ -1685,11 +1702,13 @@ elif page == "Feedback Timeline":
                     if str(do_better) not in ["nan"]:
                         st.markdown("💡 " + str(do_better))
                         st.markdown(f"`{imp_labels}`")
-    
+
 
 # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
 elif page == "Sentiment Analysis":
-    st.markdown("# ![Sentiment Analysis](https://img.icons8.com/ios/50/like--v1.png) Sentiment Analysis")
+    st.markdown(
+        "# ![Sentiment Analysis](https://img.icons8.com/ios/50/like--v1.png) Sentiment Analysis"
+    )
 
     toggle = ui.switch(
         default_checked=False, label="Explain this page.", key="switch_dash"
@@ -2006,11 +2025,13 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                         if str(do_better) not in ["nan"]:
                             st.markdown("💡 " + str(do_better))
                         st.markdown(f"`{sentiment} {score}` `{cat}`")
-                        
+
 
 # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
 elif page == "Word Cloud":
-    st.markdown("# ![Word CLoud](https://img.icons8.com/ios/50/cloud-refresh--v1.png) Word Cloud")
+    st.markdown(
+        "# ![Word CLoud](https://img.icons8.com/ios/50/cloud-refresh--v1.png) Word Cloud"
+    )
     try:
         toggle = ui.switch(
             default_checked=False, label="Explain this page.", key="switch_dash"
@@ -2242,7 +2263,9 @@ elif page == "GPT-4 Summary":
 
 # -- Dataframe ----------------------------------------------------------------------------------------------- Dataframe
 elif page == "Dataframe":
-    st.markdown("# ![Dataframe](https://img.icons8.com/ios/50/new-spreadsheet.png) Dataframe")
+    st.markdown(
+        "# ![Dataframe](https://img.icons8.com/ios/50/new-spreadsheet.png) Dataframe"
+    )
 
     toggle = ui.switch(
         default_checked=False, label="Explain this page.", key="switch_dash"
@@ -2264,11 +2287,14 @@ Rows are labeled with an Index, which you can think of as the address of the dat
 elif page == "Reports":
     st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
     st.write("")
-    ui.badges(badge_list=[("NEW", "destructive"), ("coming soon...", "outline")], class_name="flex gap-2", key="badges_soon")
-    
-    
+    ui.badges(
+        badge_list=[("NEW", "destructive"), ("coming soon...", "outline")],
+        class_name="flex gap-2",
+        key="badges_soon",
+    )
+
     # S Tips Plot --------------------------------------------------------------------------------------- Tips Plot ----
-    
+
     # Path for the generated report
     report_path = "tips_report.pdf"
 
@@ -2278,79 +2304,67 @@ elif page == "Reports":
 
         if not surgery_data.empty:
             # Find the earliest and latest dates in the data
-            min_date = surgery_data['time'].min().to_pydatetime()
-            max_date = surgery_data['time'].max().to_pydatetime()
+            min_date = surgery_data["time"].min().to_pydatetime()
+            max_date = surgery_data["time"].max().to_pydatetime()
 
             # Generate a list of years and months based on the data range
             years = list(range(min_date.year, max_date.year + 1))
-            months = [datetime.strftime(datetime(2000, i, 1), "%B") for i in range(1, 13)]
+            months = [
+                datetime.strftime(datetime(2000, i, 1), "%B") for i in range(1, 13)
+            ]
 
             # Create two columns for selectors
             col1, col2 = st.columns(2)
 
             # Create year and month selectors inside the columns
             with col1:
-                selected_year = st.selectbox("Select the Year", options=years, index=years.index(max_date.year))
-            
+                selected_year = st.selectbox(
+                    "Select the Year", options=years, index=years.index(max_date.year)
+                )
+
             # Adjust month options based on selected year
             if selected_year == min_date.year:
-                months = months[min_date.month - 1:]
+                months = months[min_date.month - 1 :]
             if selected_year == max_date.year:
-                months = months[:max_date.month]
+                months = months[: max_date.month]
 
             with col2:
-                selected_month = st.selectbox("Select the Month", options=months, index=0)
+                selected_month = st.selectbox(
+                    "Select the Month", options=months, index=0
+                )
 
             # Convert selected month to number
             selected_month_number = datetime.strptime(selected_month, "%B").month
 
             # Filter data based on the selected month and year
             filtered_data = surgery_data[
-                (surgery_data['time'].dt.year == selected_year) & 
-                (surgery_data['time'].dt.month == selected_month_number)
+                (surgery_data["time"].dt.year == selected_year)
+                & (surgery_data["time"].dt.month == selected_month_number)
             ]
-        
-     
+
     from reports import generate_cqrs_report
 
     # Your existing setup code...
 
-    if st.button('Generate CQRS Report'):
+    if st.button("Generate CQRS Report"):
         # Call the function with the parameters from Streamlit widgets
-        generate_cqrs_report(filtered_data, selected_month, selected_year, selected_surgery, selected_pcn)
-    
+        generate_cqrs_report(
+            filtered_data, selected_month, selected_year, selected_surgery, selected_pcn
+        )
+
         # Inform the user of success
-        st.success('CQRS Report generated!')
+        st.success("CQRS Report generated!")
 
         # Provide a download link for the generated PDF
         with open("cqrs_report.pdf", "rb") as file:
-            st.download_button(label="Download CQRS Report", data=file, file_name="cqrs_report.pdf", mime="application/pdf")
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            st.download_button(
+                label="Download CQRS Report",
+                data=file,
+                file_name="cqrs_report.pdf",
+                mime="application/pdf",
+            )
+
+
 # -- About ------------------------------------------------------------------------------------------------------- About
 elif page == "About":
     st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
