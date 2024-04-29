@@ -19,6 +19,7 @@ from nlpretext.basic.preprocess import (
 )
 from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
 from tqdm import tqdm
+tqdm.pandas()
 
 from ai_medreview.params import *
 from ai_medreview.utils import *
@@ -422,13 +423,13 @@ if __name__ == "__main__":
         data = clean_data(data)
 
         logger.info("🫥 Annonymize with Transformer")
-        data["free_text"] = data["free_text"].apply(anonymize_names_with_transformers)
-        data["do_better"] = data["do_better"].apply(anonymize_names_with_transformers)
+        data["free_text"] = data["free_text"].progress_apply(anonymize_names_with_transformers)
+        data["do_better"] = data["do_better"].progress_apply(anonymize_names_with_transformers)
 
-        data["free_text"] = data["free_text"].apply(
+        data["free_text"] = data["free_text"].progress_apply(
             lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
         )
-        data["do_better"] = data["do_better"].apply(
+        data["do_better"] = data["do_better"].progress_apply(
             lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
         )
 
