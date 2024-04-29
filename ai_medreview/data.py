@@ -18,6 +18,7 @@ from nlpretext.basic.preprocess import (
     replace_phone_numbers,
 )
 from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
+from tqdm import tqdm
 
 from ai_medreview.params import *
 from ai_medreview.utils import *
@@ -100,7 +101,7 @@ def sentiment_analysis(data, column):
     sentiment_score = []
 
     # Iterate over DataFrame rows and classify text
-    for index, row in data.iterrows():
+    for index, row in tqdm(data.iterrows()):
         print(f"\r{index}", end="")
         freetext = row[column]
         sentence = str(freetext)
