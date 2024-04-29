@@ -60,4 +60,6 @@ plotly
 reportlab
 fpdf
 tqdm
+langchain
+chromadb # Vector storage
 
