@@ -2412,8 +2412,8 @@ This comprehensive suite of advanced analytics empowers healthcare providers lik
 
 Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare. Join us on our mission to revolutionize the way patient feedback is leveraged to deliver exceptional care.
 
-Visit ![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.   
-[Data Protection Impact Assessment](https://github.com/janduplessis883/ai-medreview/blob/master/images/DPIA%20-%20AI%20MedReview.pdf)
+![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.   
+<img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/data-protection.png" alt="data-protection"/> [Data Protection Impact Assessment](https://github.com/janduplessis883/ai-medreview/blob/master/images/DPIA%20-%20AI%20MedReview.pdf)
 
 """
     )
