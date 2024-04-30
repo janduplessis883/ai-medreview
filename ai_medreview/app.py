@@ -2418,9 +2418,7 @@ Explore the AI MedReview dashboard today and experience the transformative power
 """
     )
 
-    form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
-    iframe_code = f'<iframe src="{form_url}" width="100%" height="400"></iframe>'
-    st.markdown(iframe_code, unsafe_allow_html=True)
+
 
     debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
     if debug_toggle:
@@ -2447,3 +2445,8 @@ Explore the AI MedReview dashboard today and experience the transformative power
             "images/openai.png",
             width=200,
         )
+    st.write("")
+    st.write("")
+    form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
+    iframe_code = f'<iframe src="{form_url}" width="80%" height="400"></iframe>'
+    st.markdown(iframe_code, unsafe_allow_html=True)
