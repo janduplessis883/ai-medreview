@@ -2428,7 +2428,7 @@ if debug_toggle:
     
 with st.expander(label="Leave Feedback"):
     form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
-    iframe_code = f'<iframe src="{form_url}" width="80%" height="400"></iframe>'
+    iframe_code = f'<iframe src="{form_url}" width="100%" height="400"></iframe>'
     st.markdown(iframe_code, unsafe_allow_html=True)
 st.markdown("---")
 
