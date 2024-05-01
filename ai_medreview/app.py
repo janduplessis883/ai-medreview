@@ -2417,36 +2417,39 @@ Explore the AI MedReview dashboard today and experience the transformative power
 
 """
     )
+st.write("")
+st.write("")
+st.image(image='images/tsneplot.png', caption="3D t-sne Plot - 'Reviews' in vector space")
+st.write("")
 
-
-
-    debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
-    if debug_toggle:
-        st.dataframe(data.tail(50))
-    st.markdown("---")
-
-    col1, col2, col3 = st.columns(3)
-
-    # Use 'col1' to display content in the first column
-    with col1:
-        st.image(
-            "images/about.png",
-            width=200,
-        )
-
-    # Use 'col2' to display content in the second column
-    with col2:
-        st.image(
-            "images/hf-logo-with-title.png",
-            width=200,
-        )
-    with col3:
-        st.image(
-            "images/openai.png",
-            width=200,
-        )
-    st.write("")
-    st.write("")
+debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
+if debug_toggle:
+    st.dataframe(data.tail(50))
+    
+with st.expander(label="Leave Feedback"):
     form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
     iframe_code = f'<iframe src="{form_url}" width="80%" height="400"></iframe>'
     st.markdown(iframe_code, unsafe_allow_html=True)
+st.markdown("---")
+
+col1, col2, col3 = st.columns(3)
+
+# Use 'col1' to display content in the first column
+with col1:
+    st.image(
+        "images/about.png",
+        width=200,
+    )
+
+# Use 'col2' to display content in the second column
+with col2:
+    st.image(
+        "images/hf-logo-with-title.png",
+        width=200,
+    )
+with col3:
+    st.image(
+        "images/openai.png",
+        width=200,
+    )
+st.write("")
