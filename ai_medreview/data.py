@@ -143,7 +143,7 @@ ner_pipeline = pipeline(
 
 
 def anonymize_names_with_transformers(text):
-
+    
     # Check if the text is empty or not a string
     if not text or not isinstance(text, str):
         return text  # Return the text as-is if it's invalid or empty
@@ -418,12 +418,12 @@ if __name__ == "__main__":
         data = add_rating_score(data)
 
         data = clean_data(data)
-
-        logger.info("🫥 Annonymize with Transformer")
+        logger.info("🫥 Annonymize with Transformer - free_text")
         data["free_text"] = data["free_text"].progress_apply(anonymize_names_with_transformers)
+        logger.info("🫥 Annonymize with Transformer - do_better")
         data["do_better"] = data["do_better"].progress_apply(anonymize_names_with_transformers)
 
-        logger.info("⭐️ Text Preprocesssing with *NLPretext")
+        logger.info("📗 Text Preprocesssing with *NLPretext")
         data["free_text"] = data["free_text"].apply(
             lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
         )
