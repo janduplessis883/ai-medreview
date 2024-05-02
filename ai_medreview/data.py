@@ -102,7 +102,7 @@ def sentiment_analysis(data, column):
     sentiment_score = []
 
     # Iterate over DataFrame rows and classify text
-    for index, row in tqdm(data.iterrows()):
+    for index, row in tqdm(data.iterrows(), total=data.shape[0], desc="Analyzing Sentiment"):
         freetext = row[column]
         sentence = str(freetext)
         sentence = sentence[:513]
@@ -171,7 +171,6 @@ def anonymize_names_with_transformers(text):
 
 # Zer0-shot classification - do_better column
 def batch_generator(data, column_name, batch_size):
-    logger.info("Calling Batch Generator")
     for i in range(0, len(data), batch_size):
         batch = data[column_name][i : i + batch_size]
         # Logging the batch content; you can comment this out or remove it in production
@@ -224,7 +223,8 @@ def feedback_classification(data, batch_size=16):
     feedback_labels = [""] * len(data)  # Pre-fill with empty strings
 
     # Process batches
-    for batch, start_index in tqdm(batch_generator(data, "free_text", batch_size)):
+    total_batches = (len(data) + batch_size - 1) // batch_size  # Calculate total number of batches
+    for batch, start_index in tqdm(batch_generator(data, "free_text", batch_size), total=total_batches, desc="Processing batches"):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
@@ -298,8 +298,8 @@ def improvement_classification(data, batch_size=16):
     # Initialize the list to store improvement labels
     improvement_labels = [""] * len(data)  # Pre-fill with empty strings
 
-    # Iterate over data in batches
-    for batch, start_index in tqdm(batch_generator(data, "do_better", batch_size)):
+    total_batches = (len(data) + batch_size - 1) // batch_size  # Calculate total number of batches
+    for batch, start_index in tqdm(batch_generator(data, "do_better", batch_size), total=total_batches, desc="Processing batches"):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
