@@ -161,7 +161,7 @@ def anonymize_names_with_transformers(text):
             # Check if the entity is classified as a person
             if entity["entity_group"] == "PER":
                 # Replace the detected name with a placeholder
-                anonymized_text = anonymized_text.replace(entity["word"], "[PERSON]")
+                anonymized_text = anonymized_text.replace(entity["word"], "[*PERSON*]")
     except ValueError as e:
         # Log the error for debugging
         print(f"Error processing text: {text}")
@@ -374,7 +374,7 @@ def concat_save_final_df(processed_df, new_df):
 
 @time_it
 def load_local_data():
-    df = pd.read_csv(f"{DATA_PATH}/data.csv", encoding='latin1')
+    df = pd.read_csv(f"{DATA_PATH}/data.csv")
     df["time"] = pd.to_datetime(df["time"], dayfirst=True)
     return df
 
@@ -393,7 +393,7 @@ def text_preprocessing(text):
     preprocessor.pipe(normalize_whitespace)
     preprocessor.pipe(
         replace_phone_numbers,
-        args={"country_to_detect": ["GB", "FR"], "replace_with": "*PHONE*"},
+        args={"country_to_detect": ["GB", "FR"], "replace_with": "[*PHONE*]"},
     )
     text = preprocessor.run(text)
 
