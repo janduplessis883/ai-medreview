@@ -378,7 +378,6 @@ def load_local_data():
 
 
 def text_preprocessing(text):
-    logger.info("⭐️ Text Preprocesssing with *NLPretext")
 
     preprocessor = Preprocessor()
     # preprocessor.pipe(lower_text)
@@ -424,10 +423,11 @@ if __name__ == "__main__":
         data["free_text"] = data["free_text"].progress_apply(anonymize_names_with_transformers)
         data["do_better"] = data["do_better"].progress_apply(anonymize_names_with_transformers)
 
-        data["free_text"] = data["free_text"].progress_apply(
+        logger.info("⭐️ Text Preprocesssing with *NLPretext")
+        data["free_text"] = data["free_text"].apply(
             lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
         )
-        data["do_better"] = data["do_better"].progress_apply(
+        data["do_better"] = data["do_better"].apply(
             lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
         )
 
