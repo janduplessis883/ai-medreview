@@ -103,7 +103,6 @@ def sentiment_analysis(data, column):
 
     # Iterate over DataFrame rows and classify text
     for index, row in tqdm(data.iterrows()):
-        print(f"\r{index}", end="")
         freetext = row[column]
         sentence = str(freetext)
         sentence = sentence[:513]
@@ -176,7 +175,6 @@ def batch_generator(data, column_name, batch_size):
     for i in range(0, len(data), batch_size):
         batch = data[column_name][i : i + batch_size]
         # Logging the batch content; you can comment this out or remove it in production
-        print(f"Batch starting at index {i}: {batch}")
         yield batch, i  # Yield the batch and the starting index
 
 
@@ -226,7 +224,7 @@ def feedback_classification(data, batch_size=16):
     feedback_labels = [""] * len(data)  # Pre-fill with empty strings
 
     # Process batches
-    for batch, start_index in batch_generator(data, "free_text", batch_size):
+    for batch, start_index in tqdm(batch_generator(data, "free_text", batch_size)):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
@@ -301,7 +299,7 @@ def improvement_classification(data, batch_size=16):
     improvement_labels = [""] * len(data)  # Pre-fill with empty strings
 
     # Iterate over data in batches
-    for batch, start_index in batch_generator(data, "do_better", batch_size):
+    for batch, start_index in tqdm(batch_generator(data, "do_better", batch_size)):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
@@ -368,7 +366,7 @@ def concat_save_final_df(processed_df, new_df):
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
     combined_data.sort_values(by="time", inplace=True, ascending=True)
     combined_data.to_parquet(f"{DATA_PATH}/data.parquet", index=False)
-    combined_data.to_csv(f"{DATA_PATH}/data.csv", index=False)
+    combined_data.to_csv(f"{DATA_PATH}/data.csv", encoding='utf-8', index=False)
     print(f"💾 data.csv saved to: {DATA_PATH}")
 
 
