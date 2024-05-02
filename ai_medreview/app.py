@@ -2419,7 +2419,7 @@ Explore the AI MedReview dashboard today and experience the transformative power
     )
 st.write("")
 st.write("")
-st.image(image='images/tsneplot.png', caption="3D t-sne Plot - 'Reviews' in vector space")
+st.image(image='images/tsneplot2.png', caption="3D t-sne Plot - 'Reviews' in vector space")
 st.write("")
 
 debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
