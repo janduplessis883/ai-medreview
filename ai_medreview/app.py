@@ -1530,7 +1530,7 @@ elif page == "Improvement Suggestions":
                     ("No improvement suggestions available for this date range.", "outline")
                 ],
                 class_name="flex gap-2",
-                key="badges11",
+                key="badges114",
             )
         st.markdown("---")
         improvement_data = filtered_data[
