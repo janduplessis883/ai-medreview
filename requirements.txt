@@ -2,7 +2,7 @@ wheel
 nbresult
 colorama
 ipdb
-ipykernel
+
 yapf
 matplotlib
 pygeohash
@@ -57,5 +57,6 @@ plotly
 reportlab
 fpdf
 tqdm
+spacy==3.2.4
 
 
