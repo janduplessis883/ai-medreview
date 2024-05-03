@@ -1494,37 +1494,44 @@ elif page == "Improvement Suggestions":
 
         # Converting the period index back to a timestamp for compatibility with Seaborn
         monthly_feedback_counts.index = monthly_feedback_counts.index.to_timestamp()
+        try:
+            fig = px.line(
+                monthly_feedback_counts,
+                x=monthly_feedback_counts.index,
+                y=monthly_feedback_counts.columns,
+                title="Time Series of Improvement Topics (Monthly Aggregation)",
+                labels={
+                    "x": "Month",
+                    "value": "Count of Improvement Labels",
+                    "variable": "Improvement Labels",
+                },
+            )
 
-        fig = px.line(
-            monthly_feedback_counts,
-            x=monthly_feedback_counts.index,
-            y=monthly_feedback_counts.columns,
-            title="Time Series of Improvement Topics (Monthly Aggregation)",
-            labels={
-                "x": "Month",
-                "value": "Count of Improvement Labels",
-                "variable": "Improvement Labels",
-            },
-        )
+            # Updating the layout
+            fig.update_layout(
+                width=900,
+                legend=dict(
+                    title="Improvement Labels", x=1.05, y=1, xanchor="left", yanchor="top"
+                ),
+                xaxis=dict(
+                    gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                ),
+                yaxis=dict(
+                    gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                ),
+                plot_bgcolor="white",
+            )
 
-        # Updating the layout
-        fig.update_layout(
-            width=900,
-            legend=dict(
-                title="Improvement Labels", x=1.05, y=1, xanchor="left", yanchor="top"
-            ),
-            xaxis=dict(
-                gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
-            ),
-            yaxis=dict(
-                gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
-            ),
-            plot_bgcolor="white",
-        )
-
-        # Displaying the plot in Streamlit
-        st.plotly_chart(fig)
-
+            # Displaying the plot in Streamlit
+            st.plotly_chart(fig)
+        except:
+            ui.badges(
+                badge_list=[
+                    ("No improvement suggestions available for this date range.", "outline")
+                ],
+                class_name="flex gap-2",
+                key="badges11",
+            )
         st.markdown("---")
         improvement_data = filtered_data[
             (filtered_data["improvement_labels"] != "No Improvement Suggestion")
