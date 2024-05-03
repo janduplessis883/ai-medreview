@@ -1,5 +1,4 @@
-wheel
-nbresult
+streamlit
 colorama
 ipdb
 
@@ -42,7 +41,7 @@ gspread
 transformers
 openai
 wordcloud
-streamlit
+
 sentencepiece
 requests
 black
