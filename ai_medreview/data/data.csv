@@ -327,8 +327,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2023-10-12 11:05:27,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2023-10-12 11:06:20,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2023-10-12 11:06:33,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,4.0,,,,
-2023-10-12 11:09:59,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2023-10-12 11:09:59,Extremely likely,The staff are helpful to the patients The doctors are attentive to patients complaints The nurse is very friendly,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9356974363327026,neutral,0.0,19.0,3,5.0,Staff Empathy and Compassion,,,
+2023-10-12 11:09:59,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2023-10-12 11:13:14,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2023-10-12 11:21:28,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2023-10-12 11:22:09,Extremely likely,Brilliant doctor very helpful reception staff,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9712806344032288,neutral,0.0,7.0,0,5.0,Reception Staff Interaction,,,
@@ -382,8 +382,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2023-10-23 10:05:29,Extremely likely,Found the atmosphere nice and friendly from reception to Doctor,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9377126097679138,neutral,0.0,10.0,0,5.0,Environment and Ambiance,,,
 2023-10-23 10:07:38,Extremely likely,They are so caring and helpful,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9582344889640808,neutral,0.0,6.0,5,5.0,Staff Empathy and Compassion,,,
 2023-10-23 10:07:50,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,1,5.0,,,,
-2023-10-23 10:09:43,Extremely likely,Staff are nice and good to listen,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9382405281066896,neutral,0.0,7.0,0,5.0,Staff Professionalism,,,
 2023-10-23 10:09:43,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
+2023-10-23 10:09:43,Extremely likely,Staff are nice and good to listen,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9382405281066896,neutral,0.0,7.0,0,5.0,Staff Professionalism,,,
 2023-10-23 10:12:42,Likely,I find that the service I receive is always very friendly and helpful,I was satisfied with the way I was treated,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9701205492019652,neutral,0.4716628193855285,13.0,9,4.0,Staff Professionalism,Treatment Quality,,
 2023-10-23 10:16:40,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,,
 2023-10-23 10:20:39,Unlikely,The front desk staff need totally changed,Doctor is Extremely likely only the front desk staff is careless and rude pretending they are busy don t give time to complete your enquiry,Earls-Court-Surgery,Brompton-Health-PCN,negative,0.8343495726585388,negative,0.8749971985816956,7.0,28,2.0,Reception Staff Interaction,Reception Staff Interaction,,
@@ -1124,8 +1124,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-22 18:33:11,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2024-02-22 18:34:42,Likely,Happy with my surgery not had any issues with them in 13 years that I hear others have faced with theirs,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.8829659223556519,neutral,0.0,22.0,0,4.0,Treatment Quality,,,
 2024-02-22 18:35:30,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
-2024-02-22 18:40:01,Extremely likely,I don t use the website but everything I do with the Surgery is fantastically good Many thanks,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.961006760597229,neutral,0.0,17.0,0,5.0,Treatment Quality,,,
 2024-02-22 18:40:01,Extremely likely,I donâ€™t use the website but everything I do with the Surgery is fantastically good Many thanks,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.964531421661377,neutral,0.0,17.0,0,5.0,Treatment Quality,,,
+2024-02-22 18:40:01,Extremely likely,I don t use the website but everything I do with the Surgery is fantastically good Many thanks,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.961006760597229,neutral,0.0,17.0,0,5.0,Treatment Quality,,,
 2024-02-22 18:40:32,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 18:42:41,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-22 18:44:31,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1133,8 +1133,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-22 18:46:21,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 18:46:52,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 18:48:01,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
-2024-02-22 18:51:32,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,1.0,0,5.0,,,,
 2024-02-22 18:51:32,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,1.0,0,4.0,,,,
+2024-02-22 18:51:32,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,1.0,0,5.0,,,,
 2024-02-22 18:54:24,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 18:57:19,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-22 18:57:47,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1206,8 +1206,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-22 21:38:05,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-22 21:38:30,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 21:39:12,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-22 21:40:36,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-22 21:40:36,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,4.0,,,,
+2024-02-22 21:40:36,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-22 21:43:20,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 21:45:52,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-22 21:47:22,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1242,8 +1242,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-23 00:11:52,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 00:16:30,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 01:35:55,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
-2024-02-23 03:35:43,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-23 03:35:43,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,4.0,,,,
+2024-02-23 03:35:43,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-23 05:07:38,Extremely likely,My doctors surgery is wonderful the best,,Earls-Court-Surgery,Brompton-Health-PCN,positive,0.9802584648132324,neutral,0.0,7.0,0,5.0,Treatment Quality,,,
 2024-02-23 05:44:13,Likely,Please get rid off the dead chair lift at the surgery,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.6370404362678528,neutral,0.0,11.0,0,4.0,Facility Cleanliness,,,
 2024-02-23 05:44:13,Extremely likely,Please get rid off the dead chair lift at the surgery,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.6370404362678528,neutral,0.0,11.0,0,5.0,Facility Cleanliness,,,
@@ -1362,8 +1362,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-23 15:10:13,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 15:10:56,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:11:01,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-23 15:11:05,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:11:05,Extremely likely,Never used website so gave a neutral reply,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.5085657238960266,neutral,0.0,8.0,0,5.0,Patient Respect,,,
+2024-02-23 15:11:05,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:11:09,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:11:29,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:12:18,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1371,8 +1371,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-23 15:15:57,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2024-02-23 15:17:39,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,4,5.0,,,,
 2024-02-23 15:17:42,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
-2024-02-23 15:21:09,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 15:21:09,Extremely likely,It s a five star service starting with the reception and doctors you are treated with care and attention no complaints from me PERSON,,Royal-Hospital-Chelsea,Brompton-Health-PCN,positive,0.957707703113556,neutral,0.0,23.0,0,5.0,Patient Respect,,,
+2024-02-23 15:21:09,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 15:25:51,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,4.0,,,,
 2024-02-23 15:25:51,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 15:25:51,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
@@ -1389,8 +1389,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-23 15:54:12,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2024-02-23 15:54:42,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2024-02-23 15:58:45,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-23 16:02:55,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2024-02-23 16:02:55,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,4.0,,,,
+2024-02-23 16:02:55,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
 2024-02-23 16:04:15,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 16:04:15,Extremely likely,The med centre at RHC is brill from the ladies on the desk the nurses and the doctors cant find any fault im extremely fortunate and happy to have a Extremely likely medical centre,,Royal-Hospital-Chelsea,Brompton-Health-PCN,positive,0.955473780632019,neutral,0.0,34.0,0,5.0,Staff Professionalism,,,
 2024-02-23 16:06:26,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,5.0,,,,
@@ -1407,16 +1407,16 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-23 16:51:22,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,,
 2024-02-23 16:58:03,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 17:07:54,Likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,1,4.0,,,,
-2024-02-23 17:13:08,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 17:13:08,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
+2024-02-23 17:13:08,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-23 17:33:07,Extremely likely,Excellent service at all times during surgery open hours Rapid referrals to major hospitals when needed Staff regularly go above and beyond in your best interests,,Royal-Hospital-Chelsea,Brompton-Health-PCN,positive,0.9484360814094543,neutral,0.0,26.0,0,5.0,Staff Professionalism,,,
 2024-02-23 18:01:55,Extremely likely,A very considerate and caring team They really can t do enough for the Chelsea Pensioners,,Royal-Hospital-Chelsea,Brompton-Health-PCN,positive,0.4761842787265777,neutral,0.0,15.0,0,5.0,Staff Empathy and Compassion,,,
 2024-02-23 18:10:38,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-23 18:10:38,Extremely likely,Thestaff at RHC GP Surgery are excellent They are efficient friendly and treat every one politeness and kindness,,Royal-Hospital-Chelsea,Brompton-Health-PCN,positive,0.9312402009963988,neutral,0.0,18.0,0,5.0,Staff Professionalism,,,
 2024-02-23 18:18:30,Extremely likely,Excellent practice with very professional doctors and staff,,The-Chelsea-Practice,Brompton-Health-PCN,positive,0.9627580642700196,neutral,0.0,8.0,1,5.0,Staff Professionalism,,,
 2024-02-23 18:24:43,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,,
-2024-02-23 18:29:33,Extremely likely,On the question of the practice website I nver used it so I cannot answer,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.6133789420127869,neutral,0.0,16.0,0,5.0,Follow-up and Continuity of Care,,,
 2024-02-23 18:29:33,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
+2024-02-23 18:29:33,Extremely likely,On the question of the practice website I nver used it so I cannot answer,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.6133789420127869,neutral,0.0,16.0,0,5.0,Follow-up and Continuity of Care,,,
 2024-02-23 18:36:03,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,1.0,0,5.0,,,,
 2024-02-23 19:05:29,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2024-02-23 19:05:29,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,4.0,,,,
@@ -1598,9 +1598,9 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-28 10:28:40,Likely,So The practise is great they do their best the GPavailability is more limiting,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.7506852746009827,neutral,0.0,17.0,0,4.0,Accessibility and Convenience,,,
 2024-02-28 10:28:56,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-28 10:29:23,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-28 10:30:24,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
-2024-02-28 10:30:24,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-28 10:30:24,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
+2024-02-28 10:30:24,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
+2024-02-28 10:30:24,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-28 10:31:43,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 10:32:25,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-28 10:33:18,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
@@ -1635,9 +1635,9 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-28 10:58:02,Unlikely,I don t use the practice almost anymore I had a horrible experience few years ago with a nurse who tried to introduce a coil and she nearly tortured me to make also very humiliating comments The coil was easily introduce by a private gynaecologist I referred the matter to doctor hussein I dismissed me without PERSON answering I went to the practise again recently after a very painful renal colic and a recurrent issue with my shoulder The GP who visited me was kind but superficial After the colic I should be referred to stone clinic as I have still one and I should repeat the blood test There was also an anomaly in the other kidney She dismissed me with nothing She just suggested to self refer to physio clinic for my shoulder but I am doing things privately Only way to survive Horrible service,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.8287822008132935,neutral,0.0,158.0,0,2.0,Follow-up and Continuity of Care,,,
 2024-02-28 10:58:02,Likely,I donâ€™t use the practice almost anymore I had a horrible experience few years ago with a nurse who tried to introduce a coil and she nearly tortured me to make also very humiliating comments The coil was easily introduce by a private gynaecologist I referred the matter to doctor hussein I dismissed me without PERSON answering I went to the practise again recently after a very painful renal colic and a recurrent issue with my shoulder The GP who visited me was kind but superficial After the colic I should be referred to stone clinic as I have still one and I should repeat the blood test There was also an anomaly in the other kidney She dismissed me with nothing She just suggested to self refer to physio clinic for my shoulder but I am doing things privately Only way to survive Horrible service,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.8658938407897949,neutral,0.0,158.0,0,4.0,Follow-up and Continuity of Care,,,
 2024-02-28 10:58:52,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-28 10:58:56,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-28 10:58:56,Likely,On my recent visit there were no doctors at work only nurses and support staff,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.7797170877456665,neutral,0.0,15.0,0,4.0,Follow-up and Continuity of Care,,,
 2024-02-28 10:58:56,Extremely unlikely,On my recent visit there were no doctors at work only nurses and support staff,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.7797170877456665,neutral,0.0,15.0,0,1.0,Follow-up and Continuity of Care,,,
+2024-02-28 10:58:56,Likely,On my recent visit there were no doctors at work only nurses and support staff,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.7797170877456665,neutral,0.0,15.0,0,4.0,Follow-up and Continuity of Care,,,
+2024-02-28 10:58:56,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 10:59:29,Unlikely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,2.0,,,,
 2024-02-28 11:00:05,Unlikely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,2.0,,,,
 2024-02-28 11:00:22,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1682,8 +1682,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-28 11:57:36,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-28 11:59:43,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 12:03:36,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-28 12:05:46,Likely,The high weight and blood pressure machine is often out of order,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.7475147843360901,neutral,0.0,12.0,0,4.0,Test Results,,,
 2024-02-28 12:05:46,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
+2024-02-28 12:05:46,Likely,The high weight and blood pressure machine is often out of order,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.7475147843360901,neutral,0.0,12.0,0,4.0,Test Results,,,
 2024-02-28 12:15:59,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
 2024-02-28 12:16:13,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 12:17:38,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,,
@@ -1782,8 +1782,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-28 17:41:58,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:05:13,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:10:30,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
-2024-02-28 18:14:07,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:14:07,Likely,It would be very helpful if I as a long term client could have a general check up once a year This would allow a number of minor concerns to be covered in one visit,,Stanhope-Mews-Surgery,Brompton-Health-PCN,positive,0.6143975257873535,neutral,0.0,35.0,0,4.0,Follow-up and Continuity of Care,,,
+2024-02-28 18:14:07,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:20:14,Likely,I have regular appointments at Chelsea and Westminster who prescribe medicines blood tests etc for me I also have medicines prescribed and similar interactions with yourselves It would be much easier if these were coordinated for instance blood tests get duplicated some medicines are available from my local chemists others can only be obtained at the hospital It would be much better if these were coordinated I would also be supportive of proactive patient health care particularly as one gets older and more prone to illness Regular health check ups and tests would prevent illness and save costs in the long run,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.7342033982276917,neutral,0.0,103.0,0,4.0,Prescriptions and Medication Management,,,
 2024-02-28 18:22:54,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:22:54,Neither likely nor unlikely,It seems there are too many locums it gets more difficult to see the same GP,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.7585225105285645,neutral,0.0,16.0,0,3.0,Appointment Availability,,,
@@ -1792,8 +1792,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-28 18:38:55,Likely,Good in clinic facilities and service,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.89523845911026,neutral,0.0,6.0,3,4.0,Treatment Quality,,,
 2024-02-28 18:39:38,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-28 18:40:53,Don't know,I am extremely confused Do tots keep moving and I have become an object There is no human element left and seems humanity has gone,No yes GPs should be committed for a period of few years so a patient can have a choice too Not all on their terms We pay tax for them as well to attend to our needs,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.809951901435852,neutral,0.7890217900276184,26.0,37,,Follow-up and Continuity of Care,Patient Respect,,
-2024-02-28 18:42:14,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,4.0,,,,
 2024-02-28 18:42:14,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,5.0,,,,
+2024-02-28 18:42:14,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,4.0,,,,
 2024-02-28 18:43:04,Extremely likely,Excellent Service so grateful to everyone at the Violett Melchett Practice,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.9804799556732178,neutral,0.0,12.0,1,5.0,Staff Professionalism,,,
 2024-02-28 18:53:52,Neither likely nor unlikely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,3.0,,,,
 2024-02-28 18:53:56,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -1937,8 +1937,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-29 11:44:44,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 11:45:10,Neither likely nor unlikely,Since the Redcliffe Surgery moved to Violet Melchett I have not actually used the GP Practice hence my responses to this questionnaire as I have no experience on which to form a judgement,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.740526556968689,neutral,0.0,33.0,0,3.0,Follow-up and Continuity of Care,,,
 2024-02-29 11:46:21,Extremely unlikely,The phone system is STILL random you often have no idea where you are in the queue number ie number 2 or 44 This is rubbish Too many mistakes from the reception personnel too many mistakes from health assistants who never introduce themselves too many differences between what a doctor says and a dedicated society advises ie the Diabetic Society or British Heart Foundation I am not alone in these thoughts even if people don t take the time to inform you Would not ever recommend this practice to anyone have a look at some of the Google reviews,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,negative,0.9014868140220642,neutral,0.0,98.0,0,1.0,Reception Staff Interaction,,,
-2024-02-29 11:47:00,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 11:47:00,Likely,Iâ€™m getting used to the new location of Redcliffe Surgery and the online booking system,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.6771718859672546,neutral,0.0,15.0,0,4.0,Accessibility and Convenience,,,
+2024-02-29 11:47:00,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 11:47:14,Neither likely nor unlikely,I have been living in the borough and with Redcliff surgery and now Health partners for almost 20 years and I DO NOT HAVE A DIRECT GP TO COMMUNICATE WITH the high turnover of doctors doens t help Please provide some point of contact for older residents who require some more personalised contact thank you,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,negative,0.8169991970062256,neutral,0.0,54.0,0,3.0,Follow-up and Continuity of Care,,,
 2024-02-29 11:47:19,Extremely likely,I m getting used to the new location of Redcliffe Surgery and the online booking system,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.71939617395401,neutral,0.0,15.0,0,5.0,Accessibility and Convenience,,,
 2024-02-29 11:47:38,Extremely likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -2139,8 +2139,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-29 15:11:01,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 15:11:18,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 15:11:18,Extremely likely,The dr I have seen in my last appointment was amazing made all difference She caused a positive impact on the overall,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.978438675403595,neutral,0.0,22.0,0,5.0,Follow-up and Continuity of Care,,,
-2024-02-29 15:13:40,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-29 15:13:40,Likely,There are too few appointments Have to wait 2 weeks or more sometimes Could be dead by then Not good enough Sorry but it is true Hire more GPs to cover the extra amount of patients,,The-Chelsea-Practice,Brompton-Health-PCN,negative,0.8847867250442505,neutral,0.0,36.0,0,4.0,Waiting Time,,,
+2024-02-29 15:13:40,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-29 15:13:52,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 15:13:52,Likely,Other than the long waiting time to make a GP appointment everything else is good One other issue is the change of doctors all the time I feel there s a lot of turn over of doctors all the time I know all doctors have access to all the history but as a patient it s nice to have some kind of consistency Last appointment was good I was listened to and I felt satisfied,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.4303489029407501,neutral,0.0,77.0,0,4.0,Waiting Time,,,
 2024-02-29 15:14:06,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -2232,8 +2232,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-29 16:06:51,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,,
 2024-02-29 16:06:55,Likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-29 16:07:06,Unlikely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,2.0,,,,
-2024-02-29 16:07:23,Unlikely,Had a blood test and am not able to get the results as I cannot get an appointment A terrible client experience,,The-Chelsea-Practice,Brompton-Health-PCN,negative,0.9031557440757751,neutral,0.0,22.0,0,2.0,Test Results,,,
 2024-02-29 16:07:23,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
+2024-02-29 16:07:23,Unlikely,Had a blood test and am not able to get the results as I cannot get an appointment A terrible client experience,,The-Chelsea-Practice,Brompton-Health-PCN,negative,0.9031557440757751,neutral,0.0,22.0,0,2.0,Test Results,,,
 2024-02-29 16:07:29,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 16:07:32,Likely,It used to be a lot better But it s not surgeries fault NHS changed,,Scarsdale-Medical-Centre,Brompton-Health-PCN,negative,0.5636188983917236,neutral,0.0,14.0,0,4.0,Treatment Quality,,,
 2024-02-29 16:07:49,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
@@ -2534,8 +2534,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-02-29 22:10:52,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-02-29 22:12:11,Extremely likely,Extremely likely to be able to do appointments over face time But also good to be able to get an in person appointment when necessary More availability would be good,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.7307654619216919,neutral,0.0,30.0,0,5.0,Appointment Availability,,,
 2024-02-29 22:12:54,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,4.0,,,,
-2024-02-29 22:13:17,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 22:13:17,Extremely likely,I always feel very well taken care of Lovely surgery,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.9738197326660156,neutral,0.0,10.0,0,5.0,Patient Respect,,,
+2024-02-29 22:13:17,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
 2024-02-29 22:23:06,Neither likely nor unlikely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,3.0,,,,
 2024-02-29 22:34:04,Neither likely nor unlikely,I would prefer to have the same GP when attending my surgery appointments It is a little confusing knowing which surgery to enter to acknowledge your arrival for appointment I have been sent backwards and forwards with reception staff not knowing location of GP,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.5657178163528442,neutral,0.0,44.0,0,3.0,Reception Staff Interaction,,,
 2024-02-29 22:42:27,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
@@ -2947,8 +2947,8 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-03-06 12:27:31,Extremely likely,Very helpful and willing to help Such a shame appointments are limited to 10 minutes only hardly time to discuss more complex situations or needs,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.3507585823535919,neutral,0.0,25.0,0,5.0,Appointment Availability,,,
 2024-03-06 12:27:34,Extremely unlikely,Incompetent team down to the fact that they knew I had to have further blood test so they gave me an Appointment that I went to to set another appointment for a blood test NHS service is by far the worst health system compared to all Europe Please change that system it s as simple as horrible,,Earls-Court-Medical-Centre,Brompton-Health-PCN,negative,0.9265927076339722,neutral,0.0,56.0,0,1.0,Follow-up and Continuity of Care,,,
 2024-03-06 12:27:40,Extremely likely,The Abingdon Health Centre Team are fantastic They are approachable kind and most of all they try their best to take care of their patients but also prioritize where possible Thank you for all your dedication,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,positive,0.9654942750930786,neutral,0.0,36.0,0,5.0,Staff Empathy and Compassion,,,
-2024-03-06 12:28:02,Extremely likely,I think they are a good practice and doct PERSON is a great doct,,The-Good-Practice,Brompton-Health-PCN,positive,0.9257747530937196,neutral,0.0,14.0,0,5.0,Staff Professionalism,,,
 2024-03-06 12:28:02,Extremely likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,,
+2024-03-06 12:28:02,Extremely likely,I think they are a good practice and doct PERSON is a great doct,,The-Good-Practice,Brompton-Health-PCN,positive,0.9257747530937196,neutral,0.0,14.0,0,5.0,Staff Professionalism,,,
 2024-03-06 12:28:13,Extremely likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,5.0,,,,
 2024-03-06 12:28:32,Likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,,
 2024-03-06 12:28:43,Likely,Very happy with the Good Practice although it takes a long time to make an appointment Even when you start telephoning at 8 00 am,,The-Good-Practice,Brompton-Health-PCN,positive,0.8754714131355286,neutral,0.0,24.0,0,4.0,Waiting Time,,,
@@ -4537,28 +4537,6 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-04-30 11:08:46,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,21V6a9,bkoaDE
 2024-04-30 12:57:25,Extremely likely,Very nice staff and caring doctors,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9616482853889464,neutral,0.0,6.0,0,5.0,Staff Empathy and Compassion,,,
 2024-04-30 22:41:26,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,j52Q6R,O0kgzA
-2024-05-01 00:37:21,Unlikely,Although Dr PERSON is the best Doctor I ve ever had in my long life it isn t possible to even make phone appointment with her in the forseable future as I was told by the reception Which is very distressing if you are alarmed about something She herself phoned me yesterday evening after 7pm which is wonderful it s just that one can t make contact oneself PERSON is a really great nurse,As I ve said above the Doctors Nurses are really lovely people but there s no way to make it better when there are too many patients to mange,Emperors-Gate-Health-Centre,Brompton-Health-PCN,negative,0.4187520742416382,positive,0.4624523818492889,73.0,29,2.0,Appointment Availability,Staff Empathy and Compassion,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Friendly responsive service Feeling that all the staff care,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.910101056098938,neutral,0.0,9.0,1,5.0,Patient Respect,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Everyone is so friendly and professional,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9647824764251708,neutral,0.0,6.0,0,5.0,Staff Professionalism,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Because I found easy to make appointment,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.59898442029953,neutral,0.0,7.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Because I m happy with the practice,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9492443203926086,neutral,0.0,6.0,1,5.0,Staff Professionalism,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,4,4.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,5,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,The phone is always answered Courteous and helpful staff The doctors are very experienced and caring and thorough,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9699438810348512,neutral,0.0,18.0,1,5.0,Staff Professionalism,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Likely,Access is good Quality of clinic is improving over the years Staff is great,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9704431891441344,neutral,0.0,14.0,0,4.0,Accessibility and Convenience,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Neither likely nor unlikely,The GP I called to inform and discuss my FHR surgery was not at all interested in my case,Get good GPs who know their matter and care about their patients My previous experience with C WH was fantastic and I praise the NHS Almost comparable with the private care It is the GPs that are often the problem whom patients do not get on with,Emperors-Gate-Health-Centre,Brompton-Health-PCN,negative,0.8051640391349792,positive,0.8678941130638123,19.0,47,3.0,Patient Education and Information,Staff Empathy and Compassion,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,The senior GPs are really good and the whole team is nice and competent Which unfortunately is not always the case in the NHS,Being able to have appointments with Dr PERSON t every time I ve tried in the last few months it s been impossible,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8807033896446228,negative,0.624182403087616,24.0,20,5.0,Staff Professionalism,Appointment Availability,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,I have been with the practice for years every doctor or nurse I have encountered is incredibly helpful informed and I cannot praise them enough,Nothing I would be hard pressed to find another surgery like this I think,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9684619307518004,negative,0.5848117470741272,25.0,14,5.0,Staff Professionalism,Treatment Quality,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,1,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,I got an appointment fairly quickly it is friendly and close to home reminders are sent to book regular checkups,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8673112392425537,neutral,0.0,21.0,1,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Always best attitude attention and fast appointment and best care,No I have already have best care,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.942708432674408,positive,0.6849111318588257,10.0,8,5.0,Patient Respect,Patient Respect,PvLadP,O0kgzA
-2024-05-01 00:37:21,Likely,The secretary and the GP were very kind and listened to my concerns,Talk to the GP on the same day I called but I know they are very busy,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8334207534790039,neutral,0.6722941994667053,13.0,17,4.0,Staff Empathy and Compassion,Follow-up and Continuity of Care,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,1,5.0,,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Extremely likely,Fantastic service from start to finish Very accommodating with scheduling a convenient slot,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.981475591659546,neutral,0.0,13.0,5,5.0,Staff Professionalism,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,They are really good at listening and caring,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9493430852890016,neutral,0.0,8.0,0,5.0,Patient Respect,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,PERSON is amazing Puts you at complete ease She s wonderful,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9841991662979126,neutral,0.0,10.0,4,5.0,Patient Respect,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Likely,It s a very good Surgery The staff and doctors are very caring It s never difficult to get an appointment,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9750017523765564,neutral,0.0,19.0,0,4.0,Staff Empathy and Compassion,,PvLadP,O0kgzA
@@ -4567,7 +4545,7 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-05-01 00:37:21,Extremely likely,The are very friendly and helpful,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9444087743759156,neutral,0.0,6.0,0,5.0,Staff Empathy and Compassion,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,0,5.0,,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,The surgery are very professional follow up on all issues,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8634621500968933,neutral,0.0,10.0,1,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
-2024-05-01 00:37:21,Neither likely nor unlikely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,3.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Fantastic service from start to finish Very accommodating with scheduling a convenient slot,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.981475591659546,neutral,0.0,13.0,5,5.0,Staff Professionalism,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,I am looked after very well,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9199427962303162,neutral,0.0,6.0,0,5.0,Patient Respect,,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,I have been coming to Emperor s Gate for over 20 years Staff are always helpful and friendly I feel listened to and receive high quality of care,More availability of face to face appointments,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9673410058021544,neutral,0.7574506402015686,27.0,7,5.0,Patient Respect,Appointment Availability,PvLadP,O0kgzA
@@ -4576,6 +4554,28 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-05-01 00:37:21,Extremely likely,Extremely friendly receptionist nurses and Doctors They always call back and follow up your case,I am very happy and feel they are my extended family,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9609280824661256,positive,0.984000563621521,15.0,11,5.0,Follow-up and Continuity of Care,Follow-up and Continuity of Care,PvLadP,O0kgzA
 2024-05-01 00:37:21,Likely,,Being able to see my GP in person rather than talking on the phone If that cannot be helped I d like to have a specific time as for me it s very difficult answering the phone at work I have a customer facing job and I need to organise the time when can answer with my manager,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.4852721691131592,3.0,56,4.0,,Appointment Availability,PvLadP,O0kgzA
 2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Neither likely nor unlikely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,3.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,1,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Because I found easy to make appointment,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.59898442029953,neutral,0.0,7.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Always best attitude attention and fast appointment and best care,No I have already have best care,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.942708432674408,positive,0.6849111318588257,10.0,8,5.0,Patient Respect,Patient Respect,PvLadP,O0kgzA
+2024-05-01 00:37:21,Unlikely,Although Dr PERSON is the best Doctor I ve ever had in my long life it isn t possible to even make phone appointment with her in the forseable future as I was told by the reception Which is very distressing if you are alarmed about something She herself phoned me yesterday evening after 7pm which is wonderful it s just that one can t make contact oneself PERSON is a really great nurse,As I ve said above the Doctors Nurses are really lovely people but there s no way to make it better when there are too many patients to mange,Emperors-Gate-Health-Centre,Brompton-Health-PCN,negative,0.4187520742416382,positive,0.4624523818492889,73.0,29,2.0,Appointment Availability,Staff Empathy and Compassion,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Friendly responsive service Feeling that all the staff care,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.910101056098938,neutral,0.0,9.0,1,5.0,Patient Respect,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Likely,The secretary and the GP were very kind and listened to my concerns,Talk to the GP on the same day I called but I know they are very busy,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8334207534790039,neutral,0.6722941994667053,13.0,17,4.0,Staff Empathy and Compassion,Follow-up and Continuity of Care,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Because I m happy with the practice,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9492443203926086,neutral,0.0,6.0,1,5.0,Staff Professionalism,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,3.0,4,4.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,Everyone is so friendly and professional,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9647824764251708,neutral,0.0,6.0,0,5.0,Staff Professionalism,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,The phone is always answered Courteous and helpful staff The doctors are very experienced and caring and thorough,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9699438810348512,neutral,0.0,18.0,1,5.0,Staff Professionalism,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Likely,Access is good Quality of clinic is improving over the years Staff is great,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9704431891441344,neutral,0.0,14.0,0,4.0,Accessibility and Convenience,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Neither likely nor unlikely,The GP I called to inform and discuss my FHR surgery was not at all interested in my case,Get good GPs who know their matter and care about their patients My previous experience with C WH was fantastic and I praise the NHS Almost comparable with the private care It is the GPs that are often the problem whom patients do not get on with,Emperors-Gate-Health-Centre,Brompton-Health-PCN,negative,0.8051640391349792,positive,0.8678941130638123,19.0,47,3.0,Patient Education and Information,Staff Empathy and Compassion,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,The senior GPs are really good and the whole team is nice and competent Which unfortunately is not always the case in the NHS,Being able to have appointments with Dr PERSON t every time I ve tried in the last few months it s been impossible,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8807033896446228,negative,0.624182403087616,24.0,20,5.0,Staff Professionalism,Appointment Availability,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,5,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,I have been with the practice for years every doctor or nurse I have encountered is incredibly helpful informed and I cannot praise them enough,Nothing I would be hard pressed to find another surgery like this I think,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9684619307518004,negative,0.5848117470741272,25.0,14,5.0,Staff Professionalism,Treatment Quality,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,2.0,1,5.0,,,PvLadP,O0kgzA
+2024-05-01 00:37:21,Extremely likely,I got an appointment fairly quickly it is friendly and close to home reminders are sent to book regular checkups,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.8673112392425537,neutral,0.0,21.0,1,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
 2024-05-01 03:41:29,Extremely likely,Because of stress free consultation online and assurance of getting feedbacks,Prompt feedback and possible treatment after testing will enhance my experience,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.508389949798584,positive,0.745965838432312,11.0,11,5.0,Accessibility and Convenience,Follow-up and Continuity of Care,PvLadP,O0kgzA
 2024-05-01 05:31:56,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,0,5.0,,,PvLadP,O0kgzA
 2024-05-01 06:37:50,Extremely likely,The staff is very attentive and qualified,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9561480283737184,neutral,0.0,8.0,2,5.0,Staff Professionalism,,PvLadP,O0kgzA
@@ -4640,30 +4640,6 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-05-03 12:29:33,Extremely likely,They always answer and are willing to giver you options not just turn you away due to no bookings They will help you find the help you need,,The-Chelsea-Practice,Brompton-Health-PCN,positive,0.6642168164253235,neutral,0.0,28.0,0,5.0,Staff Professionalism,,Lvxl2G,v2v9kX
 2024-05-03 12:46:19,Extremely likely,As usual on time professional and very kind service,No all was excellent from booking the appointment to the end,The-Chelsea-Practice,Brompton-Health-PCN,positive,0.9577770829200744,positive,0.9639571905136108,9.0,11,5.0,Patient Respect,Appointment Availability,7108vR,6xzlqe
 2024-05-03 13:38:54,Extremely likely,Personally I ve been looked after very well at the surgery,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.94257652759552,neutral,0.0,11.0,2,5.0,Patient Respect,,,
-2024-05-03 15:24:05,Extremely likely,,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,Telephone consultations are an available option which is great for quick discussions The downside is that it s sometimes difficult to convey more complex issues over the phone,,The-Good-Practice,Brompton-Health-PCN,neutral,0.5479089021682739,neutral,0.0,27.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,Visited the GP surgery last week The process was straightforward but the clinic seemed quite busy leading to a longer than expected wait Doctors were professional yet the visit felt somewhat rushed,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.6430193185806274,neutral,0.0,32.0,0,5.0,Waiting Time,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,The GP surgery is generally efficient Appointments can be made within a reasonable time frame but the availability of preferred doctors is often limited The staff are polite though the wait times can vary,,Earls-Court-Medical-Centre,Brompton-Health-PCN,positive,0.6986605525016785,neutral,0.0,34.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Earls-Court-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,This surgery has a clean and welcoming environment Getting through on the phone can be a challenge during peak hours but once through the support staff are helpful,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9132019281387328,neutral,0.0,28.0,0,5.0,Facility Cleanliness,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,The medical staff at the clinic are knowledgeable but it s hard to see the same doctor consistently This lack of continuity can be frustrating when dealing with ongoing health issues,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,negative,0.6735357642173767,neutral,0.0,30.0,0,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Likely,,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,The surgery is well organized with modern facilities However the booking system online can be glitchy which sometimes makes scheduling appointments a hassle,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.5713911056518555,neutral,0.0,22.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,This surgery is conveniently located with sufficient parking The receptionists are friendly but there seems to be a high turnover of GPs which isn t ideal,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.5199310183525085,neutral,0.0,25.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The practice usually sends reminders for appointments and follow ups which is helpful However the communication could be more detailed especially regarding what to expect at upcoming appointments,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.5927475690841675,neutral,0.0,27.0,0,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,Appointments are generally available within a few days which is convenient However the consultations often feel rushed with little time to discuss concerns in depth,,Earls-Court-Medical-Centre,Brompton-Health-PCN,neutral,0.7215476036071777,neutral,0.0,25.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,Getting an appointment is usually straightforward but the experience can feel impersonal While the doctors are professional the appointments are quick and can seem hurried,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.6015695333480835,neutral,0.0,25.0,0,5.0,Staff Professionalism,,PvLadP,O0kgzA
@@ -4674,15 +4650,41 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-05-03 15:24:05,Extremely likely,The staff at the front desk are efficient at handling check ins and paperwork Sometimes though their responses can seem curt due to the busy nature of their work,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.7702150940895081,neutral,0.0,28.0,0,5.0,Reception Staff Interaction,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The online booking system is user friendly and a great option for making appointments Still it occasionally experiences downtime which can be frustrating,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.6896857023239136,neutral,0.0,22.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,,,Earls-Court-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,The surgery is well maintained and modern but the atmosphere is somewhat clinical and impersonal A warmer more welcoming environment could enhance patient comfort,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.4930945932865143,neutral,0.0,23.0,0,5.0,Environment and Ambiance,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,Parking is ample making access to the clinic easy Inside however the signage could be improved to better direct patients to different sections of the practice,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.5788455605506897,neutral,0.0,26.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,Overall the surgery functions well with its online prescription service being particularly useful However the experience lacks a personal touch which could make a big difference in patient care,,The-Good-Practice,Brompton-Health-PCN,positive,0.6373333930969238,neutral,0.0,29.0,0,5.0,Surgery Website,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The healthcare assistants are diligent in taking vital signs and preparing patients While they are professional the interaction often lacks a personal touch,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.6236227750778198,neutral,0.0,23.0,0,5.0,Staff Professionalism,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The staff at this GP surgery are courteous and the premises are always kept clean However the follow up process can be vague leaving you unsure of the next steps,,Stanhope-Mews-Surgery,Brompton-Health-PCN,positive,0.5310226678848267,neutral,0.0,29.0,0,5.0,Facility Cleanliness,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,I appreciate the surgery s effort to accommodate urgent appointments though regular check ups require booking well in advance The doctors are competent but the appointments feel brief,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.7922588586807251,neutral,0.0,26.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The GP practice offers a range of services which is great However the reception area is often crowded and privacy at the front desk could be improved,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.4931512176990509,neutral,0.0,27.0,0,5.0,Reception Staff Interaction,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
-2024-05-03 15:24:05,Extremely likely,Parking is ample making access to the clinic easy Inside however the signage could be improved to better direct patients to different sections of the practice,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.5788455605506897,neutral,0.0,26.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Likely,,,The-Good-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
 2024-05-03 15:24:05,Extremely likely,The waiting area is clean and has enough seating but it could use more current magazines or a children s corner to make waits more comfortable especially when delays occur,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.5814945101737976,neutral,0.0,29.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,The surgery is well maintained and modern but the atmosphere is somewhat clinical and impersonal A warmer more welcoming environment could enhance patient comfort,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.4930945932865143,neutral,0.0,23.0,0,5.0,Environment and Ambiance,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,This surgery is conveniently located with sufficient parking The receptionists are friendly but there seems to be a high turnover of GPs which isn t ideal,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.5199310183525085,neutral,0.0,25.0,0,5.0,Accessibility and Convenience,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Earls-Court-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,Telephone consultations are an available option which is great for quick discussions The downside is that it s sometimes difficult to convey more complex issues over the phone,,The-Good-Practice,Brompton-Health-PCN,neutral,0.5479089021682739,neutral,0.0,27.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,Visited the GP surgery last week The process was straightforward but the clinic seemed quite busy leading to a longer than expected wait Doctors were professional yet the visit felt somewhat rushed,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.6430193185806274,neutral,0.0,32.0,0,5.0,Waiting Time,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,The surgery is well organized with modern facilities However the booking system online can be glitchy which sometimes makes scheduling appointments a hassle,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.5713911056518555,neutral,0.0,22.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Royal-Hospital-Chelsea,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,The-Abingdon-Medical-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,This surgery has a clean and welcoming environment Getting through on the phone can be a challenge during peak hours but once through the support staff are helpful,,Emperors-Gate-Health-Centre,Brompton-Health-PCN,positive,0.9132019281387328,neutral,0.0,28.0,0,5.0,Facility Cleanliness,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,The medical staff at the clinic are knowledgeable but it s hard to see the same doctor consistently This lack of continuity can be frustrating when dealing with ongoing health issues,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,negative,0.6735357642173767,neutral,0.0,30.0,0,5.0,Follow-up and Continuity of Care,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,,,Stanhope-Mews-Surgery,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,5.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Likely,,,Knightsbridge-Medical-Centre,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,PvLadP,O0kgzA
+2024-05-03 15:24:05,Extremely likely,The GP surgery is generally efficient Appointments can be made within a reasonable time frame but the availability of preferred doctors is often limited The staff are polite though the wait times can vary,,Earls-Court-Medical-Centre,Brompton-Health-PCN,positive,0.6986605525016785,neutral,0.0,34.0,0,5.0,Appointment Availability,,PvLadP,O0kgzA
 2024-05-03 16:23:10,Likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,4.0,1,4.0,,,AAMbZW,qPXGMO
 2024-05-03 16:45:51,Likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,0.0,0,4.0,,,Odx8RY,O0KG17
+2024-05-03 16:49:13,Extremely likely,Efficient and friendly no rude gatekeepers at reception,A medical expert doctor appointed specifically for women s health,The-Chelsea-Practice,Brompton-Health-PCN,positive,0.7713761329650879,neutral,0.667157769203186,8.0,11,5.0,Patient Respect,Appointment Availability,QvNv7A,xZEYY9
+2024-05-03 16:49:50,Extremely likely,,,The-Chelsea-Practice,Brompton-Health-PCN,neutral,0.0,neutral,0.0,5.0,1,5.0,,,2191Nb,rEJE0M
