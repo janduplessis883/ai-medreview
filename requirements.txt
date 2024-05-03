@@ -42,7 +42,7 @@ requests
 nlpretext
 plotly
 reportlab
-
+fpdf
 tqdm
 
 
