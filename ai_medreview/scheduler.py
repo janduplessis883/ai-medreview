@@ -14,7 +14,7 @@ while True:
     for remaining in range(wait_time, 0, -1):
         sys.stdout.write("\r")
         # Setting the color to bold red for the countdown
-        countdown_message = "{0}{1}{2} seconds remaining. AI MedReview".format(
+        countdown_message = "{0}{1}{2} seconds remaining. 💛 AI MedReview".format(
             Fore.RED + Style.BRIGHT, remaining, Style.RESET_ALL
         )
         sys.stdout.write(countdown_message)

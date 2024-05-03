@@ -1,4 +1,5 @@
 import os
+import requests
 import pandas as pd
 from transformers import pipeline
 from sheethelper import SheetHelper
@@ -397,6 +398,23 @@ def text_preprocessing(text):
     return text
 
 
+def send_alert_webhook(number):
+    # URL of the webhook to which the data will be sent
+    webhook_url = "https://eop1rwe4n08xnwk.m.pipedream.net"
+    
+    # Create a dictionary to hold the data
+    data = {"number": number}
+    
+    # Use the requests library to send a POST request with JSON data
+    response = requests.post(webhook_url, json=data)
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        logger.info(f"Webhook sent to Pipedream with ** {number} ** new responses processed.")
+    else:
+        logger.info(f"Failed to send data: {response.status_code}, {response.text}")
+    
+
 if __name__ == "__main__":
 
     logger.info("▶️ Friends & Family Test Analysis - MAKE DATA - Started")
@@ -412,8 +430,9 @@ if __name__ == "__main__":
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
-
+    
     if data.shape[0] != 0:
+        send_alert_webhook(int(data.shape[0]))
         data = word_count(data)  # word count
         data = add_rating_score(data)
 
