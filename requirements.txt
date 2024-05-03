@@ -1,40 +1,29 @@
 streamlit
-spacy==3.0.6
-colorama
-ipdb
 
-yapf
+colorama
 matplotlib
-pygeohash
-pytest
 seaborn
 numpy
 pandas
-scipy
-scikit-learn==1.2.1
+
 google-auth
-db-dtypes
-pyarrow
-bokeh
+
+
 distributed
 dateparser
 fastparquet
-httpcore
+
 nlpaug
 
 # prevent bq 3+ db-dtypes package error when running training from bq
-
-prefect
-psycopg2-binary
 
 # API
 
 
 # jupiter notebook
-notebook
-ipython
+
 torch
-ipywidgets
+
 
 
 # Dependancies for sheethelper
@@ -44,9 +33,7 @@ openai
 wordcloud
 
 sentencepiece
-requests
 black
-skimpy
 streamlit-shadcn-ui
 loguru
 schedule
@@ -55,8 +42,8 @@ requests
 nlpretext
 plotly
 reportlab
-fpdf
+
 tqdm
-spacy
+
 
 
