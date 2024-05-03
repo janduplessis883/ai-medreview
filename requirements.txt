@@ -18,15 +18,12 @@ pyarrow
 bokeh==2.4.2
 distributed==2021.5.0
 dateparser==1.1.1
-dask[complete]==2021.5.0
 fastparquet==0.4.1
 httpcore==1.0.4
 nlpaug==1.0.1
 
 # prevent bq 3+ db-dtypes package error when running training from bq
-ipython
 
-python-dotenv
 prefect==2.8.1
 psycopg2-binary
 
@@ -60,5 +57,5 @@ plotly
 reportlab
 fpdf
 tqdm
-requests
+
 
