@@ -18,8 +18,8 @@ import os
 
 client = OpenAI()
 
-from utils import *
-from reports import *
+from ai_medreview.utils import *
+from ai_medreview.reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
 
@@ -161,7 +161,19 @@ if page == "PCN Dashboard":
     if (
         tab_selector == "PCN Responses"
     ):  # ---------------------------------------------------------- PCN Responses ----
-        st.subheader("PCN Response Rate")
+        st.subheader("PCN Responses")
+        
+        cols = st.columns(2)
+        with cols[0]:
+            ui.metric_card(
+                title="Total Responses",
+                content=f"{pcn_data.shape[0]}",
+                description=f"Since 17 July 2023.",
+                key="total_pcn_responses",
+            )
+        with cols[1]:
+            pass
+        
         st.markdown("**Dialy FFT Responses**")
 
         daily_count = pcn_data.resample("D", on="time").size()
@@ -296,6 +308,46 @@ if page == "PCN Dashboard":
             plt.tight_layout()
 
             # Display the ordered percentage heatmap
+            st.pyplot(plt)
+            
+            st.markdown("---")
+            
+            brompton_health_pcn_data = load_pcn_data(selected_pcn)
+            # Set the time as index
+            brompton_health_pcn_data.set_index('time', inplace=True)
+
+            # Resample and calculate the average monthly rating_score for each surgery
+            monthly_rating = brompton_health_pcn_data.groupby('surgery').resample('M')['rating_score'].mean().unstack(level=0)
+
+            # Plotting
+            # Set up the figure and axis with your specified size
+            plt.figure(figsize=(12, 8))
+            ax = plt.gca()  # Get the current axis
+
+            # Loop through each column in your DataFrame to plot the data
+            for column in monthly_rating.columns:
+                ax.plot(monthly_rating.index, monthly_rating[column], marker='o', label=column)
+
+            # Set the title and labels for the axes
+            ax.set_title('Average Monthly Rating Score for Each Surgery in Brompton-Health-PCN')
+            ax.set_xlabel('Month')
+            ax.set_ylabel('Average Rating Score')
+
+            # Adjust the legend to be outside the plot area
+            ax.legend(title='Surgery', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+            # Customize the grid lines
+            ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")  # Customize x-axis grid lines
+            ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")  # Customize y-axis grid lines
+
+            # Hide the top and right borders
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+
+            # Use tight layout to fit everything nicely
+            plt.tight_layout()
+
+            # Display the plot in Streamlit
             st.pyplot(plt)
 
     elif (
