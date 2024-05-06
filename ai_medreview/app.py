@@ -18,8 +18,8 @@ import os
 
 client = OpenAI()
 
-from ai_medreview.utils import *
-from ai_medreview.reports import *
+from utils import *
+from reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
 
