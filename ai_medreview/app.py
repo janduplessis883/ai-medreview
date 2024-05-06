@@ -151,8 +151,8 @@ if page == "PCN Dashboard":
             "PCN Responses",
             "Sentiment A.",
             "Topic A.",
-            "Surgery Ratings",
-            "Surgery Responses",
+            "Surgeries Ratings",
+            "Surgeries Responses",
         ],
         default_value="PCN Rating",
         key="tab3",
@@ -261,9 +261,9 @@ if page == "PCN Dashboard":
             st.pyplot(fig)
 
     elif (
-        tab_selector == "Surgery Ratings"
+        tab_selector == "Surgeries Ratings"
     ):  # --------------------------------------------------- Surgery Ratings -----
-        st.subheader("Surgery Ratings")
+        st.subheader("Surgeries Ratings")
 
         with st.container(border=False):
 
@@ -300,7 +300,7 @@ if page == "PCN Dashboard":
                 cmap="Blues",
                 linewidths=0.5,
             )
-            plt.title("% Heatmap of Surgery Ratings", fontsize=16)
+            plt.title("% Heatmap of Surgeries Ratings", fontsize=16)
             plt.ylabel("")
             plt.xlabel("Rating (%)", fontsize=12)
             plt.xticks(rotation=45)
@@ -555,9 +555,9 @@ if page == "PCN Dashboard":
         st.pyplot(plt)
 
     elif (
-        tab_selector == "Surgery Responses"
+        tab_selector == "Surgeries Responses"
     ):  # ----------------------------------------------- Surgery Responses------
-        st.subheader("Surgery Responses")
+        st.subheader("Surgeries Responses")
         with st.container(border=False):
 
             fig, ax = plt.subplots(figsize=(12, 6))
