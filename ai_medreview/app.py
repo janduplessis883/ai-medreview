@@ -329,7 +329,7 @@ if page == "PCN Dashboard":
                 ax.plot(monthly_rating.index, monthly_rating[column], marker='o', label=column)
 
             # Set the title and labels for the axes
-            ax.set_title('Average Monthly Rating Score for Each Surgery in Brompton-Health-PCN')
+            ax.set_title(f'Average Monthly Rating Score for Each Surgery in {selected_pcn}')
             ax.set_xlabel('Month')
             ax.set_ylabel('Average Rating Score')
 
@@ -1025,6 +1025,7 @@ elif page == "Surgery Dashboard":
                 y="rating_score",
                 data=monthly_avg_df,
                 ax=ax,
+                marker='o',
                 linewidth=4,
                 color="#e5c17e",
             )
