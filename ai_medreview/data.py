@@ -103,7 +103,7 @@ def sentiment_analysis(data, column):
     sentiment_score = []
 
     # Iterate over DataFrame rows and classify text
-    for index, row in tqdm(data.iterrows(), total=data.shape[0], desc="Analyzing Sentiment"):
+    for index, row in tqdm(data.iterrows(), total=data.shape[0], desc="Analyzing Sentiment", colour="#e8c44d"):
         freetext = row[column]
         sentence = str(freetext)
         sentence = sentence[:513]
