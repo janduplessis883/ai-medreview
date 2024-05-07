@@ -1870,7 +1870,6 @@ elif page == "Improvement Suggestions":
         # Displaying the plot
         st.pyplot(plt)    
     
-    
         
     st.markdown("---")
 
