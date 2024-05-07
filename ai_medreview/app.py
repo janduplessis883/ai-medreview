@@ -1112,13 +1112,7 @@ if page == "PCN Dashboard":
             # Displaying the plot
             st.pyplot(plt)
         
-        
-        
-        
-        
-        
-        
-        
+    
 
 # -- Surgery Dashboard ------------------------------------------------------------------------------- Surgery Dashboard
 elif page == "Surgery Dashboard":
