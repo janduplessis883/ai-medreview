@@ -20,6 +20,7 @@ from nlpretext.basic.preprocess import (
 )
 from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
 from tqdm import tqdm
+
 tqdm.pandas()
 
 from ai_medreview.params import *
@@ -103,7 +104,12 @@ def sentiment_analysis(data, column):
     sentiment_score = []
 
     # Iterate over DataFrame rows and classify text
-    for index, row in tqdm(data.iterrows(), total=data.shape[0], desc="Analyzing Sentiment", colour="#e8c44d"):
+    for index, row in tqdm(
+        data.iterrows(),
+        total=data.shape[0],
+        desc="Analyzing Sentiment",
+        colour="#e8c44d",
+    ):
         freetext = row[column]
         sentence = str(freetext)
         sentence = sentence[:513]
@@ -144,7 +150,7 @@ ner_pipeline = pipeline(
 
 
 def anonymize_names_with_transformers(text):
-    
+
     # Check if the text is empty or not a string
     if not text or not isinstance(text, str):
         return text  # Return the text as-is if it's invalid or empty
@@ -224,8 +230,14 @@ def feedback_classification(data, batch_size=16):
     feedback_labels = [""] * len(data)  # Pre-fill with empty strings
 
     # Process batches
-    total_batches = (len(data) + batch_size - 1) // batch_size  # Calculate total number of batches
-    for batch, start_index in tqdm(batch_generator(data, "free_text", batch_size), total=total_batches, desc="Processing batches"):
+    total_batches = (
+        len(data) + batch_size - 1
+    ) // batch_size  # Calculate total number of batches
+    for batch, start_index in tqdm(
+        batch_generator(data, "free_text", batch_size),
+        total=total_batches,
+        desc="Processing batches",
+    ):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
@@ -299,8 +311,14 @@ def improvement_classification(data, batch_size=16):
     # Initialize the list to store improvement labels
     improvement_labels = [""] * len(data)  # Pre-fill with empty strings
 
-    total_batches = (len(data) + batch_size - 1) // batch_size  # Calculate total number of batches
-    for batch, start_index in tqdm(batch_generator(data, "do_better", batch_size), total=total_batches, desc="Processing batches"):
+    total_batches = (
+        len(data) + batch_size - 1
+    ) // batch_size  # Calculate total number of batches
+    for batch, start_index in tqdm(
+        batch_generator(data, "do_better", batch_size),
+        total=total_batches,
+        desc="Processing batches",
+    ):
         # Validate and filter batch data
         valid_sentences = [
             (sentence.strip(), idx)
@@ -367,7 +385,7 @@ def concat_save_final_df(processed_df, new_df):
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
     combined_data.sort_values(by="time", inplace=True, ascending=True)
     combined_data.to_parquet(f"{DATA_PATH}/data.parquet", index=False)
-    combined_data.to_csv(f"{DATA_PATH}/data.csv", encoding='utf-8', index=False)
+    combined_data.to_csv(f"{DATA_PATH}/data.csv", encoding="utf-8", index=False)
     print(f"💾 data.csv saved to: {DATA_PATH}")
 
 
@@ -401,19 +419,21 @@ def text_preprocessing(text):
 def send_alert_webhook(number):
     # URL of the webhook to which the data will be sent
     webhook_url = "https://eop1rwe4n08xnwk.m.pipedream.net"
-    
+
     # Create a dictionary to hold the data
     data = {"number": number}
-    
+
     # Use the requests library to send a POST request with JSON data
     response = requests.post(webhook_url, json=data)
-    
+
     # Check if the request was successful
     if response.status_code == 200:
-        logger.info(f"Webhook sent to Pipedream with ** {number} ** new responses processed.")
+        logger.info(
+            f"Webhook sent to Pipedream with ** {number} ** new responses processed."
+        )
     else:
         logger.info(f"Failed to send data: {response.status_code}, {response.text}")
-    
+
 
 if __name__ == "__main__":
 
@@ -430,7 +450,7 @@ if __name__ == "__main__":
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
-    
+
     if data.shape[0] != 0:
         send_alert_webhook(int(data.shape[0]))
         data = word_count(data)  # word count
@@ -438,9 +458,13 @@ if __name__ == "__main__":
 
         data = clean_data(data)
         logger.info("🫥 Annonymize with Transformer - free_text")
-        data["free_text"] = data["free_text"].progress_apply(anonymize_names_with_transformers)
+        data["free_text"] = data["free_text"].progress_apply(
+            anonymize_names_with_transformers
+        )
         logger.info("🫥 Annonymize with Transformer - do_better")
-        data["do_better"] = data["do_better"].progress_apply(anonymize_names_with_transformers)
+        data["do_better"] = data["do_better"].progress_apply(
+            anonymize_names_with_transformers
+        )
 
         logger.info("📗 Text Preprocesssing with *NLPretext")
         data["free_text"] = data["free_text"].apply(
