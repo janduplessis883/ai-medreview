@@ -1069,7 +1069,7 @@ if page == "PCN Dashboard":
             normalized_df = monthly_feedback_counts.loc[
                 :, "Accessibility and Convenience":"Waiting Time"
             ].div(monthly_feedback_counts["TOTAL"], axis=0)
-            st.markdown("#### Feedback Classification")
+            st.markdown("#### Monthly Distribution of Feedback Labels - Heatmap: [Normalized]")
             # Setting the plot size
             plt.figure(figsize=(15, 10))
 
@@ -1127,7 +1127,7 @@ if page == "PCN Dashboard":
             normalized_df2 = monthly_imp_counts.loc[
                 :, "Accessibility and Convenience":"Waiting Time"
             ].div(monthly_imp_counts["TOTAL"], axis=0)
-            st.markdown("#### Improvement Suggestions")
+            st.markdown("#### Monthly Distribution of Improvement Labels - Heatmap: [Normalized]")
             # Setting the plot size
             plt.figure(figsize=(15, 10))
 
@@ -1181,14 +1181,14 @@ if page == "PCN Dashboard":
                 feedback_title = "Normalized Heatmap of Feedback Labels against Brompton-Health-PCN Surgeries (ALL)"
                 imp_title = "Normalized Heatmap of Improvement Labels against Brompton-Health-PCN Surgeries (ALL)"
                 
-            st.subheader("Feedback")
+            st.markdown("#### Feedback labels aggregated by Surgery - Heatmap: [Normalized]")
             pcn_data.dropna(subset='free_text', inplace=True)
             heatmap_data = pd.crosstab(pcn_data['surgery'], pcn_data['feedback_labels'])
             normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
 
             # Create a new heatmap using the normalized data
             plt.figure(figsize=(14, 10))
-            ax = sns.heatmap(normalized_heatmap_data.T, annot=True, cmap="Oranges", fmt=".2f")
+            ax = sns.heatmap(normalized_heatmap_data.T, annot=True, cmap="Reds", fmt=".2f")
             plt.title(feedback_title)
             plt.xlabel('Surgeries')
             plt.ylabel('Feedback Labels')
@@ -1200,7 +1200,7 @@ if page == "PCN Dashboard":
             
             st.markdown("---")
             
-            st.subheader("Improvement Suggestions")
+            st.markdown("#### Improvmeent labels aggregated by Surgery - Heatmap: [Normalized]")
             pcn_data.dropna(subset='do_better', inplace=True)
             heatmap_data = pd.crosstab(pcn_data['surgery'], pcn_data['improvement_labels'])
             normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
@@ -1510,7 +1510,7 @@ elif page == "Surgery Dashboard":
         with cols[1]:
             pass
 
-    elif surgery_tab_selector == "Missing Data":   # --------------------------------------------     ----Missing Data -
+    elif surgery_tab_selector == "Missing Data":   # -----------------------------------------------------Missing Data -
         plt.figure(figsize=(12, 5))
         sns.heatmap(filtered_data.isnull(), cbar=False, cmap="Blues", yticklabels=False)
         plt.title("Missing Data")
