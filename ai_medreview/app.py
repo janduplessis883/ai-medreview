@@ -1422,16 +1422,23 @@ elif page == "Feedback Classification":
     )
     st.markdown("Responses to **FFT Q1**: Please tell us why you feel this way?")
 
-    toggle = ui.switch(default_checked=False, label="Time Series", key="switch_dash")
-    if toggle:
-
+    tab_selector = ui.tabs(
+        options=[
+            "Bar Chart - Totals",
+            "Time Series - Line Chart",
+            "Heatmap (Normalized)",
+        ],
+        default_value="Bar Chart - Totals",
+        key="tab_topic_surgery",
+    )
+    if tab_selector == "Time Series - Line Chart":
         radio_options = [
             {"label": "All", "value": "all", "id": "r1"},
             {"label": "Negative", "value": "neg", "id": "r2"},
             {"label": "Neutral + Positive", "value": "pos", "id": "r3"},
         ]
         radio_value = ui.radio_group(
-            options=radio_options, default_value="all", key="radio1"
+            options=radio_options, default_value="all", key="radio18"
         )
 
         if radio_value == "pos":
@@ -1495,48 +1502,8 @@ elif page == "Feedback Classification":
         # Displaying the plot in Streamlit
         st.plotly_chart(fig)
 
-        st.markdown("---")
-        # View Patient Feedback
-        st.subheader("View Patient Feedback")
-        class_list = list(filtered_data["feedback_labels"].unique())
-        cleaned_class_list = [x for x in class_list if not pd.isna(x)]
-        selected_ratings = st.multiselect(
-            "Select Feedback Categories:",
-            cleaned_class_list,
-            help="Feedback in orange have a negative sentiment.",
-        )
 
-        # Filter the data based on the selected classifications
-        filtered_classes = filtered_data[
-            filtered_data["feedback_labels"].isin(selected_ratings)
-        ]
-
-        if not selected_ratings:
-            ui.badges(
-                badge_list=[("Please select at least one classification.", "outline")],
-                class_name="flex gap-2",
-                key="badges10",
-            )
-        else:
-            for rating in selected_ratings:
-                specific_class = filtered_classes[
-                    filtered_classes["feedback_labels"] == rating
-                ]
-                st.subheader(f"{rating.capitalize()} ({str(specific_class.shape[0])})")
-                for index, row in specific_class.iterrows():
-                    text = row["free_text"]
-                    sentiment = row["sentiment_free_text"]
-                    if sentiment == "negative":
-                        text_color = "orange"
-                    elif sentiment == "neutral":
-                        text_color = "gray"
-                    else:
-                        text_color = "black"
-
-                    if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
-
-    else:
+    elif tab_selector == "Bar Chart - Totals":
         palette = {"positive": "#2e5f77", "negative": "#d7662a", "neutral": "#d7d8d7"}
         hue_order = ["negative", "neutral", "positive"]
 
@@ -1578,48 +1545,110 @@ elif page == "Feedback Classification":
 
         # Streamlit function to display Plotly figures
         st.plotly_chart(fig)
-
-        st.markdown("---")
-
-        # View Patient Feedback
-        st.subheader("View Patient Feedback")
-        class_list = list(filtered_data["feedback_labels"].unique())
-        cleaned_class_list = [x for x in class_list if not pd.isna(x)]
-        selected_ratings = st.multiselect(
-            "Select Feedback Categories:",
-            cleaned_class_list,
-            help="Feedback in orange have a negative sentiment.",
+        
+        
+    elif tab_selector == "Heatmap (Normalized)":
+        
+        radio_options = [
+                {"label": "All", "value": "all", "id": "r10"},
+                {"label": "Negative", "value": "neg", "id": "r11"},
+                {"label": "Neutral + Positive", "value": "pos", "id": "r12"},
+            ]
+        radio_value = ui.radio_group(
+            options=radio_options, default_value="all", key="radio6"
         )
 
-        # Filter the data based on the selected classifications
-        filtered_classes = filtered_data[
-            filtered_data["feedback_labels"].isin(selected_ratings)
-        ]
+        if radio_value == "pos":
+            filtered_data = filtered_data[
+                (
+                    (filtered_data["sentiment_free_text"] == "neutral")
+                    | (filtered_data["sentiment_free_text"] == "positive")
+                )
+            ]
+            title_string = 'Heatmap of Normalized Feedback (NEUT + POS)'
+        elif radio_value == "neg":
+            filtered_data = filtered_data[(filtered_data["sentiment_free_text"] == "negative")]
 
-        if not selected_ratings:
-            ui.badges(
-                badge_list=[("Please select at least one classification.", "outline")],
-                class_name="flex gap-2",
-                key="badges10",
-            )
+            title_string = 'Heatmap of Normalized Feedback (NEGATIVE)'
         else:
-            for rating in selected_ratings:
-                specific_class = filtered_classes[
-                    filtered_classes["feedback_labels"] == rating
+            
+            filtered_data = filtered_data[((filtered_data["sentiment_free_text"] == "negative")
+                | (filtered_data["sentiment_free_text"] == "positive")
+                | (filtered_data["sentiment_free_text"] == "neutral")
+                )
                 ]
-                st.subheader(f"{rating.capitalize()} ({str(specific_class.shape[0])})")
-                for index, row in specific_class.iterrows():
-                    text = row["free_text"]
-                    sentiment = row["sentiment_free_text"]
-                    if sentiment == "negative":
-                        text_color = "orange"
-                    elif sentiment == "neutral":
-                        text_color = "gray"
-                    else:
-                        text_color = "black"
+            title_string = 'Heatmap of Normalized Feedback (ALL)'
+        
+    
+        filtered_data["time"] = pd.to_datetime(filtered_data["time"])
+        # Setting the 'time' column as the index
+        filtered_data2 = filtered_data[['time', 'feedback_labels']].copy()
+        filtered_data2.set_index("time", inplace=True)
+        filtered_data2.index = filtered_data2.index.to_period("M")
+        
+        monthly_feedback_counts = (
+            filtered_data2.groupby([filtered_data2.index, "feedback_labels"])
+            .size()
+            .unstack(fill_value=0)
+            )
+        monthly_feedback_counts['TOTAL'] = monthly_feedback_counts.sum(axis=1)
+        normalized_df = monthly_feedback_counts.loc[:,monthly_feedback_counts.columns[0]:monthly_feedback_counts.columns[-2]].div(monthly_feedback_counts['TOTAL'], axis=0)
+        st.markdown("#### Feedback Classification")
+        # Setting the plot size
+        plt.figure(figsize=(15, 10))
 
-                    if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
+        # Creating a heatmap
+        sns.heatmap(normalized_df.T, annot=True, cmap="Oranges", fmt=".2f", linewidths=.5)
+
+        # Adding titles and labels
+        plt.title(title_string, fontsize=20)
+        plt.xlabel('Month', fontsize=15)
+        plt.ylabel('Feedback Categories', fontsize=15)
+
+        # Displaying the plot
+        st.pyplot(plt)
+        
+    st.markdown("---")
+
+    # View Patient Feedback
+    st.subheader("View Patient Feedback")
+    class_list = list(filtered_data["feedback_labels"].unique())
+    cleaned_class_list = [x for x in class_list if not pd.isna(x)]
+    selected_ratings = st.multiselect(
+        "Select Feedback Categories:",
+        cleaned_class_list,
+        help="Feedback in orange have a negative sentiment.",
+    )
+
+    # Filter the data based on the selected classifications
+    filtered_classes = filtered_data[
+        filtered_data["feedback_labels"].isin(selected_ratings)
+    ]
+
+    if not selected_ratings:
+        ui.badges(
+            badge_list=[("Please select at least one classification.", "outline")],
+            class_name="flex gap-2",
+            key="badges10",
+        )
+    else:
+        for rating in selected_ratings:
+            specific_class = filtered_classes[
+                filtered_classes["feedback_labels"] == rating
+            ]
+            st.subheader(f"{rating.capitalize()} ({str(specific_class.shape[0])})")
+            for index, row in specific_class.iterrows():
+                text = row["free_text"]
+                sentiment = row["sentiment_free_text"]
+                if sentiment == "negative":
+                    text_color = "orange"
+                elif sentiment == "neutral":
+                    text_color = "gray"
+                else:
+                    text_color = "black"
+
+                if str(text).lower() != "nan":
+                    st.markdown(f"- :{text_color}[{str(text)}] ")
 
 # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
 elif page == "Improvement Suggestions":
@@ -1630,8 +1659,16 @@ elif page == "Improvement Suggestions":
         "Responses to **FFT Q2**: Is there anything that would have made your experience better?"
     )
 
-    toggle = ui.switch(default_checked=False, label="Time Series", key="switch_dash")
-    if toggle:
+    tab_selector = ui.tabs(
+        options=[
+            "Bar Chart - Totals",
+            "Time Series - Line Chart",
+            "Heatmap (Normalized)",
+        ],
+        default_value="Bar Chart - Totals",
+        key="tab_topic_surgery2",
+    )
+    if tab_selector == "Time Series - Line Chart":
 
         radio_options = [
             {"label": "All", "value": "all", "id": "r4"},
@@ -1710,60 +1747,11 @@ elif page == "Improvement Suggestions":
                 class_name="flex gap-2",
                 key="badges114",
             )
-        st.markdown("---")
-        improvement_data = filtered_data[
-            (filtered_data["improvement_labels"] != "No Improvement Suggestion")
-        ]
-        # Calculate value counts
-        label_counts = improvement_data["improvement_labels"].value_counts(
-            ascending=False
-        )  # Use ascending=True to match the order in your image
 
-        # Convert the Series to a DataFrame
-        label_counts_df = label_counts.reset_index()
-        label_counts_df.columns = ["Improvement Labels", "Counts"]
 
-        st.subheader("View Patient Improvement Suggestions")
-        improvement_list = [label for label in label_counts_df["Improvement Labels"]]
+       
 
-        selected_ratings = st.multiselect(
-            "Select Categories:",
-            improvement_list,
-            help="Improvement Suggestions in orange have a negative sentiment.",
-        )
-
-        # Filter the data based on the selected classifications
-        filtered_classes = improvement_data[
-            improvement_data["improvement_labels"].isin(selected_ratings)
-        ]
-
-        if not selected_ratings:
-            ui.badges(
-                badge_list=[("Please select at least one classification.", "outline")],
-                class_name="flex gap-2",
-                key="badges10",
-            )
-        else:
-            for rating in selected_ratings:
-                specific_class = filtered_classes[
-                    filtered_classes["improvement_labels"] == rating
-                ]
-                st.subheader(
-                    f"{str(rating).capitalize()} ({str(specific_class.shape[0])})"
-                )
-                for index, row in specific_class.iterrows():
-                    text = row["do_better"]
-                    text = text.replace("[PERSON]", "PERSON")
-                    sentiment = row["sentiment_do_better"]
-                    if sentiment == "positive" or sentiment == "neutral":
-                        text_color = "black"
-                    else:
-                        text_color = "orange"
-
-                    if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
-
-    else:
+    elif tab_selector == "Bar Chart - Totals":
         improvement_data = filtered_data[
             (filtered_data["improvement_labels"] != "No Improvement Suggestion")
         ]
@@ -1818,48 +1806,123 @@ elif page == "Improvement Suggestions":
 
         # Streamlit function to display Plotly figures
         st.plotly_chart(fig)
-
-        st.markdown("---")
-
-        st.subheader("View Patient Improvement Suggestions")
-        improvement_list = [label for label in label_counts_df["Improvement Labels"]]
-
-        selected_ratings = st.multiselect(
-            "Select Categories:",
-            improvement_list,
-            help="Improvement Suggestions in orange have a negative sentiment.",
-        )
-
-        # Filter the data based on the selected classifications
-        filtered_classes = improvement_data[
-            improvement_data["improvement_labels"].isin(selected_ratings)
+        
+    elif tab_selector == "Heatmap (Normalized)":
+        
+        radio_options = [
+            {"label": "All", "value": "all", "id": "r4"},
+            {"label": "Negative", "value": "neg", "id": "r5"},
+            {"label": "Neutral + Positive", "value": "pos", "id": "r6"},
         ]
-
-        if not selected_ratings:
-            ui.badges(
-                badge_list=[("Please select at least one classification.", "outline")],
-                class_name="flex gap-2",
-                key="badges10",
-            )
-        else:
-            for rating in selected_ratings:
-                specific_class = filtered_classes[
-                    filtered_classes["improvement_labels"] == rating
-                ]
-                st.subheader(
-                    f"{str(rating).capitalize()} ({str(specific_class.shape[0])})"
+        radio_value = ui.radio_group(
+            options=radio_options, default_value="all", key="radio2"
+        )
+        
+        filtered_data2 = filtered_data.copy()
+            
+        if radio_value == "pos":
+            filtered_data2 = filtered_data2[
+                (
+                    (filtered_data2["sentiment_do_better"] == "neutral")
+                    | (filtered_data2["sentiment_do_better"] == "positive")
                 )
-                for index, row in specific_class.iterrows():
-                    text = row["do_better"]
-                    text = text.replace("[PERSON]", "PERSON")
-                    sentiment = row["sentiment_do_better"]
-                    if sentiment == "positive" or sentiment == "neutral":
-                        text_color = "black"
-                    else:
-                        text_color = "orange"
+            ]
+            title_string = 'Heatmap of Normalized Improvement Sugg. (NEUT + POS)'
+        elif radio_value == "neg":
+            filtered_data2 = filtered_data2[(filtered_data2["sentiment_do_better"] == "negative")]
 
-                    if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
+            title_string = 'Heatmap of Normalized Improvement Sugg. (NEGATIVE)'
+        else:
+            
+            filtered_data2 = filtered_data2[((filtered_data2["sentiment_do_better"] == "negative")
+                | (filtered_data2["sentiment_do_better"] == "positive")
+                | (filtered_data2["sentiment_do_better"] == "neutral")
+                )
+                ]
+            title_string = 'Heatmap of Normalized Improvement Sugg. (ALL)'
+        
+    
+        filtered_data2["time"] = pd.to_datetime(filtered_data2["time"])
+        # Setting the 'time' column as the index
+        filtered_data2 = filtered_data2[['time', 'improvement_labels']]
+        filtered_data2.set_index("time", inplace=True)
+        filtered_data2.index = filtered_data2.index.to_period("M")
+        
+        monthly_imp_counts = (
+            filtered_data2.groupby([filtered_data2.index, "improvement_labels"])
+            .size()
+            .unstack(fill_value=0)
+            )
+        monthly_imp_counts['TOTAL'] = monthly_imp_counts.sum(axis=1)
+        normalized_df2 = monthly_imp_counts.loc[:,monthly_imp_counts.columns[0]:monthly_imp_counts.columns[-2]].div(monthly_imp_counts['TOTAL'], axis=0)
+        st.markdown("#### Improvement Suggestions")
+        # Setting the plot size
+        plt.figure(figsize=(15, 10))
+
+        # Creating a heatmap
+        sns.heatmap(normalized_df2.T, annot=True, cmap="Grays", fmt=".2f", linewidths=.5)
+
+        # Adding titles and labels
+        plt.title(title_string, fontsize=20)
+        plt.xlabel('Month', fontsize=15)
+        plt.ylabel('Improvement Sugg. Categories', fontsize=15)
+
+        # Displaying the plot
+        st.pyplot(plt)    
+    
+    
+        
+    st.markdown("---")
+
+    st.subheader("View Patient Improvement Suggestions")
+    improvement_data = filtered_data[
+            (filtered_data["improvement_labels"] != "No Improvement Suggestion")
+        ]
+    label_counts = improvement_data["improvement_labels"].value_counts(
+        ascending=False
+    )  # Use ascending=True to match the order in your image
+
+    # Convert the Series to a DataFrame
+    label_counts_df = label_counts.reset_index()
+    label_counts_df.columns = ["Improvement Labels", "Counts"]
+    improvement_list = [label for label in label_counts_df["Improvement Labels"]]
+
+    selected_ratings = st.multiselect(
+        "Select Categories:",
+        improvement_list,
+        help="Improvement Suggestions in orange have a negative sentiment.",
+    )
+
+    # Filter the data based on the selected classifications
+    filtered_classes = improvement_data[
+        improvement_data["improvement_labels"].isin(selected_ratings)
+    ]
+
+    if not selected_ratings:
+        ui.badges(
+            badge_list=[("Please select at least one classification.", "outline")],
+            class_name="flex gap-2",
+            key="badges10",
+        )
+    else:
+        for rating in selected_ratings:
+            specific_class = filtered_classes[
+                filtered_classes["improvement_labels"] == rating
+            ]
+            st.subheader(
+                f"{str(rating).capitalize()} ({str(specific_class.shape[0])})"
+            )
+            for index, row in specific_class.iterrows():
+                text = row["do_better"]
+                text = text.replace("[PERSON]", "PERSON")
+                sentiment = row["sentiment_do_better"]
+                if sentiment == "positive" or sentiment == "neutral":
+                    text_color = "black"
+                else:
+                    text_color = "orange"
+
+                if str(text).lower() != "nan":
+                    st.markdown(f"- :{text_color}[{str(text)}] ")
 
 # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
 elif page == "Feedback Timeline":
