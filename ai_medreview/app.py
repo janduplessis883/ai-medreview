@@ -151,8 +151,8 @@ if page == "PCN Dashboard":
             "PCN Responses",
             "Sentiment A.",
             "Topic A.",
-            "Surgeries Ratings",
-            "Surgeries Responses",
+            "Surg. Ratings",
+            "Surg. Responses",
         ],
         default_value="PCN Rating",
         key="tab3",
@@ -211,7 +211,7 @@ if page == "PCN Dashboard":
         with st.container(border=False):
             # Monthly Totals Plot
 
-            monthly_count_filtered = pcn_data.resample("M", on="time").size()
+            monthly_count_filtered = pcn_data.resample("MS", on="time").size()
             monthly_count_filtered_df = monthly_count_filtered.reset_index()
             monthly_count_filtered_df.columns = ["Month", "Monthly Count"]
             monthly_count_filtered_df["Month"] = monthly_count_filtered_df[
@@ -261,7 +261,7 @@ if page == "PCN Dashboard":
             st.pyplot(fig)
 
     elif (
-        tab_selector == "Surgeries Ratings"
+        tab_selector == "Surg. Ratings"
     ):  # --------------------------------------------------- Surgery Ratings -----
         st.subheader("Surgeries Ratings")
 
@@ -317,7 +317,7 @@ if page == "PCN Dashboard":
             brompton_health_pcn_data.set_index('time', inplace=True)
 
             # Resample and calculate the average monthly rating_score for each surgery
-            monthly_rating = brompton_health_pcn_data.groupby('surgery').resample('M')['rating_score'].mean().unstack(level=0)
+            monthly_rating = brompton_health_pcn_data.groupby('surgery').resample('MS')['rating_score'].mean().unstack(level=0)
 
             # Plotting
             # Set up the figure and axis with your specified size
@@ -411,7 +411,7 @@ if page == "PCN Dashboard":
         # Calculate the standard deviation for each month and sentiment
         monthly_sentiment_std = (
             pcn_data.groupby("sentiment_free_text")
-            .resample("M")["sentiment_score_free_text"]
+            .resample("MS")["sentiment_score_free_text"]
             .std()
             .unstack(level=0)
         )
@@ -422,7 +422,7 @@ if page == "PCN Dashboard":
         # Calculate the mean sentiment scores for each month and sentiment, if not already done
         monthly_sentiment_means_adjusted = (
             pcn_data.groupby("sentiment_free_text")
-            .resample("M")["sentiment_score_free_text"]
+            .resample("MS")["sentiment_score_free_text"]
             .mean()
             .unstack(level=0)
         )
@@ -485,7 +485,7 @@ if page == "PCN Dashboard":
         )
         monthly_sentiment_std = (
             pcn_data.groupby("sentiment_do_better")
-            .resample("M")["sentiment_score_do_better"]
+            .resample("MS")["sentiment_score_do_better"]
             .std()
             .unstack(level=0)
         )
@@ -496,7 +496,7 @@ if page == "PCN Dashboard":
         # Calculate the mean sentiment scores for each month and sentiment, if not already done
         monthly_sentiment_means_adjusted = (
             pcn_data.groupby("sentiment_do_better")
-            .resample("M")["sentiment_score_do_better"]
+            .resample("MS")["sentiment_score_do_better"]
             .mean()
             .unstack(level=0)
         )
@@ -555,7 +555,7 @@ if page == "PCN Dashboard":
         st.pyplot(plt)
 
     elif (
-        tab_selector == "Surgeries Responses"
+        tab_selector == "Surg. Responses"
     ):  # ----------------------------------------------- Surgery Responses------
         st.subheader("Surgeries Responses")
         with st.container(border=False):
@@ -673,7 +673,7 @@ if page == "PCN Dashboard":
 
                 # Resample the data by week and calculate the mean 'rating_score' for each week
                 weekly_mean_rating = (
-                    daily_mean_rating["rating_score"].resample("M").mean().reset_index()
+                    daily_mean_rating["rating_score"].resample("MS").mean().reset_index()
                 )
 
                 # Create a seaborn line plot for weekly mean rating scores
@@ -1013,7 +1013,7 @@ elif page == "Surgery Dashboard":
 
         try:
             # Resample to get monthly average rating
-            monthly_avg = filtered_data.resample("M", on="time")["rating_score"].mean()
+            monthly_avg = filtered_data.resample("MS", on="time")["rating_score"].mean()
 
             # Reset index to make 'time' a column again
             monthly_avg_df = monthly_avg.reset_index()
@@ -1183,7 +1183,7 @@ elif page == "Surgery Dashboard":
         st.pyplot(fig)
         st.markdown("---")
         # Monthly Totals Plot
-        monthly_count_filtered = filtered_data.resample("M", on="time").size()
+        monthly_count_filtered = filtered_data.resample("MS", on="time").size()
         monthly_count_filtered_df = monthly_count_filtered.reset_index()
         monthly_count_filtered_df.columns = ["Month", "Monthly Count"]
         monthly_count_filtered_df["Month"] = monthly_count_filtered_df["Month"].dt.date
@@ -1875,7 +1875,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     # Calculate the standard deviation for each month and sentiment
     monthly_sentiment_std = (
         filtered_data.groupby("sentiment_free_text")
-        .resample("M")["sentiment_score_free_text"]
+        .resample("MS")["sentiment_score_free_text"]
         .std()
         .unstack(level=0)
     )
@@ -1886,7 +1886,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     # Calculate the mean sentiment scores for each month and sentiment, if not already done
     monthly_sentiment_means_adjusted = (
         filtered_data.groupby("sentiment_free_text")
-        .resample("M")["sentiment_score_free_text"]
+        .resample("MS")["sentiment_score_free_text"]
         .mean()
         .unstack(level=0)
     )
@@ -1943,7 +1943,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
     monthly_sentiment_std = (
         filtered_data.groupby("sentiment_do_better")
-        .resample("M")["sentiment_score_do_better"]
+        .resample("MS")["sentiment_score_do_better"]
         .std()
         .unstack(level=0)
     )
@@ -1954,7 +1954,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     # Calculate the mean sentiment scores for each month and sentiment, if not already done
     monthly_sentiment_means_adjusted = (
         filtered_data.groupby("sentiment_do_better")
-        .resample("M")["sentiment_score_do_better"]
+        .resample("MS")["sentiment_score_do_better"]
         .mean()
         .unstack(level=0)
     )
