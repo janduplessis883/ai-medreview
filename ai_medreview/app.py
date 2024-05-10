@@ -142,7 +142,7 @@ else:
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "PCN Dashboard":
     
-
+    ui.badges(badge_list=[("Data version:", "default"), (f"{data_version(data)}", "outline")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
     )
@@ -151,7 +151,7 @@ if page == "PCN Dashboard":
         """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
     )
-    ui.badges(badge_list=[("Data version:", "default"), (f"{data_version(data)}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
+    
     st.write("")
     tab_selector = ui.tabs(
         options=[
