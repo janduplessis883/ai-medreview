@@ -151,7 +151,6 @@ if page == "PCN Dashboard":
         """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
     )
-    
     st.write("")
     tab_selector = ui.tabs(
         options=[
