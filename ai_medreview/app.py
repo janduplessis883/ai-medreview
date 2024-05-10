@@ -154,11 +154,7 @@ if page == "PCN Dashboard":
         """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
     )
-    ui.badges(
-        badge_list=[("Branch: pcn_slider", "default")],
-        class_name="flex gap-2",
-        key="badges_temp_version",
-    )
+
     st.write("")
     tab_selector = ui.tabs(
         options=[
