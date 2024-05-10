@@ -144,7 +144,8 @@ else:
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "PCN Dashboard":
     
-    ui.badges(badge_list=[("Data version:", "default"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
+    ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
+
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
     )
