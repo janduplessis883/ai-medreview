@@ -58,7 +58,7 @@ def load_data():
 data = load_data()
 
 def data_version(df):
-    last_time = df.tail(1)['time'].values[0]
+    last_time = df.iloc[-1]['time']
     return last_time
 
 # Function to load PCN specific data
@@ -144,7 +144,7 @@ else:
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "PCN Dashboard":
     
-    ui.badges(badge_list=[("Data version:", "default"), (f"{data_version(data)}", "outline")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
+    ui.badges(badge_list=[("Data version:", "default"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
     )
@@ -798,11 +798,12 @@ if page == "PCN Dashboard":
 
         try:
             pcn_date_range = st.slider(
-                f"Topic Analysis Date Slider",
+                f"Topic Analysis Date Range",
                 min_value=start_date,
                 max_value=end_date,
                 value=(start_date, end_date),
                 format="MM/DD/YYYY",
+                help="Use to adjust the time frame for Topic Analaysis"
             )
         except ValueError as e:
             st.error(f"Cannot display slider: {str(e)}")
@@ -2738,7 +2739,9 @@ Rows are labeled with an Index, which you can think of as the address of the dat
 
     # Display the filtered DataFrame
     st.dataframe(filtered_data)
-
+    st.write("")
+    with st.container(height=600):
+        st.help(pd.DataFrame)
 
 # -- Reports --------------------------------------------------------------------------------------------------- Reports
 elif page == "Reports":
