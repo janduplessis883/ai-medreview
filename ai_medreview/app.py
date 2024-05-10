@@ -58,8 +58,8 @@ def load_data():
 data = load_data()
 
 def data_version(df):
-    d_version = data['time'].tail(1)
-    return d_version
+    last_time = df.tail(1)['time'].values[0]
+    return last_time
 
 # Function to load PCN specific data
 @st.cache_data(ttl=3600)
