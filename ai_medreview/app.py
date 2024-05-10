@@ -152,7 +152,7 @@ if page == "PCN Dashboard":
 
 
     st.markdown(
-        """Accumulating and interpreting the **pooled patient feedback data** from member practices.
+        """:orangebg[Accumulating and interpreting the **pooled patient feedback data** from member practices.]
 """
     )
 
