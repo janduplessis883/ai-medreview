@@ -5,7 +5,6 @@ import matplotlib.dates as mdates
 from wordcloud import WordCloud
 import seaborn as sns
 from datetime import datetime, timedelta
-from datetime import date
 from matplotlib.patches import Patch
 import time
 from openai import OpenAI
@@ -13,11 +12,11 @@ import streamlit_shadcn_ui as ui
 import requests
 import plotly.graph_objects as go
 import plotly.express as px
-import os
 
-
+# Initialize OpenAI API
 client = OpenAI()
 
+# Loading my OWN FUNCTIONS
 from utils import *
 from reports import *
 
@@ -81,6 +80,15 @@ def get_surgeries_by_pcn(data, pcn):
     return surgeries
 
 
+# Define the function to filter data based on selected date range
+@st.cache_data(ttl=3600)
+def filter_data_by_date_range(data, date_range):
+    return data[
+        (data["time"].dt.date >= date_range[0])
+        & (data["time"].dt.date <= date_range[1])
+    ]
+
+
 # Page selection
 page = st.sidebar.radio(
     "Select a Page",
@@ -124,15 +132,9 @@ if page not in ["PCN Dashboard", "About"]:
             except ValueError as e:
                 st.error(f"Cannot display slider: {str(e)}")
 
-            # Define the function to filter data based on selected date range
-            @st.cache_data(ttl=3600)
-            def filter_data_by_date_range(data, date_range):
-                return data[
-                    (data["time"].dt.date >= date_range[0])
-                    & (data["time"].dt.date <= date_range[1])
-                ]
-
+            # Create data filtered by date via slider
             filtered_data = filter_data_by_date_range(surgery_data, selected_date_range)
+
 else:
     selected_surgery = None
     filtered_data = None
@@ -146,9 +148,15 @@ if page == "PCN Dashboard":
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
     )
+
     st.markdown(
         """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
+    )
+    ui.badges(
+        badge_list=[("Branch: pcn_slider", "default")],
+        class_name="flex gap-2",
+        key="badges_temp_version",
     )
     st.write("")
     tab_selector = ui.tabs(
@@ -783,6 +791,28 @@ if page == "PCN Dashboard":
             key="tab_topic_pcn",
         )
         st.subheader("Topic Analysis")
+
+        # implement PCN Slider to load data by date for comparison -------------------------------PCN TOPIC A Slider----
+        start_date = pcn_data["time"].dt.date.min()
+        end_date = pcn_data["time"].dt.date.max()
+
+        if start_date == end_date:
+            start_date -= timedelta(days=1)
+
+        try:
+            pcn_date_range = st.slider(
+                f"Topic Analysis Date Slider",
+                min_value=start_date,
+                max_value=end_date,
+                value=(start_date, end_date),
+                format="MM/DD/YYYY",
+            )
+        except ValueError as e:
+            st.error(f"Cannot display slider: {str(e)}")
+
+        # Create data filtered by date via slider
+        filtered_pcn_data = filter_data_by_date_range(pcn_data, pcn_date_range)
+
         if tab_selector == "TS Line Chart":
 
             radio_options = [
@@ -795,28 +825,27 @@ if page == "PCN Dashboard":
             )
 
             if radio_value == "pos":
-                pcn_data = pcn_data[
+                filtered_pcn_data = filtered_pcn_data[
                     (
-                        (pcn_data["sentiment_free_text"] == "neutral")
-                        | (pcn_data["sentiment_free_text"] == "positive")
+                        (filtered_pcn_data["sentiment_free_text"] == "neutral")
+                        | (filtered_pcn_data["sentiment_free_text"] == "positive")
                     )
                 ]
             elif radio_value == "neg":
+                filtered_pcn_data = filtered_pcn_data[
+                    (filtered_pcn_data["sentiment_free_text"] == "negative")
+                ]
 
-                pcn_data = pcn_data[(pcn_data["sentiment_free_text"] == "negative")]
-            else:
-                pcn_pcn_data = pcn_data[(pcn_data["pcn"] == selected_pcn)]
-
-            pcn_data["time"] = pd.to_datetime(pcn_data["time"])
+            filtered_pcn_data["time"] = pd.to_datetime(filtered_pcn_data["time"])
             # Setting the 'time' column as the index
-            pcn_data.set_index("time", inplace=True)
+            filtered_pcn_data.set_index("time", inplace=True)
 
             # Grouping by month and 'feedback_labels' and then counting the occurrences
             # Converting the time index to a period index for monthly resampling
-            pcn_data.index = pcn_data.index.to_period("M")
+            filtered_pcn_data.index = filtered_pcn_data.index.to_period("M")
 
             monthly_feedback_counts = (
-                pcn_data.groupby([pcn_data.index, "feedback_labels"])
+                filtered_pcn_data.groupby([filtered_pcn_data.index, "feedback_labels"])
                 .size()
                 .unstack(fill_value=0)
             )
@@ -868,7 +897,9 @@ if page == "PCN Dashboard":
             st.markdown("---")
 
             monthly_improvement_counts = (
-                pcn_data.groupby([pcn_data.index, "improvement_labels"])
+                filtered_pcn_data.groupby(
+                    [filtered_pcn_data.index, "improvement_labels"]
+                )
                 .size()
                 .unstack(fill_value=0)
             )
@@ -931,7 +962,8 @@ if page == "PCN Dashboard":
             # Create a cross-tabulation of feedback labels and sentiment categories
 
             crosstab = pd.crosstab(
-                pcn_data["feedback_labels"], pcn_data["sentiment_free_text"]
+                filtered_pcn_data["feedback_labels"],
+                filtered_pcn_data["sentiment_free_text"],
             )
             crosstab = crosstab.reindex(columns=hue_order)
 
@@ -984,7 +1016,8 @@ if page == "PCN Dashboard":
             # Create a cross-tabulation of feedback labels and sentiment categories
 
             crosstab = pd.crosstab(
-                pcn_data["improvement_labels"], pcn_data["sentiment_do_better"]
+                filtered_pcn_data["improvement_labels"],
+                filtered_pcn_data["sentiment_do_better"],
             )
             crosstab = crosstab.reindex(columns=hue_order)
 
@@ -1038,36 +1071,38 @@ if page == "PCN Dashboard":
             )
 
             if radio_value == "pos":
-                pcn_data = pcn_data[
+                filtered_pcn_data = filtered_pcn_data[
                     (
-                        (pcn_data["sentiment_free_text"] == "neutral")
-                        | (pcn_data["sentiment_free_text"] == "positive")
+                        (filtered_pcn_data["sentiment_free_text"] == "neutral")
+                        | (filtered_pcn_data["sentiment_free_text"] == "positive")
                     )
                 ]
                 title_string = "Heatmap of Normalized Feedback (NEUT + POS)"
             elif radio_value == "neg":
-                pcn_data = pcn_data[(pcn_data["sentiment_free_text"] == "negative")]
+                filtered_pcn_data = filtered_pcn_data[
+                    (filtered_pcn_data["sentiment_free_text"] == "negative")
+                ]
 
                 title_string = "Heatmap of Normalized Feedback (NEGATIVE)"
             else:
 
-                pcn_data = pcn_data[
+                filtered_pcn_data = filtered_pcn_data[
                     (
-                        (pcn_data["sentiment_free_text"] == "negative")
-                        | (pcn_data["sentiment_free_text"] == "positive")
-                        | (pcn_data["sentiment_free_text"] == "neutral")
+                        (filtered_pcn_data["sentiment_free_text"] == "negative")
+                        | (filtered_pcn_data["sentiment_free_text"] == "positive")
+                        | (filtered_pcn_data["sentiment_free_text"] == "neutral")
                     )
                 ]
                 title_string = "Heatmap of Normalized Feedback (ALL)"
 
-            pcn_data["time"] = pd.to_datetime(pcn_data["time"])
+            filtered_pcn_data["time"] = pd.to_datetime(filtered_pcn_data["time"])
             # Setting the 'time' column as the index
-            pcn_data = pcn_data[["time", "feedback_labels"]].copy()
-            pcn_data.set_index("time", inplace=True)
-            pcn_data.index = pcn_data.index.to_period("M")
+            filtered_pcn_data = filtered_pcn_data[["time", "feedback_labels"]].copy()
+            filtered_pcn_data.set_index("time", inplace=True)
+            filtered_pcn_data.index = filtered_pcn_data.index.to_period("M")
 
             monthly_feedback_counts = (
-                pcn_data.groupby([pcn_data.index, "feedback_labels"])
+                filtered_pcn_data.groupby([filtered_pcn_data.index, "feedback_labels"])
                 .size()
                 .unstack(fill_value=0)
             )
@@ -1075,7 +1110,9 @@ if page == "PCN Dashboard":
             normalized_df = monthly_feedback_counts.loc[
                 :, "Accessibility and Convenience":"Waiting Time"
             ].div(monthly_feedback_counts["TOTAL"], axis=0)
-            st.markdown("#### Monthly Distribution of Feedback Labels - Heatmap: [Normalized]")
+            st.markdown(
+                "#### Monthly Distribution of Feedback Labels - Heatmap: [Normalized]"
+            )
             # Setting the plot size
             plt.figure(figsize=(15, 10))
 
@@ -1094,38 +1131,43 @@ if page == "PCN Dashboard":
 
             st.markdown("---")
             pcn_data2 = load_pcn_data(selected_pcn)
+            filtered_pcn_data2 = filter_data_by_date_range(pcn_data2, pcn_date_range)
 
             if radio_value == "pos":
-                pcn_data2 = pcn_data2[
+                filtered_pcn_data2 = filtered_pcn_data2[
                     (
-                        (pcn_data2["sentiment_do_better"] == "neutral")
-                        | (pcn_data2["sentiment_do_better"] == "positive")
+                        (filtered_pcn_data2["sentiment_do_better"] == "neutral")
+                        | (filtered_pcn_data2["sentiment_do_better"] == "positive")
                     )
                 ]
                 title_string = "Heatmap of Normalized Improvement Sugg. (NEUT + POS)"
             elif radio_value == "neg":
-                pcn_data2 = pcn_data2[(pcn_data2["sentiment_do_better"] == "negative")]
+                filtered_pcn_data2 = filtered_pcn_data2[
+                    (filtered_pcn_data2["sentiment_do_better"] == "negative")
+                ]
 
                 title_string = "Heatmap of Normalized Improvement Sugg. (NEGATIVE)"
             else:
 
-                pcn_data2 = pcn_data2[
+                filtered_pcn_data2 = filtered_pcn_data2[
                     (
-                        (pcn_data2["sentiment_do_better"] == "negative")
-                        | (pcn_data2["sentiment_do_better"] == "positive")
-                        | (pcn_data2["sentiment_do_better"] == "neutral")
+                        (filtered_pcn_data2["sentiment_do_better"] == "negative")
+                        | (filtered_pcn_data2["sentiment_do_better"] == "positive")
+                        | (filtered_pcn_data2["sentiment_do_better"] == "neutral")
                     )
                 ]
                 title_string = "Heatmap of Normalized Improvement Sugg. (ALL)"
 
-            pcn_data2["time"] = pd.to_datetime(pcn_data2["time"])
+            filtered_pcn_data2["time"] = pd.to_datetime(filtered_pcn_data2["time"])
             # Setting the 'time' column as the index
-            pcn_data2 = pcn_data2[["time", "improvement_labels"]]
-            pcn_data2.set_index("time", inplace=True)
-            pcn_data2.index = pcn_data2.index.to_period("M")
+            filtered_pcn_data2 = filtered_pcn_data2[["time", "improvement_labels"]]
+            filtered_pcn_data2.set_index("time", inplace=True)
+            filtered_pcn_data2.index = filtered_pcn_data2.index.to_period("M")
 
             monthly_imp_counts = (
-                pcn_data2.groupby([pcn_data2.index, "improvement_labels"])
+                filtered_pcn_data2.groupby(
+                    [filtered_pcn_data2.index, "improvement_labels"]
+                )
                 .size()
                 .unstack(fill_value=0)
             )
@@ -1133,7 +1175,9 @@ if page == "PCN Dashboard":
             normalized_df2 = monthly_imp_counts.loc[
                 :, "Accessibility and Convenience":"Waiting Time"
             ].div(monthly_imp_counts["TOTAL"], axis=0)
-            st.markdown("#### Monthly Distribution of Improvement Labels - Heatmap: [Normalized]")
+            st.markdown(
+                "#### Monthly Distribution of Improvement Labels - Heatmap: [Normalized]"
+            )
             # Setting the plot size
             plt.figure(figsize=(15, 10))
 
@@ -1149,9 +1193,9 @@ if page == "PCN Dashboard":
 
             # Displaying the plot
             st.pyplot(plt)
-            
+
         elif tab_selector == "By Surgery Heatmap (Normalized)":
-            
+
             radio_options = [
                 {"label": "All", "value": "all", "id": "r10"},
                 {"label": "Negative", "value": "neg", "id": "r11"},
@@ -1162,66 +1206,82 @@ if page == "PCN Dashboard":
             )
 
             if radio_value == "pos":
-                pcn_data = pcn_data[
+                filtered_pcn_data = filtered_pcn_data[
                     (
-                        (pcn_data["sentiment_free_text"] == "neutral")
-                        | (pcn_data["sentiment_free_text"] == "positive")
+                        (filtered_pcn_data["sentiment_free_text"] == "neutral")
+                        | (filtered_pcn_data["sentiment_free_text"] == "positive")
                     )
                 ]
                 feedback_title = "Normalized Heatmap of Feedback Labels against Brompton-Health-PCN Surgeries (NEUT + POS)"
                 imp_title = "Normalized Heatmap of Improvement Labels against Brompton-Health-PCN Surgeries (NEUT + POS)"
             elif radio_value == "neg":
-                pcn_data = pcn_data[(pcn_data["sentiment_free_text"] == "negative")]
+                filtered_pcn_data = filtered_pcn_data[
+                    (filtered_pcn_data["sentiment_free_text"] == "negative")
+                ]
 
                 feedback_title = "Normalized Heatmap of Feedback Labels against Brompton-Health-PCN Surgeries (NEG)"
                 imp_title = "Normalized Heatmap of Improvement Labels against Brompton-Health-PCN Surgeries (NEG)"
             else:
 
-                pcn_data = pcn_data[
+                filtered_pcn_data = filtered_pcn_data[
                     (
-                        (pcn_data["sentiment_free_text"] == "negative")
-                        | (pcn_data["sentiment_free_text"] == "positive")
-                        | (pcn_data["sentiment_free_text"] == "neutral")
+                        (filtered_pcn_data["sentiment_free_text"] == "negative")
+                        | (filtered_pcn_data["sentiment_free_text"] == "positive")
+                        | (filtered_pcn_data["sentiment_free_text"] == "neutral")
                     )
                 ]
                 feedback_title = "Normalized Heatmap of Feedback Labels against Brompton-Health-PCN Surgeries (ALL)"
                 imp_title = "Normalized Heatmap of Improvement Labels against Brompton-Health-PCN Surgeries (ALL)"
-                
-            st.markdown("#### Feedback labels aggregated by Surgery - Heatmap: [Normalized]")
-            pcn_data.dropna(subset='free_text', inplace=True)
-            heatmap_data = pd.crosstab(pcn_data['surgery'], pcn_data['feedback_labels'])
+
+            st.markdown(
+                "#### Feedback labels aggregated by Surgery - Heatmap: [Normalized]"
+            )
+            filtered_pcn_data.dropna(subset="free_text", inplace=True)
+            heatmap_data = pd.crosstab(
+                filtered_pcn_data["surgery"], filtered_pcn_data["feedback_labels"]
+            )
             normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
 
             # Create a new heatmap using the normalized data
             plt.figure(figsize=(14, 10))
-            ax = sns.heatmap(normalized_heatmap_data.T, annot=True, cmap="Reds", fmt=".2f")
+            ax = sns.heatmap(
+                normalized_heatmap_data.T, annot=True, cmap="Reds", fmt=".2f"
+            )
             plt.title(feedback_title)
-            plt.xlabel('Surgeries')
-            plt.ylabel('Feedback Labels')
+            plt.xlabel("Surgeries")
+            plt.ylabel("Feedback Labels")
             plt.xticks(rotation=90)
             plt.yticks(rotation=0)
             plt.tight_layout()
             # Show the normalized heatmap
             st.pyplot(plt)
-            
+
             st.markdown("---")
-            
-            st.markdown("#### Improvmeent labels aggregated by Surgery - Heatmap: [Normalized]")
-            pcn_data.dropna(subset='do_better', inplace=True)
-            heatmap_data = pd.crosstab(pcn_data['surgery'], pcn_data['improvement_labels'])
+
+            st.markdown(
+                "#### Improvmeent labels aggregated by Surgery - Heatmap: [Normalized]"
+            )
+            filtered_pcn_data.dropna(subset="do_better", inplace=True)
+            heatmap_data = pd.crosstab(
+                filtered_pcn_data["surgery"], filtered_pcn_data["improvement_labels"]
+            )
             normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
 
             # Create a new heatmap using the normalized data
             plt.figure(figsize=(14, 10))
-            ax = sns.heatmap(normalized_heatmap_data.T, annot=True, cmap="Grays", fmt=".2f")
+            ax = sns.heatmap(
+                normalized_heatmap_data.T, annot=True, cmap="Grays", fmt=".2f"
+            )
             plt.title(imp_title)
-            plt.xlabel('Surgeries')
-            plt.ylabel('Feedback Labels')
+            plt.xlabel("Surgeries")
+            plt.ylabel("Feedback Labels")
             plt.xticks(rotation=90)
             plt.yticks(rotation=0)
             plt.tight_layout()
             # Show the normalized heatmap
             st.pyplot(plt)
+
+
 # -- Surgery Dashboard --------------------------------------------------------------------------- Surgery Dashboard ---
 elif page == "Surgery Dashboard":
     st.markdown(
@@ -1459,7 +1519,9 @@ elif page == "Surgery Dashboard":
         plt.tight_layout()
         st.pyplot(fig)
 
-    elif surgery_tab_selector == "Feedback Length":  # ------------------------------------------------Feedback Length -
+    elif (
+        surgery_tab_selector == "Feedback Length"
+    ):  # ------------------------------------------------Feedback Length -
         fig, ax = plt.subplots(
             1, 2, figsize=(12, 6)
         )  # figsize can be adjusted as needed
@@ -1490,7 +1552,9 @@ elif page == "Surgery Dashboard":
         plt.tight_layout()
         st.pyplot(plt)
 
-    elif surgery_tab_selector == "Total Word Count":   # ----------------------------------------------Total Word Count-
+    elif (
+        surgery_tab_selector == "Total Word Count"
+    ):  # ----------------------------------------------Total Word Count-
         filtered_data["prompt"] = (
             filtered_data["free_text"].fillna("")
             + " "
@@ -1516,7 +1580,9 @@ elif page == "Surgery Dashboard":
         with cols[1]:
             pass
 
-    elif surgery_tab_selector == "Missing Data":   # -----------------------------------------------------Missing Data -
+    elif (
+        surgery_tab_selector == "Missing Data"
+    ):  # -----------------------------------------------------Missing Data -
         plt.figure(figsize=(12, 5))
         sns.heatmap(filtered_data.isnull(), cbar=False, cmap="Blues", yticklabels=False)
         plt.title("Missing Data")
