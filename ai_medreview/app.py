@@ -777,7 +777,7 @@ if page == "PCN Dashboard":
         tab_selector == "Topic A."
     ):  # ------------------------------------------------------------------------------------------ Topic Analysis ----
         # st.markdown("![sub-menu](https://img.icons8.com/material-sharp/24/menu--v1.png) Sub-menu")
-
+        st.subheader("Topic Analysis")
         tab_selector = ui.tabs(
             options=[
                 "Bar Chart - Totals",
@@ -788,7 +788,7 @@ if page == "PCN Dashboard":
             default_value="Bar Chart - Totals",
             key="tab_topic_pcn",
         )
-        st.subheader("Topic Analysis")
+        
 
         # implement PCN Slider to load data by date for comparison -------------------------------PCN TOPIC A Slider----
         start_date = pcn_data["time"].dt.date.min()
