@@ -138,6 +138,7 @@ if page not in ["PCN Dashboard", "About"]:
 else:
     selected_surgery = None
     filtered_data = None
+    
 
 # Content Start ========================================================================================== Content Start
 
