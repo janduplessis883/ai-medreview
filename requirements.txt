@@ -30,7 +30,7 @@ torch
 gspread
 transformers
 openai
-wordcloud
+
 
 sentencepiece
 black
