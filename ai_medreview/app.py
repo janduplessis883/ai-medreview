@@ -93,8 +93,8 @@ def filter_data_by_date_range(data, date_range):
 page = st.sidebar.radio(
     "Select a Page",
     [
-        "PCN Dashboard",
-        "Surgery Dashboard",
+        ":blue-background[PCN Dashboard]",
+        ":orange-background[Surgery Dashboard]",
         "Feedback Classification",
         "Improvement Suggestions",
         "Feedback Timeline",
@@ -108,7 +108,7 @@ page = st.sidebar.radio(
 )
 
 # Surgery selection and data filtering
-if page not in ["PCN Dashboard", "About"]:
+if page not in [":blue-background[PCN Dashboard]", "About"]:
     surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
     if len(surgery_list) > 0:
         selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
@@ -143,7 +143,7 @@ else:
 # Content Start ========================================================================================== Content Start
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
-if page == "PCN Dashboard":
+if page == ":blue-background[PCN Dashboard]":
     
     ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
@@ -1283,7 +1283,7 @@ if page == "PCN Dashboard":
 
 
 # -- Surgery Dashboard --------------------------------------------------------------------------- Surgery Dashboard ---
-elif page == "Surgery Dashboard":
+elif page == ":orange-background[Surgery Dashboard]":
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}"
     )
