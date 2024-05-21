@@ -93,7 +93,7 @@ def filter_data_by_date_range(data, date_range):
 page = st.sidebar.radio(
     "Select a Page",
     [
-        ":blue-background[PCN Dashboard]",
+        "**:blue-background[PCN Dashboard]**",
         ":orange-background[Surgery Dashboard]",
         "Feedback Classification",
         "Improvement Suggestions",
@@ -103,12 +103,12 @@ page = st.sidebar.radio(
         "Word Cloud",
         "Dataframe",
         "Reports",
-        "About",
+        "**About**",
     ],
 )
 
 # Surgery selection and data filtering
-if page not in [":blue-background[PCN Dashboard]", "About"]:
+if page not in ["**:blue-background[PCN Dashboard]**", "**About**"]:
     surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
     if len(surgery_list) > 0:
         selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
@@ -143,7 +143,7 @@ else:
 # Content Start ========================================================================================== Content Start
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
-if page == ":blue-background[PCN Dashboard]":
+if page == "**:blue-background[PCN Dashboard]**":
     
     ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
@@ -2761,7 +2761,7 @@ elif page == "Reports":
     report_path = "tips_report.pdf"
 
     # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
-    if page not in ["PCN Dashboard", "About"] and selected_surgery:
+    if page not in ["**:blue-background[PCN Dashboard]**", "**About**"] and selected_surgery:
         surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
         if not surgery_data.empty:
@@ -2830,7 +2830,7 @@ elif page == "Reports":
 
 
 # -- About ------------------------------------------------------------------------------------------------------- About
-elif page == "About":
+elif page == "**About**":
     st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
 
     st.markdown(
