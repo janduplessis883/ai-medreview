@@ -22,6 +22,7 @@ from reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
 
+
 # Styling with HTML
 html = """
 <style>
