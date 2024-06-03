@@ -51,7 +51,7 @@ selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selecto
 @st.cache_data(ttl=3600)
 def load_data():
     df = pd.read_csv("ai_medreview/data/data.csv")
-    df["time"] = pd.to_datetime(df["time"], dayfirst=True)
+    df["time"] = pd.to_datetime(df["time"])
     df.sort_values(by='time')
     return df
 
