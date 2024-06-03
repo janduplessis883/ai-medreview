@@ -418,8 +418,8 @@ def text_preprocessing(text):
 
 def send_alert_webhook(number):
     # URL of the webhook to which the data will be sent
-    webhook_url = "https://hook.eu1.make.com/r1intrdp5lggk94dbdpw8iim6jhqynsx"
-
+    webhook_url = "https://hook.eu1.make.com/rs75ih8bec68fpqzyx2euufn7g3ir68f"
+    
     # Create a dictionary to hold the data
     data = {"number": number}
 
