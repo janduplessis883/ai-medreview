@@ -20,6 +20,7 @@ from nlpretext.basic.preprocess import (
 )
 from nlpretext.social.preprocess import remove_mentions, remove_hashtag, remove_emoji
 from tqdm import tqdm
+import math
 
 tqdm.pandas()
 
@@ -124,6 +125,63 @@ def sentiment_analysis(data, column):
     # Add labels and scores as new columns
     data[f"sentiment_{column}"] = sentiment
     data[f"sentiment_score_{column}"] = sentiment_score
+
+    return data
+
+def sentiment_arc_analysis(data, column, chunk_size=6):
+
+    sentiment_task = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+
+    # Initialize lists to store labels and scores
+    sentiment = []
+    sentiment_score = []
+    sentiment_arc = []
+
+        # Iterate over DataFrame rows and classify text
+    for index, row in tqdm(
+        data.iterrows(),
+        total=data.shape[0],
+        desc="Analyzing Sentiment Arc",
+        colour="#e8c44d",
+    ):
+        temp_sentiment_arc = []
+        freetext = row[column]
+        words = str(freetext)
+        words = words.split()
+        
+        # Calculate the number of chunks
+        num_chunks = math.ceil(len(words) / chunk_size)
+    
+        for i in range(num_chunks):
+            # Get the current chunk of words
+            chunk = words[i * chunk_size : (i + 1) * chunk_size]
+            
+            # Join the chunk into a single string
+            chunk_text = ' '.join(chunk)
+            
+            # Calculate the sentiment polarity of the chunk
+            if pd.isna(chunk_text) or chunk_text == "":
+                sentiment_arc.append(0)
+            else:
+                model_output = sentiment_task(chunk_text)
+                temp_sentiment = model_output[0]["label"]
+                temp_sentiment_score = model_output[0]["score"]
+    
+                if temp_sentiment == 'negative':
+                    chunk_sentiment = -abs(temp_sentiment_score)
+                elif temp_sentiment == 'neutral':
+                    chunk_sentiment = 0
+                elif temp_sentiment == 'positive':
+                    chunk_sentiment = temp_sentiment_score
+    
+                temp_sentiment_arc.append(chunk_sentiment)
+
+        sentiment_arc.append(temp_sentiment_arc)
+        
+
+
+    # Add labels and scores as new columns
+    data[f"sentiment_arc_{column}"] = sentiment_arc
 
     return data
 
@@ -479,6 +537,9 @@ if __name__ == "__main__":
 
         data = cleanup_neutral_sentiment(data, "free_text")
         data = cleanup_neutral_sentiment(data, "do_better")
+        
+        data = sentiment_arc_analysis(data, 'free_text', chunk_size=8)
+        data = sentiment_arc_analysis(data, 'do_better', chunk_size=8)
 
         data = feedback_classification(data, batch_size=16)
         data = improvement_classification(data, batch_size=16)
