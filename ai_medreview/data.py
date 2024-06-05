@@ -440,7 +440,7 @@ def concat_save_final_df(processed_df, new_df):
     logger.info("💾 Concat Dataframes to data.parquet successfully")
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
     combined_data.sort_values(by="time", inplace=True, ascending=True)
-    combined_data.to_parquet(f"{DATA_PATH}/data.parquet", index=False)
+    # combined_data.to_parquet(f"{DATA_PATH}/data.parquet", index=False)
     combined_data.to_csv(f"{DATA_PATH}/data.csv", encoding="utf-8", index=False)
     print(f"💾 data.csv saved to: {DATA_PATH}")
 
@@ -515,11 +515,11 @@ if __name__ == "__main__":
         data = clean_data(data)
         logger.info("🫥 Annonymize with Transformer - free_text")
         data["free_text"] = data["free_text"].progress_apply(
-            anonymize_names_with_transformers, desc="Anonymizing", colour="#8e5575"
+            anonymize_names_with_transformers
         )
         logger.info("🫥 Annonymize with Transformer - do_better")
         data["do_better"] = data["do_better"].progress_apply(
-            anonymize_names_with_transformers, desc="Anonymizing", colour="#8e5575"
+            anonymize_names_with_transformers
         )
 
         logger.info("📗 Text Preprocesssing with *NLPretext")
