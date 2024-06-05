@@ -130,8 +130,6 @@ def sentiment_analysis(data, column):
 
 def sentiment_arc_analysis(data, column, chunk_size=6):
 
-    sentiment_task = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment-latest")
-
     # Initialize lists to store labels and scores
     sentiment = []
     sentiment_score = []
@@ -142,7 +140,7 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
         data.iterrows(),
         total=data.shape[0],
         desc="Analyzing Sentiment Arc",
-        colour="#e8c44d",
+        colour="#50b2d4",
     ):
         temp_sentiment_arc = []
         freetext = row[column]
@@ -517,11 +515,11 @@ if __name__ == "__main__":
         data = clean_data(data)
         logger.info("🫥 Annonymize with Transformer - free_text")
         data["free_text"] = data["free_text"].progress_apply(
-            anonymize_names_with_transformers
+            anonymize_names_with_transformers, desc="Anonymizing", colour="#8e5575"
         )
         logger.info("🫥 Annonymize with Transformer - do_better")
         data["do_better"] = data["do_better"].progress_apply(
-            anonymize_names_with_transformers
+            anonymize_names_with_transformers, desc="Anonymizing", colour="#8e5575"
         )
 
         logger.info("📗 Text Preprocesssing with *NLPretext")
