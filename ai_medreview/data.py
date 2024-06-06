@@ -489,6 +489,12 @@ def send_alert_webhook(number):
         )
     else:
         logger.info(f"Failed to send data: {response.status_code}, {response.text}")
+        
+@time_it   
+def create_monthyear(df):
+    df['time'] = pd.to_datetime(df['time'])
+    df['month_year'] = df['time'].dt.to_period('M')
+    return df
 
 
 if __name__ == "__main__":
@@ -535,14 +541,11 @@ if __name__ == "__main__":
 
         data = cleanup_neutral_sentiment(data, "free_text")
         data = cleanup_neutral_sentiment(data, "do_better")
-        
-        data = sentiment_arc_analysis(data, 'free_text', chunk_size=8)
-        data = sentiment_arc_analysis(data, 'do_better', chunk_size=8)
 
         data = feedback_classification(data, batch_size=16)
         data = improvement_classification(data, batch_size=16)
         logger.info("Data pre-processing completed")
-
+        
         concat_save_final_df(processed_data, data)
 
         do_git_merge()  # Push everything to GitHub
