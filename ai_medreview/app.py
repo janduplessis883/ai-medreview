@@ -2649,7 +2649,13 @@ elif page == "GPT-4 Summary":
                     st.session_state["webhook_sent"] = (
                         True  # Avoid sending the webhook again on rerun
                     )
-                    st.write("Webhook sent successfully!")
+                    ui.badges(
+                    badge_list=[
+                (f"⚡️Webhook sent successfully!", "outline"),
+            ],
+            class_name="flex gap-2",
+            key="badges50",
+        )
 
         # Conditionally show the 'Summarize with GPT-4' button based on the submission state
         if st.session_state.get("submitted", False):
