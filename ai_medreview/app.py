@@ -2584,7 +2584,7 @@ elif page == "GPT-4 Summary":
         selected_surgery (str): The selected surgery.
         word_count (int): The word count.
         """
-        webhook_url = "https://eodj7kiwqrtobj4.m.pipedream.net"
+        webhook_url = "https://hook.eu1.make.com/37kqw0pre1scl6tslnguib5cwbpft4rn"
         data = {
             "user_name": user_name,
             "surgery": selected_surgery,
