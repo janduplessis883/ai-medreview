@@ -95,7 +95,7 @@ page = st.sidebar.radio(
     "Select a Page",
     [
         "**:blue-background[PCN Dashboard]**",
-        "Surgery Dashboard",
+        "Surgery Dashboards",
         "Feedback Classification",
         "Improvement Suggestions",
         "Feedback Timeline",
@@ -1284,7 +1284,7 @@ if page == "**:blue-background[PCN Dashboard]**":
 
 
 # -- Surgery Dashboard --------------------------------------------------------------------------- Surgery Dashboard ---
-elif page == "Surgery Dashboard":
+elif page == "Surgery Dashboards":
     st.markdown(
         f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}"
     )
