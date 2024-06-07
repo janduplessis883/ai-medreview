@@ -2147,7 +2147,7 @@ elif page == "Feedback Timeline":
     sample = filtered_data.tail(100)
 
     with st.spinner(text="Loading Feedback..."):
-        time.sleep(10)
+        time.sleep(2)
         with st.container(height=500, border=True):
             icounter = 1
             for _, row in sample.iterrows():
