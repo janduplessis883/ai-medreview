@@ -496,6 +496,35 @@ def create_monthyear(df):
     df['month_year'] = df['time'].dt.to_period('M')
     return df
 
+# --- Emotion Classification Pipeline ----------------------------------------------------------------------------------
+model_name = "SamLowe/roberta-base-go_emotions"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
+classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, top_k=1)
+    
+def emotion_classification(df, column, classifier):
+    emotion = []
+
+    # Total number of rows
+    total_rows = df.shape[0]
+
+    for index, row in tqdm(df.iterrows(), total=total_rows, desc="Analyzing Emotion"):
+        sentence = row[column]
+        
+        if sentence == '' or pd.isna(sentence):
+            emotion.append(np.nan)
+        else:
+            sentence = str(sentence)
+            model_output = classifier(sentence, truncation=True, max_length=512)[0]
+            
+            model_output = list(model_output)
+            model_output = model_output[0]['label']
+            emotion.append(model_output)
+
+    df[f"emotion_{column}"] = emotion
+
+    return data
+
 
 if __name__ == "__main__":
 
@@ -544,6 +573,10 @@ if __name__ == "__main__":
 
         data = feedback_classification(data, batch_size=16)
         data = improvement_classification(data, batch_size=16)
+        
+        data = emotion_classification(data, "free_text", classifier=classifier)
+        data = emotion_classification(data, "do_better", classifier=classifier)
+        
         logger.info("Data pre-processing completed")
         
         concat_save_final_df(processed_data, data)
