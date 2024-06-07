@@ -2143,10 +2143,12 @@ elif page == "Feedback Timeline":
     st.pyplot(fig)
     st.markdown("---")
     st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses")
+    
+    sample = filtered_data.tail(200)
 
     with st.container(height=500, border=True):
         icounter = 1
-        for _, row in filtered_data.iterrows():
+        for _, row in sample.iterrows():
             free_text = row["free_text"]
             do_better = row["do_better"]
             feedback_labels = row["feedback_labels"]
