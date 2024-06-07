@@ -2155,7 +2155,7 @@ elif page == "Feedback Timeline":
             rating = row["rating"]
             
             with st.container(border=True):
-                ui.badges(badge_list=[(f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
+                ui.badges(badge_list=[(f"{icounter}", "default"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
                 
                 if str(free_text) not in ["nan"]:
                     st.markdown(f"🤔 {icounter}" + str(free_text))
