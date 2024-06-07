@@ -2460,7 +2460,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
                     with st.container(border=True):
                        # st.markdown(f"**{rating}** `{time_}`")
-                        ui.badges(badge_list=[(f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
+                        ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
                         if str(free_text) not in ["nan"]:
                             st.markdown("🤔 " + str(free_text))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
@@ -2501,7 +2501,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                         
                     with st.container(border=True):
                        # st.markdown(f"**{rating}** `{time_}`")
-                        ui.badges(badge_list=[(f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
+                        ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
                         if str(do_better) not in ["nan"]:
                             st.markdown("🛠️ " + str(do_better))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
