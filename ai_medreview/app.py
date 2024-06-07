@@ -2466,7 +2466,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
                             ui.badges(badge_list=[(f"Emotion", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
                     
-                icounter += 1
+                    icounter += 1
                 
     elif sentiment_tab_selector == "Improvement Suggestions":
         if neg.shape[0] > 0:
