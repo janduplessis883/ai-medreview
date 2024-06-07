@@ -2469,7 +2469,8 @@ Select Patient feedback to review, this page only displays feedback that on Sent
             st.pyplot(plt)
             st.write("")
             st.markdown(f"Showing **{neg2.shape[0]}** Improvement Suggestions.")
-            with st.container(height=500, border=True):
+            with st.container(height=550, border=True):
+                icounter = 1
                 for _, row in neg2.iterrows():
                     do_better = row["do_better"]
                     cat = row["improvement_labels"]
@@ -2478,14 +2479,23 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                     score = row["sentiment_score_do_better"]
                     sentiment = row["sentiment_do_better"]
 
-                    with st.chat_message("user"):
-                        st.markdown(f"**{rating}** `{time_}`")
+                    # with st.chat_message("user"):
+                    #     st.markdown(f"**{rating}** `{time_}`")
 
+                    #     if str(do_better) not in ["nan"]:
+                    #         st.markdown("💡 " + str(do_better))
+                    #     # st.markdown(f"`{sentiment} {score}` `{cat}`")
+                    #     ui.badges(badge_list=[(f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "outline")], class_name=f"badges_improve_{icounter}")
+                        
+                    with st.container(border=True):
+                       # st.markdown(f"**{rating}** `{time_}`")
+                        ui.badges(badge_list=[(f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
                         if str(do_better) not in ["nan"]:
-                            st.markdown("💡 " + str(do_better))
-                        st.markdown(f"`{sentiment} {score}` `{cat}`")
-
-
+                            st.markdown("🤔 " + str(do_better))
+                            # st.markdown(f"`{sentiment} {score}` `{cat}`")
+                            ui.badges(badge_list=[(f"EMOTION", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
+                        
+                    icounter += 1
 # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
 elif page == "Word Cloud":
     st.markdown(

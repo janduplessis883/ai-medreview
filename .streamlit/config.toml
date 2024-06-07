@@ -10,10 +10,10 @@ primaryColor = "#004768"
 backgroundColor = "#ffffff"
 
 # Secondary background color for your app
-secondaryBackgroundColor = "#edeaeb"
+secondaryBackgroundColor = "#e8e8e8"
 
 # Text color for your app
-textColor = "#4d4e4d"
+textColor = "#222529"
 
 # Font for your app, choose between "sans serif", "serif", and "monospace"
 font = "sans serif"
