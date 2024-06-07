@@ -2145,22 +2145,27 @@ elif page == "Feedback Timeline":
     st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses")
 
     with st.container(height=500, border=True):
+        icounter = 1
         for _, row in filtered_data.iterrows():
             free_text = row["free_text"]
             do_better = row["do_better"]
             feedback_labels = row["feedback_labels"]
             imp_labels = row["improvement_labels"]
-            time = row["time"]
+            time_ = row["time"]
             rating = row["rating"]
-
-            with st.chat_message("user"):
-                st.markdown(f"**{rating}** `{time}`")
+            
+            with st.container(border=True):
+                ui.badges(badge_list=[(f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
+                
                 if str(free_text) not in ["nan"]:
-                    st.markdown("🗣️ " + str(free_text))
-                    st.markdown(f"`{feedback_labels}`")
+                    st.markdown(f"🤔 {icounter}" + str(free_text))
+                    ui.badges(badge_list=[(f"Emotion", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
+                    
                     if str(do_better) not in ["nan"]:
-                        st.markdown("💡 " + str(do_better))
-                        st.markdown(f"`{imp_labels}`")
+                        st.markdown("🛠️ " + str(do_better))
+                        ui.badges(badge_list=[(f"Emotion", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
+                
+            icounter += 1           
 
 
 # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
