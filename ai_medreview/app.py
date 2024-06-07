@@ -2396,7 +2396,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     st.markdown(f"### FFT Feedback with a `NEGATIVE` Sentiment Score.")
 
     toggle = ui.switch(
-        default_checked=False, label="Show last 30 days only.", key="switch_dash_neg"
+        default_checked=True, label="Show last 30 days only.", key="switch_dash_neg"
     )
 
     # React to the toggle's state
