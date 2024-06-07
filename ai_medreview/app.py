@@ -2146,28 +2146,29 @@ elif page == "Feedback Timeline":
     
     sample = filtered_data.tail(200)
 
-    with st.container(height=500, border=True):
-        icounter = 1
-        for _, row in sample.iterrows():
-            free_text = row["free_text"]
-            do_better = row["do_better"]
-            feedback_labels = row["feedback_labels"]
-            imp_labels = row["improvement_labels"]
-            time_ = row["time"]
-            rating = row["rating"]
-            
-            with st.container(border=True):
-                ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
+    with st.spinner:
+        with st.container(height=500, border=True):
+            icounter = 1
+            for _, row in sample.iterrows():
+                free_text = row["free_text"]
+                do_better = row["do_better"]
+                feedback_labels = row["feedback_labels"]
+                imp_labels = row["improvement_labels"]
+                time_ = row["time"]
+                rating = row["rating"]
                 
-                if str(free_text) not in ["nan"]:
-                    st.markdown(f"🤔 {icounter}" + str(free_text))
-                    ui.badges(badge_list=[(f"Emotion", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
+                with st.container(border=True):
+                    ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
                     
-                    if str(do_better) not in ["nan"]:
-                        st.markdown("🛠️ " + str(do_better))
-                        ui.badges(badge_list=[(f"Emotion", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
-                
-            icounter += 1           
+                    if str(free_text) not in ["nan"]:
+                        st.markdown(f"🤔 {icounter}" + str(free_text))
+                        ui.badges(badge_list=[(f"Emotion", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
+                        
+                        if str(do_better) not in ["nan"]:
+                            st.markdown("🛠️ " + str(do_better))
+                            ui.badges(badge_list=[(f"Emotion", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
+                    
+                icounter += 1           
 
 
 # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
