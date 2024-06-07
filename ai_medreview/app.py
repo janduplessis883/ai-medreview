@@ -2142,9 +2142,9 @@ elif page == "Feedback Timeline":
     plt.tight_layout()
     st.pyplot(fig)
     st.markdown("---")
-    st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses")
+    st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses | Last 100 messages displayed.")
     
-    sample = filtered_data.tail(200)
+    sample = filtered_data.tail(100)
 
     with st.spinner(text="Loading Feedback..."):
         with st.container(height=500, border=True):
