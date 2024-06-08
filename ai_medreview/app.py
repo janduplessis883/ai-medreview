@@ -99,6 +99,7 @@ page = st.sidebar.radio(
         "Feedback Classification",
         "Improvement Suggestions",
         "Feedback Timeline",
+        ":orange-background[Emotion Detection]",
         "Sentiment Analysis",
         "GPT-4 Summary",
         "Word Cloud",
@@ -163,7 +164,7 @@ if page == "**:blue-background[PCN Dashboard]**":
         options=[
             "PCN Rating",
             "PCN Responses",
-            "Sentiment A.",
+            "Sentiment-Emotion",
             "Topic A.",
             "Surg. Ratings",
             "Surg. Responses",
@@ -381,11 +382,84 @@ if page == "**:blue-background[PCN Dashboard]**":
             st.pyplot(plt)
 
     elif (
-        tab_selector == "Sentiment A."
+        tab_selector == "Sentiment-Emotion"
     ):  # -------------------------------------------------------------------------------------- Sentiment Analysis ----
-        st.subheader("Sentiment Analysis")
+        st.subheader("Sentiment Analysis | Emotion Detection")
         # Assuming 'data' is already defined and processed
         # Define labels and colors outside since they are the same for both plots
+        
+        data['time'] = pd.to_datetime(data['time'])
+
+        # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
+        pooled_data = pd.concat([data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
+                                data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+
+        # Extract the year and month from the 'time' column
+        pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
+
+        # Group by 'year_month' and 'emotion' to get the monthly counts
+        pooled_monthly_emotion_counts = pooled_data.groupby(['year_month', 'emotion']).size().unstack(fill_value=0)
+
+        # Normalize the counts by dividing each emotion's count by the total counts for that month
+        pooled_normalized_monthly_emotion_counts = pooled_monthly_emotion_counts.div(pooled_monthly_emotion_counts.sum(axis=1), axis=0)
+
+        # Convert the normalized monthly counts dataframe to long format for Plotly
+        pooled_normalized_long = pooled_normalized_monthly_emotion_counts.reset_index().melt(id_vars='year_month', var_name='emotion', value_name='proportion')
+
+        # Create a Plotly line plot
+        fig = px.line(
+            pooled_normalized_long,
+            x='year_month',
+            y='proportion',
+            color='emotion',
+            markers=True,
+            title='Normalized Monthly Counts of Pooled Emotions Over Time',
+            labels={'year_month': 'Time (Year-Month)', 'proportion': 'Proportion'}
+        )
+
+        # Update layout for better appearance
+        fig.update_layout(
+            legend_title_text='Emotion',
+            xaxis_title='Time (Year-Month)',
+            yaxis_title='Proportion',
+            autosize=False,
+            width=900,
+            height=600,
+            margin=dict(l=40, r=40, b=40, t=40)
+        )
+
+        st.plotly_chart(fig)
+        st.markdown("---")
+    # Convert the 'time' column to datetime format
+        data['time'] = pd.to_datetime(data['time'])
+
+        # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
+        pooled_data_with_source = pd.concat([
+            data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
+            data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
+        ])
+
+        # Filter out rows with NaN values in 'emotion'
+        pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
+
+
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.countplot(data=pooled_data_with_source, y='emotion', hue='source', palette=["#4088a9", "#f1c045"])
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.yaxis.grid(False)
+        ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+        plt.xlabel('Counts')
+        plt.ylabel('Emotions')
+        plt.title('Distribution of Emotions in Feedback and Do Improvement Suggestions')
+        plt.legend(title='Source', loc='upper right')
+        plt.tight_layout()
+        st.pyplot(fig)
+        
+        st.markdown("---")
+        st.subheader("Sentiment Analysis")
         labels = ["Negative", "Neutral", "Positive"]
         colors = ["#ae4f4d", "#eeeadb", "#7495a8"]  # Order adjusted to match labels
         explode = (0, 0, 0)  # No slice exploded
@@ -2111,6 +2185,92 @@ elif page == "Improvement Suggestions":
                 if str(text).lower() != "nan":
                     st.markdown(f"- :{text_color}[{str(text)}] ")
 
+
+# -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
+elif page == ":orange-background[Emotion Detection]":
+    st.markdown(
+        "# ![Emotion Detection](https://img.icons8.com/ios/50/happy--v1.png) Emotion Detection"
+    )
+    st.markdown(
+        "Identifying and classifying the **emotions** expressed in FFT feedback."
+    )
+    
+    # Convert the 'time' column to datetime format
+    data['time'] = pd.to_datetime(data['time'])
+
+    # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
+    pooled_data = pd.concat([data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
+                            data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+
+    # Extract the year and month from the 'time' column
+    pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
+
+    # Group by 'year_month' and 'emotion' to get the monthly counts
+    pooled_monthly_emotion_counts = pooled_data.groupby(['year_month', 'emotion']).size().unstack(fill_value=0)
+
+    # Normalize the counts by dividing each emotion's count by the total counts for that month
+    pooled_normalized_monthly_emotion_counts = pooled_monthly_emotion_counts.div(pooled_monthly_emotion_counts.sum(axis=1), axis=0)
+
+    # Convert the normalized monthly counts dataframe to long format for Plotly
+    pooled_normalized_long = pooled_normalized_monthly_emotion_counts.reset_index().melt(id_vars='year_month', var_name='emotion', value_name='proportion')
+
+    # Create a Plotly line plot
+    fig = px.line(
+        pooled_normalized_long,
+        x='year_month',
+        y='proportion',
+        color='emotion',
+        markers=True,
+        title='Normalized Monthly Counts of Pooled Emotions Over Time',
+        labels={'year_month': 'Time (Year-Month)', 'proportion': 'Proportion'}
+    )
+
+    # Update layout for better appearance
+    fig.update_layout(
+        legend_title_text='Emotion',
+        xaxis_title='Time (Year-Month)',
+        yaxis_title='Proportion',
+        autosize=False,
+        width=900,
+        height=600,
+        margin=dict(l=40, r=40, b=40, t=40)
+    )
+
+    st.plotly_chart(fig)
+    st.markdown("---")
+# Convert the 'time' column to datetime format
+    data['time'] = pd.to_datetime(data['time'])
+
+    # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
+    pooled_data_with_source = pd.concat([
+        data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
+        data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
+    ])
+
+    # Filter out rows with NaN values in 'emotion'
+    pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
+
+
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.countplot(data=pooled_data_with_source, y='emotion', hue='source', palette=["#4088a9", "#f1c045"])
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.yaxis.grid(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    plt.xlabel('Counts')
+    plt.ylabel('Emotions')
+    plt.title('Distribution of Emotions in Feedback and Do Improvement Suggestions')
+    plt.legend(title='Source', loc='upper right')
+    plt.tight_layout()
+    st.pyplot(fig)
+
+
+    
+    
+    
+    
 # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
 elif page == "Feedback Timeline":
     st.markdown(
@@ -2157,17 +2317,19 @@ elif page == "Feedback Timeline":
                 imp_labels = row["improvement_labels"]
                 time_ = row["time"]
                 rating = row["rating"]
+                fb_emotion = row['emotion_free_text']
+                ip_emotion = row['emotion_do_better']
                 
                 with st.container(border=True):
                     ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
                     
                     if str(free_text) not in ["nan"]:
-                        st.markdown(f"🤔 {icounter}" + str(free_text))
-                        ui.badges(badge_list=[(f"Emotion", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
+                        st.markdown(f"🤔 " + str(free_text))
+                        ui.badges(badge_list=[(f"{fb_emotion}", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
                         
                         if str(do_better) not in ["nan"]:
                             st.markdown("🛠️ " + str(do_better))
-                            ui.badges(badge_list=[(f"Emotion", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
+                            ui.badges(badge_list=[(f"{ip_emotion}", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
                     
                 icounter += 1           
 
