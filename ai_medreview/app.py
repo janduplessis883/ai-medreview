@@ -2231,8 +2231,8 @@ elif page == ":orange-background[Emotion Detection]":
         xaxis_title='Time (Year-Month)',
         yaxis_title='Proportion',
         autosize=False,
-        width=900,
-        height=600,
+        width=750,
+        height=550,
         margin=dict(l=40, r=40, b=40, t=40)
     )
 
