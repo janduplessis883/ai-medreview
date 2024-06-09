@@ -164,7 +164,7 @@ if page == "**:blue-background[PCN Dashboard]**":
         options=[
             "PCN Rating",
             "PCN Responses",
-            "Sentiment-Emotion",
+            "Sentim.-Emotion",
             "Topic A.",
             "Surg. Ratings",
             "Surg. Responses",
@@ -382,7 +382,7 @@ if page == "**:blue-background[PCN Dashboard]**":
             st.pyplot(plt)
 
     elif (
-        tab_selector == "Sentiment-Emotion"
+        tab_selector == "Sentim.-Emotion"
     ):  # -------------------------------------------------------------------------------------- Sentiment Analysis ----
         st.subheader("Sentiment Analysis | Emotion Detection")
         # Assuming 'data' is already defined and processed
@@ -423,8 +423,8 @@ if page == "**:blue-background[PCN Dashboard]**":
             xaxis_title='Time (Year-Month)',
             yaxis_title='Proportion',
             autosize=False,
-            width=900,
-            height=600,
+            width=750,
+            height=550,
             margin=dict(l=40, r=40, b=40, t=40)
         )
 
@@ -2196,11 +2196,11 @@ elif page == ":orange-background[Emotion Detection]":
     )
     
     # Convert the 'time' column to datetime format
-    data['time'] = pd.to_datetime(data['time'])
+    filtered_data['time'] = pd.to_datetime(filtered_data['time'])
 
-    # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
-    pooled_data = pd.concat([data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
-                            data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+    # Combine the filtered_data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
+    pooled_data = pd.concat([filtered_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
+                            filtered_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
 
     # Extract the year and month from the 'time' column
     pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
@@ -2238,22 +2238,39 @@ elif page == ":orange-background[Emotion Detection]":
 
     st.plotly_chart(fig)
     st.markdown("---")
-# Convert the 'time' column to datetime format
-    data['time'] = pd.to_datetime(data['time'])
+    # Convert the 'time' column to datetime format
+    # Assuming filtered_data is your DataFrame
+    filtered_data['time'] = pd.to_datetime(filtered_data['time'])
 
-    # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
+    # Combine the filtered_data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
     pooled_data_with_source = pd.concat([
-        data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
-        data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
+        filtered_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
+        filtered_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
     ])
 
     # Filter out rows with NaN values in 'emotion'
     pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
 
+    # Pivot the data to get counts of each emotion per source
+    pivot_table = pooled_data_with_source.pivot_table(index='emotion', columns='source', aggfunc='size', fill_value=0)
 
-
+    # Plotting
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.countplot(data=pooled_data_with_source, y='emotion', hue='source', palette=["#4088a9", "#f1c045"])
+
+    # Define the colors for the sources
+    colors = ["#4088a9", "#f1c045"]
+
+    # Plot each source as a stacked bar
+    bottom = None
+    for i, source in enumerate(pivot_table.columns):
+        counts = pivot_table[source]
+        ax.barh(pivot_table.index, counts, left=bottom, label=source, color=colors[i])
+        if bottom is None:
+            bottom = counts
+        else:
+            bottom += counts
+
+    # Customize the plot
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_visible(False)
