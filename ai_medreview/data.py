@@ -509,7 +509,7 @@ def emotion_classification(df, column, classifier):
     # Total number of rows
     total_rows = df.shape[0]
 
-    for index, row in tqdm(df.iterrows(), total=total_rows, desc="Analyzing Emotion"):
+    for index, row in tqdm(df.iterrows(), total=total_rows, desc="Analyzing Emotion", colour="#4088a9"):
         sentence = row[column]
         
         if sentence == '' or pd.isna(sentence):
