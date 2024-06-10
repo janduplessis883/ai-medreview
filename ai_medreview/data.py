@@ -501,7 +501,8 @@ model_name = "SamLowe/roberta-base-go_emotions"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, top_k=1)
-    
+ 
+@time_it   
 def emotion_classification(df, column, classifier):
     emotion = []
 
