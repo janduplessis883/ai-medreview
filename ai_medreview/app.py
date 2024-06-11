@@ -384,7 +384,7 @@ if page == "**:blue-background[PCN Dashboard]**":
     elif (
         tab_selector == "Sentim.-Emotion"
     ):  # -------------------------------------------------------------------------------------- Sentiment Analysis ----
-        st.subheader("Sentiment Analysis | Emotion Detection")
+        st.subheader("Emotion Detection")
         # Assuming 'data' is already defined and processed
         # Define labels and colors outside since they are the same for both plots
         
@@ -442,10 +442,26 @@ if page == "**:blue-background[PCN Dashboard]**":
         # Filter out rows with NaN values in 'emotion'
         pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
 
+        # Pivot the data to get counts of each emotion per source
+        pivot_table = pooled_data_with_source.pivot_table(index='emotion', columns='source', aggfunc='size', fill_value=0)
 
-
+        # Plotting
         fig, ax = plt.subplots(figsize=(10, 6))
-        sns.countplot(data=pooled_data_with_source, y='emotion', hue='source', palette=["#4088a9", "#f1c045"])
+
+        # Define the colors for the sources
+        colors = ["#4088a9", "#f1c045"]
+
+        # Plot each source as a stacked bar
+        bottom = None
+        for i, source in enumerate(pivot_table.columns):
+            counts = pivot_table[source]
+            ax.barh(pivot_table.index, counts, left=bottom, label=source, color=colors[i])
+            if bottom is None:
+                bottom = counts
+            else:
+                bottom += counts
+
+        # Customize the plot
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.spines["left"].set_visible(False)
@@ -453,58 +469,15 @@ if page == "**:blue-background[PCN Dashboard]**":
         ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
         plt.xlabel('Counts')
         plt.ylabel('Emotions')
-        plt.title('Distribution of Emotions in Feedback and Do Improvement Suggestions')
+        plt.title('Distribution of Emotions in Feedback and Improvement Suggestions')
         plt.legend(title='Source', loc='upper right')
         plt.tight_layout()
+
+        # Display the plot in Streamlit
         st.pyplot(fig)
-        
+
         st.markdown("---")
         st.subheader("Sentiment Analysis")
-        labels = ["Negative", "Neutral", "Positive"]
-        colors = ["#ae4f4d", "#eeeadb", "#7495a8"]  # Order adjusted to match labels
-        explode = (0, 0, 0)  # No slice exploded
-
-        # Create a subplot with 1 row and 2 columns
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-
-        # First pie chart - Cum Sentiment - Feedback
-        sentiment_totals_feedback = pcn_data.groupby("sentiment_free_text")[
-            "sentiment_score_free_text"
-        ].sum()
-        ax1.pie(
-            sentiment_totals_feedback,
-            explode=explode,
-            labels=labels,
-            colors=colors,
-            autopct="%1.1f%%",
-            startangle=140,
-        )
-        ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
-        centre_circle = plt.Circle((0, 0), 0.50, fc="white")
-        ax1.add_artist(centre_circle)
-        ax1.set_title("Cum Sentiment - Feedback")
-
-        # Second pie chart - Cum Sentiment - Improvement Suggestions
-        sentiment_totals_improvement = pcn_data.groupby("sentiment_do_better")[
-            "sentiment_score_do_better"
-        ].sum()
-        ax2.pie(
-            sentiment_totals_improvement,
-            explode=explode,
-            labels=labels,
-            colors=colors,
-            autopct="%1.1f%%",
-            startangle=140,
-        )
-        ax2.axis("equal")
-        centre_circle = plt.Circle((0, 0), 0.50, fc="white")
-        ax2.add_artist(centre_circle)
-        ax2.set_title("Cum Sentiment - Improvement Sugg.")
-
-        # Display the subplot
-        st.pyplot(fig)
-
-        st.markdown("---")
         st.markdown("Average Monthly **Sentiment Analysis Score** - Feedback")
         pcn_data["time"] = pd.to_datetime(pcn_data["time"])
         pcn_data.set_index("time", inplace=True)
@@ -2240,6 +2213,7 @@ elif page == ":orange-background[Emotion Detection]":
     st.markdown("---")
     # Convert the 'time' column to datetime format
     # Assuming filtered_data is your DataFrame
+ # Convert the 'time' column to datetime
     filtered_data['time'] = pd.to_datetime(filtered_data['time'])
 
     # Combine the filtered_data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
@@ -2281,8 +2255,9 @@ elif page == ":orange-background[Emotion Detection]":
     plt.title('Distribution of Emotions in Feedback and Do Improvement Suggestions')
     plt.legend(title='Source', loc='upper right')
     plt.tight_layout()
-    st.pyplot(fig)
 
+    # Display the plot in Streamlit
+    st.pyplot(fig)
 
     
     
