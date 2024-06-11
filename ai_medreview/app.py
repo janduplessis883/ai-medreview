@@ -473,7 +473,6 @@ if page == "**:blue-background[PCN Dashboard]**":
         plt.legend(title='Source', loc='upper right')
         plt.tight_layout()
 
-
         # Display the plot in Streamlit
         st.pyplot(fig)
 
