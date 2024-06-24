@@ -101,6 +101,7 @@ page = st.sidebar.radio(
         "Feedback Timeline",
         ":orange-background[Emotion Detection]",
         "Sentiment Analysis",
+        "Private Directory",
         "GPT-4 Summary",
         "Word Cloud",
         "Dataframe",
@@ -3078,3 +3079,24 @@ Explore the AI MedReview dashboard today and experience the transformative power
             width=200,
         )
     st.write("")
+
+
+# -- About ------------------------------------------------------------------------------------------------------- About
+elif page == "Private Directory":
+    st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) Private Directory")
+
+    # Set the correct PIN
+    correct_pin = "2027"
+    col1, col2 = st.columns(2)
+    with col1:
+        # Input field for the PIN
+        pin_input = st.text_input("Enter PIN", type="password")
+    with col2:
+        pass
+
+    if pin_input == correct_pin:
+
+        st.markdown("Welcome to the Private Directory")
+        # Add the content you want to display here
+    else:
+        st.warning("Please enter the correct PIN to access the Private Directory.")
