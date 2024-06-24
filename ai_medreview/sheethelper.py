@@ -2,17 +2,10 @@ import os
 import pandas as pd
 import gspread
 from google.oauth2 import service_account
-<<<<<<< HEAD
 # from dotenv import load_dotenv
 
 # # Load the .env file
 # load_dotenv()
-=======
-from dotenv import load_dotenv
-
-# Load the .env file
-load_dotenv()
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
 secret_path = "/Users/janduplessis/code/janduplessis883/ai-medreview/secret/google_sheets_secret.json"
 
