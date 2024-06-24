@@ -2,7 +2,7 @@ import os
 import requests
 import pandas as pd
 from transformers import pipeline
-from sheethelper import SheetHelper
+from ai_medreview.sheethelper import SheetHelper
 import seaborn as sns
 import matplotlib.pyplot as plt
 from colorama import init, Fore, Back, Style
@@ -31,8 +31,6 @@ from ai_medreview.automation.git_merge import *
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 init(autoreset=True)
 warnings.filterwarnings("ignore")
-
-from sheethelper import *
 
 from loguru import logger
 
