@@ -2548,7 +2548,11 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
     st.markdown("---")
 
+<<<<<<< HEAD
+    st.markdown(f"### FFT Feedback with a `NEGATIVE` Sentiment Score.")
+=======
     st.markdown(f"### FFT Feedback with a :red-background[NEGATIVE] Sentiment Score.")
+>>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
     toggle = ui.switch(
         default_checked=True, label="Show last 30 days only.", key="switch_dash_neg"
@@ -3078,7 +3082,10 @@ Explore the AI MedReview dashboard today and experience the transformative power
             width=200,
         )
     st.write("")
+<<<<<<< HEAD
+=======
     
     
+>>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
     # End of file Jan du Plessis - 2 May 2024
