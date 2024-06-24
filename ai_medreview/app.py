@@ -140,13 +140,13 @@ if page not in ["**:blue-background[PCN Dashboard]**", "**About**"]:
 else:
     selected_surgery = None
     filtered_data = None
-    
+
 
 # Content Start ========================================================================================== Content Start
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "**:blue-background[PCN Dashboard]**":
-    
+
     ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
     st.markdown(
@@ -387,7 +387,7 @@ if page == "**:blue-background[PCN Dashboard]**":
         st.subheader("Emotion Detection")
         # Assuming 'data' is already defined and processed
         # Define labels and colors outside since they are the same for both plots
-        
+
         data['time'] = pd.to_datetime(data['time'])
 
         # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
@@ -837,7 +837,7 @@ if page == "**:blue-background[PCN Dashboard]**":
             default_value="Bar Chart - Totals",
             key="tab_topic_pcn",
         )
-        
+
 
         # implement PCN Slider to load data by date for comparison -------------------------------PCN TOPIC A Slider----
         start_date = pcn_data["time"].dt.date.min()
@@ -2167,7 +2167,7 @@ elif page == ":orange-background[Emotion Detection]":
     st.markdown(
         "Identifying and classifying the **emotions** expressed in FFT feedback."
     )
-    
+
     # Convert the 'time' column to datetime format
     filtered_data['time'] = pd.to_datetime(filtered_data['time'])
 
@@ -2259,10 +2259,10 @@ elif page == ":orange-background[Emotion Detection]":
     # Display the plot in Streamlit
     st.pyplot(fig)
 
-    
-    
-    
-    
+
+
+
+
 # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
 elif page == "Feedback Timeline":
     st.markdown(
@@ -2295,9 +2295,9 @@ elif page == "Feedback Timeline":
     st.pyplot(fig)
     st.markdown("---")
     st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses | Last 100 messages displayed.")
-    
+
     sample = filtered_data.tail(100)
-    
+
     with st.container(height=500, border=True):
         with st.spinner(text="Loading Feedback..."):
             time.sleep(0.5)
@@ -2311,19 +2311,19 @@ elif page == "Feedback Timeline":
                 rating = row["rating"]
                 fb_emotion = row['emotion_free_text']
                 ip_emotion = row['emotion_do_better']
-                
+
                 with st.container(border=True):
                     ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
-                    
+
                     if str(free_text) not in ["nan"]:
                         st.markdown(f"🤔 " + str(free_text))
                         ui.badges(badge_list=[(f"{fb_emotion}", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
-                        
+
                         if str(do_better) not in ["nan"]:
                             st.markdown("🛠️ " + str(do_better))
                             ui.badges(badge_list=[(f"{ip_emotion}", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
-                    
-                icounter += 1           
+
+                icounter += 1
 
 
 # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
@@ -2548,11 +2548,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
     st.markdown("---")
 
-<<<<<<< HEAD
-    st.markdown(f"### FFT Feedback with a `NEGATIVE` Sentiment Score.")
-=======
     st.markdown(f"### FFT Feedback with a :red-background[NEGATIVE] Sentiment Score.")
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
     toggle = ui.switch(
         default_checked=True, label="Show last 30 days only.", key="switch_dash_neg"
@@ -2624,9 +2620,9 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                             st.markdown("🤔 " + str(free_text))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
                             ui.badges(badge_list=[(f"Emotion", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
-                    
+
                     icounter += 1
-                
+
     elif sentiment_tab_selector == "Improvement Suggestions":
         if neg.shape[0] > 0:
             fig, ax = plt.subplots(figsize=(12, 2.5))
@@ -2657,7 +2653,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                     #         st.markdown("💡 " + str(do_better))
                     #     # st.markdown(f"`{sentiment} {score}` `{cat}`")
                     #     ui.badges(badge_list=[(f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "outline")], class_name=f"badges_improve_{icounter}")
-                        
+
                     with st.container(border=True):
                        # st.markdown(f"**{rating}** `{time_}`")
                         ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
@@ -2665,7 +2661,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                             st.markdown("🛠️ " + str(do_better))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
                             ui.badges(badge_list=[(f"Emotion", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
-                        
+
                     icounter += 1
 # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
 elif page == "Word Cloud":
@@ -2679,9 +2675,9 @@ elif page == "Word Cloud":
         if toggle:
             st.markdown(
                 """1. The **Feedback Word Cloud**:
-    From response to FFT Q1: Please tell us why you feel this way? 
+    From response to FFT Q1: Please tell us why you feel this way?
     A **word cloud** is a visual representation of text data where the size of each word indicates its frequency or importance. In a word cloud, commonly occurring words are usually displayed in larger fonts or bolder colors, while less frequent words appear smaller. This makes it easy to perceive the most prominent terms within a large body of text at a glance.
-    In the context of patient feedback, a word cloud can be especially useful to quickly identify the key themes or subjects that are most talked about by patients. For example, if many patients mention terms like "waiting times" or "friendly staff," these words will stand out in the word cloud, indicating areas that are notably good or need improvement.  
+    In the context of patient feedback, a word cloud can be especially useful to quickly identify the key themes or subjects that are most talked about by patients. For example, if many patients mention terms like "waiting times" or "friendly staff," these words will stand out in the word cloud, indicating areas that are notably good or need improvement.
 2. The **Improvement Suggestions Word Cloud** is a creative and intuitive representation of the feedback collected from patients through the Friends and Family Test (FFT). When patients are asked, "Is there anything that would have made your experience better?" their responses provide invaluable insights into how healthcare services can be enhanced."""
             )
         st.subheader("Feedback Word Cloud")
@@ -2725,14 +2721,14 @@ elif page == "GPT-4 Summary":
         st.markdown(
             """**What This Page Offers:**
 
-**Automated Summaries**: Leveraging OpenAI's cutting-edge ChatGPT-4, we transform the Friends & Family Test feedback and improvement suggestions into concise, actionable insights.  
-**Time-Specific Insights**: Select the period that matters to you. Whether it's a week, a month, or a custom range, our tool distills feedback relevant to your chosen timeframe.  
-**Efficient Meeting Preparations**: Prepare for meetings with ease. Our summaries provide a clear overview of patient feedback, enabling you to log actions and decisions swiftly and accurately.  
+**Automated Summaries**: Leveraging OpenAI's cutting-edge ChatGPT-4, we transform the Friends & Family Test feedback and improvement suggestions into concise, actionable insights.
+**Time-Specific Insights**: Select the period that matters to you. Whether it's a week, a month, or a custom range, our tool distills feedback relevant to your chosen timeframe.
+**Efficient Meeting Preparations**: Prepare for meetings with ease. Our summaries provide a clear overview of patient feedback, enabling you to log actions and decisions swiftly and accurately.
 
 **How It Works**:
 
-1. **Select Your Time Period**: Choose the dates that you want to analyze.  
-2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.  
+1. **Select Your Time Period**: Choose the dates that you want to analyze.
+2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.
 3. **Receive Your Summary**: Get a well-structured, comprehensive summary that highlights the core sentiments and suggestions from your patients."""
         )
     st.markdown("**Follow the steps below to summarise free-text with GPT4.**")
@@ -3034,9 +3030,9 @@ Furthermore, our innovative **zero-shot classification** approach, powered by th
 
 This comprehensive suite of advanced analytics empowers healthcare providers like yourself to move beyond mere data presentation and unlock a clearer, more actionable understanding of patient experiences. Armed with these insights, you can drive continuous improvements, elevate service quality, and enhance patient outcomes.
 
-Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare. 
+Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare.
 
-![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.   
+![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.
 ![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)
 
 """
@@ -3082,10 +3078,3 @@ Explore the AI MedReview dashboard today and experience the transformative power
             width=200,
         )
     st.write("")
-<<<<<<< HEAD
-=======
-    
-    
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
-
-    # End of file Jan du Plessis - 2 May 2024

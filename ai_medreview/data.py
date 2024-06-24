@@ -59,11 +59,9 @@ def load_google_sheet():
         "pcn",
         "surgery",
     ]
-<<<<<<< HEAD
+
     data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
-=======
-    data["time"] = pd.to_datetime(data["time"], format="%Y/%m/%d %H:%M:%S")
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
+
     data.sort_values(by="time", inplace=True)
     return data
 
@@ -150,7 +148,6 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
         freetext = row[column]
         words = str(freetext)
         words = words.split()
-<<<<<<< HEAD
 
         # Calculate the number of chunks
         num_chunks = math.ceil(len(words) / chunk_size)
@@ -162,19 +159,6 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
             # Join the chunk into a single string
             chunk_text = ' '.join(chunk)
 
-=======
-        
-        # Calculate the number of chunks
-        num_chunks = math.ceil(len(words) / chunk_size)
-    
-        for i in range(num_chunks):
-            # Get the current chunk of words
-            chunk = words[i * chunk_size : (i + 1) * chunk_size]
-            
-            # Join the chunk into a single string
-            chunk_text = ' '.join(chunk)
-            
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
             # Calculate the sentiment polarity of the chunk
             if pd.isna(chunk_text) or chunk_text == "":
                 sentiment_arc.append(0)
@@ -182,30 +166,17 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
                 model_output = sentiment_task(chunk_text)
                 temp_sentiment = model_output[0]["label"]
                 temp_sentiment_score = model_output[0]["score"]
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
                 if temp_sentiment == 'negative':
                     chunk_sentiment = -abs(temp_sentiment_score)
                 elif temp_sentiment == 'neutral':
                     chunk_sentiment = 0
                 elif temp_sentiment == 'positive':
                     chunk_sentiment = temp_sentiment_score
-<<<<<<< HEAD
 
                 temp_sentiment_arc.append(chunk_sentiment)
 
         sentiment_arc.append(temp_sentiment_arc)
 
-=======
-    
-                temp_sentiment_arc.append(chunk_sentiment)
-
-        sentiment_arc.append(temp_sentiment_arc)
-        
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
 
     # Add labels and scores as new columns
@@ -505,11 +476,6 @@ def text_preprocessing(text):
 def send_alert_webhook(number):
     # URL of the webhook to which the data will be sent
     webhook_url = "https://hook.eu1.make.com/ajlcdluav0xw6vnjgrvcghwmbedrr0u4"
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
     # Create a dictionary to hold the data
     data = {"number": number}
 
@@ -523,13 +489,8 @@ def send_alert_webhook(number):
         )
     else:
         logger.info(f"Failed to send data: {response.status_code}, {response.text}")
-<<<<<<< HEAD
 
 @time_it
-=======
-        
-@time_it   
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 def create_monthyear(df):
     df['time'] = pd.to_datetime(df['time'])
     df['month_year'] = df['time'].dt.to_period('M')
@@ -540,13 +501,8 @@ model_name = "SamLowe/roberta-base-go_emotions"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, top_k=1)
-<<<<<<< HEAD
 
 @time_it
-=======
- 
-@time_it   
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 def emotion_classification(df, column, classifier):
     emotion = []
 
@@ -555,21 +511,11 @@ def emotion_classification(df, column, classifier):
 
     for index, row in tqdm(df.iterrows(), total=total_rows, desc="Analyzing Emotion", colour="#4088a9"):
         sentence = row[column]
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
         if sentence == '' or pd.isna(sentence):
             emotion.append(np.nan)
         else:
             sentence = str(sentence)
             model_output = classifier(sentence, truncation=True, max_length=512)[0]
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
             model_output = list(model_output)
             model_output = model_output[0]['label']
             emotion.append(model_output)
@@ -589,11 +535,7 @@ if __name__ == "__main__":
 
     # Load local data.csv to dataframe
     processed_data = load_local_data()
-<<<<<<< HEAD
     logger.info("data.csv Loadded")
-=======
-    logger.info("Data.csv Loadded")
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
 
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
@@ -630,21 +572,12 @@ if __name__ == "__main__":
 
         data = feedback_classification(data, batch_size=16)
         data = improvement_classification(data, batch_size=16)
-<<<<<<< HEAD
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
 
         logger.info("Data pre-processing completed")
 
-=======
-        
-        data = emotion_classification(data, "free_text", classifier=classifier)
-        data = emotion_classification(data, "do_better", classifier=classifier)
-        
-        logger.info("Data pre-processing completed")
-        
->>>>>>> 30325d172cbc0d6484428dfcfc36a4919fc2ee36
         concat_save_final_df(processed_data, data)
 
         do_git_merge()  # Push everything to GitHub
