@@ -147,7 +147,7 @@ else:
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "**:blue-background[PCN Dashboard]**":
-
+    st.toast(f"**Data version**: {data_version(data)} - **{pcn_data.shape[0]}**", icon=":material/database:")
     ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
     st.markdown(
@@ -1836,6 +1836,8 @@ elif page == "Feedback Classification":
         # Displaying the plot
         st.pyplot(plt)
 
+    st.toast("Use the **Date Slider** to define the review period.", icon=":material/linear_scale:")
+
     st.markdown("---")
 
     # View Patient Feedback
@@ -2110,6 +2112,7 @@ elif page == "Improvement Suggestions":
         st.pyplot(plt)
 
     st.markdown("---")
+    st.toast("Use the **Date Slider** to define the review period.", icon=":material/linear_scale:")
 
     st.subheader("View Patient Improvement Suggestions")
     improvement_data = filtered_data[
@@ -3084,7 +3087,7 @@ Explore the AI MedReview dashboard today and experience the transformative power
 # -- About ------------------------------------------------------------------------------------------------------- About
 elif page == "Private Directory":
     st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) Private Directory")
-
+    st.toast("**Private Directory** Coming Soon: This feature will enable you to review de-anonymized reviews.", icon=":material/lock:")
     # Set the correct PIN
     correct_pin = "2027"
     col1, col2 = st.columns(2)
