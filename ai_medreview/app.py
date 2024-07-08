@@ -2616,6 +2616,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                     rating = row["rating"]
                     score = row["sentiment_score_free_text"]
                     sentiment = row["sentiment_free_text"]
+                    emotion = row["emotion_free_text"]
 
                     with st.container(border=True):
                        # st.markdown(f"**{rating}** `{time_}`")
@@ -2623,7 +2624,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                         if str(free_text) not in ["nan"]:
                             st.markdown("🤔 " + str(free_text))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                            ui.badges(badge_list=[(f"Emotion", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
+                            ui.badges(badge_list=[(f"{emotion}", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
 
                     icounter += 1
 
@@ -2649,6 +2650,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                     rating = row["rating"]
                     score = row["sentiment_score_do_better"]
                     sentiment = row["sentiment_do_better"]
+                    emotion = row["emotion_do_better"]
 
                     # with st.chat_message("user"):
                     #     st.markdown(f"**{rating}** `{time_}`")
@@ -2664,7 +2666,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
                         if str(do_better) not in ["nan"]:
                             st.markdown("🛠️ " + str(do_better))
                             # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                            ui.badges(badge_list=[(f"Emotion", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
+                            ui.badges(badge_list=[(f"{emotion}", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
 
                     icounter += 1
 # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
