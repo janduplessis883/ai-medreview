@@ -568,8 +568,8 @@ if __name__ == "__main__":
         data = cleanup_neutral_sentiment(data, "free_text")
         data = cleanup_neutral_sentiment(data, "do_better")
 
-        data = feedback_classification(data, batch_size=16)
-        data = improvement_classification(data, batch_size=16)
+        data = feedback_classification(data, batch_size=1)
+        data = improvement_classification(data, batch_size=1)
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
