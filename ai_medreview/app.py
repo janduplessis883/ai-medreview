@@ -147,7 +147,7 @@ else:
 
 # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
 if page == "**:blue-background[PCN Dashboard]**":
-    st.toast(f"**Data version**: {data_version(data)} - **{pcn_data.shape[0]}**", icon=":material/database:")
+    st.toast(f"**Data version**: {data_version(data)}-**{pcn_data.shape[0]}**", icon=":material/database:")
     ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
     st.markdown(
