@@ -2742,7 +2742,7 @@ elif page == "GPT-4 Summary":
     def call_chatgpt_api(text):
         # Example OpenAI Python library request
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
