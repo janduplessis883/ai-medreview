@@ -296,11 +296,11 @@ if page == "**:blue-background[PCN Dashboard]**":
             )
             # Define the desired column order based on the rating categories
             column_order = [
-                "Extremely likely",
-                "Likely",
-                "Neither likely nor unlikely",
-                "Unlikely",
-                "Extremely unlikely",
+                "Very good",
+                "Good",
+                "Neither good nor poor",
+                "Poor",
+                "Very poor",
                 "Don't know",
             ]
 
@@ -1413,20 +1413,20 @@ elif page == "Surgery Dashboards":
             f"**Total Responses** for selected time period: **{filtered_data.shape[0]}**"
         )
         order = [
-            "Extremely likely",
-            "Likely",
-            "Neither likely nor unlikely",
-            "Unlikely",
-            "Extremely unlikely",
-            "Don't know",
+                "Very good",
+                "Good",
+                "Neither good nor poor",
+                "Poor",
+                "Very poor",
+                "Don't know",
         ]
 
         palette = {
-            "Extremely likely": "#112f45",
-            "Likely": "#4d9cb9",
-            "Neither likely nor unlikely": "#9bc8e3",
-            "Unlikely": "#f4ba41",
-            "Extremely unlikely": "#ec8b33",
+            "Very good": "#112f45",
+            "Good": "#4d9cb9",
+            "Neither good nor poor": "#9bc8e3",
+            "Poor": "#f4ba41",
+            "Very poor": "#ec8b33",
             "Don't know": "#ae4f4d",
         }
 
@@ -3004,7 +3004,7 @@ elif page == "Reports":
 
         # Inform the user of success
         ui.badges(
-            badge_list=[("Report Generated Successfully!", "default")],
+            badge_list=[(f"Report Generated Successfully! - {selected_month}-{selected_year}", "default")],
             class_name="flex gap-2",
             key="badges_success",
         )
