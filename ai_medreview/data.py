@@ -408,11 +408,11 @@ def improvement_classification(data, batch_size=16):
 def add_rating_score(data):
     # Mapping dictionary
     rating_map = {
-        "Extremely likely": 5,
-        "Likely": 4,
-        "Neither likely nor unlikely": 3,
-        "Unlikely": 2,
-        "Extremely unlikely": 1,
+        "Very good": 5,
+        "Good": 4,
+        "Neither good nor poor": 3,
+        "Poor": 2,
+        "Very poor": 1,
     }
 
     # Apply the mapping to the 'rating' column
