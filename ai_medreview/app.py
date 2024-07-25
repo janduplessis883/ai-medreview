@@ -1465,7 +1465,7 @@ elif page == "Surgery Dashboards":
                     y,
                     f"{int(width)} / {round((int(width)/filtered_data.shape[0])*100, 1)}%",
                     va="center",
-                    fontsize=12,
+                    fontsize=14,
                 )
             except ValueError:
                 pass

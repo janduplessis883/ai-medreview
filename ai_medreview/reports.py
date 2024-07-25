@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from fpdf import FPDF
 import pandas as pd
 import seaborn as sns
+import numpy as np
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):
     # Create a Seaborn count plot
@@ -71,10 +72,62 @@ def generate_sns_countplot(df, column, filename="reports/rating.png"):
     ax.yaxis.grid(False)
     plt.xlabel("Count")
     plt.ylabel("Rating")
+    ax.set_title('Feedback Ratings', fontweight='bold', fontsize=12)
     plt.tight_layout()
 
     plt.savefig(filename)
     plt.close()
+
+def recommendation_plot(recomended, not_recomended, pcn_recomended, pcn_not_recomended, filename):
+    # Data
+    categories = ['Recommended', 'Not Recommended']
+    your_data = [recomended, not_recomended]
+    pcn_avg_data = [pcn_recomended, pcn_not_recomended]
+
+    # Bar width
+    bar_width = 0.35
+
+    # Bar positions
+    r1 = np.arange(len(categories))
+    r2 = [x + bar_width for x in r1]
+
+    # Create figure and axes
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    # Create bars
+    bars1 = ax.bar(r1, your_data, color='#a3b638', width=bar_width, edgecolor='grey', label='Your Data')
+    bars2 = ax.bar(r2, pcn_avg_data, color='#e78531', width=bar_width, edgecolor='grey', label='PCN Average')
+
+    # Add text annotations
+    for bar in bars1:
+        yval = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval}%', ha='center', va='bottom', fontsize=12)
+
+    for bar in bars2:
+        yval = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval}%', ha='center', va='bottom', fontsize=12)
+
+    # Add labels, title and custom x-axis tick labels
+    ax.set_xlabel('Categories', fontsize=10)
+    ax.set_ylabel('Percentage', fontsize=10)
+    ax.set_title('Recommendation vs PCN Average', fontweight='bold', fontsize=12)
+    ax.set_xticks([r + bar_width / 2 for r in range(len(categories))])
+    ax.set_xticklabels(categories)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.xaxis.grid(False)
+    plt.tight_layout()
+
+    # Add legend
+    ax.legend()
+
+    # Show the plot
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.close()
+
 
 def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, selected_pcn, plot_column):
     # Generate the Seaborn count plot
@@ -115,7 +168,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pcn_recomended = round(((pcn_vg_count + pcn_g_count) / (pcn_vg_count + pcn_g_count + pcn_nn_count + pcn_p_count + pcn_vp_count + pcn_dk_count)) * 100, 1)
     pcn_not_recomended = round(((pcn_p_count + pcn_vp_count) / (pcn_vg_count + pcn_g_count + pcn_nn_count + pcn_p_count + pcn_vp_count + pcn_dk_count)) * 100, 1)
 
-
+    recommendation_plot(recomended, not_recomended, pcn_recomended, pcn_not_recomended, "reports/recommendation.png")
     # Create the PDF
     pdf = FPDF()
     pdf.add_page()
@@ -163,9 +216,31 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 5, f"Not Recommended - {not_recomended}%  (PCN Average - {pcn_not_recomended}%)", 0, 1)  # '0' for cell width, '1' for the new line
 
-    pdf.image(plot_filename, x=10, y=150, w=180)  # Adjust x, y, w as necessary
+    pdf.image("reports/recommendation.png", x=10, y=85, w=180)  # Adjust x, y, w as necessary
+    pdf.image(plot_filename, x=10, y=160, w=180)  # Adjust x, y, w as necessary
+    pdf.image('images/nhs_scoring.png', x=10, y=235, w=180)
+
 
     pdf.add_page()
 
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(197, 58, 50)
+    pdf.cell(0, 10, "SECTION 2: Response Rate", 0, 1)  # '0' for cell width, '1' for the new line
+
+    pdf.add_page()
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(197, 58, 50)
+    pdf.cell(0, 10, "SECTION 3: Emontion Detection & Sentiment Analysis", 0, 1)  # '0' for cell width, '1' for the new line
+
+    pdf.set_font("Arial", "", 10)
+    pdf.set_text_color(35, 37, 41)
+    pdf.cell(0, 5, f"Emotion Detection identify and interpret human emotions from text. By analyzing the language used in patient feedback.", 0, 1)
+
+    pdf.add_page()
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(197, 58, 50)
+    pdf.cell(0, 10, "SECTION 4: Topic Analysis", 0, 1)  # '0' for cell width, '1' for the new line
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
