@@ -3,7 +3,7 @@ from fpdf import FPDF
 import pandas as pd
 import seaborn as sns
 
-def generate_sns_countplot(df, column, filename="rating.png"):
+def generate_sns_countplot(df, column, filename="reports/rating.png"):
     # Create a Seaborn count plot
     order = [
             "Very good",
@@ -78,7 +78,7 @@ def generate_sns_countplot(df, column, filename="rating.png"):
 
 def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, selected_pcn, plot_column):
     # Generate the Seaborn count plot
-    plot_filename = "rating.png"
+    plot_filename = "reports/rating.png"
     generate_sns_countplot(df, plot_column, plot_filename)
     total_feedback_count = df.shape[0]
     rating_value_counts = df['rating'].value_counts()
@@ -168,4 +168,4 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.add_page()
 
     # Output the PDF
-    pdf.output("report.pdf", "F")
+    pdf.output("reports/report.pdf", "F")
