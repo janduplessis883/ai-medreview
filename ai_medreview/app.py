@@ -2999,6 +2999,8 @@ elif page == "Reports":
             ]
 
 
+
+
     # Your existing setup code...
 
     if st.button("Generate CQRS Report"):

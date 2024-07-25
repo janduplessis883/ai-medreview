@@ -93,6 +93,8 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
         "Don't know",
     ]
 
+
+
     rating_value_counts = df['rating'].value_counts().reindex(categories, fill_value=0)
     vg_count = rating_value_counts['Very good']
     g_count = rating_value_counts['Good']
