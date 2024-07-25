@@ -1450,8 +1450,8 @@ elif page == "Surgery Dashboards":
         plt.legend(
             handles=legend_patches,
             title="Rating Categories",
-            bbox_to_anchor=(1.05, 1),
-            loc="best",
+            bbox_to_anchor=(1, 0),  # Place legend at the bottom right
+            loc="lower right",
         )
 
         # Iterate through the rectangles (bars) of the plot for width annotations
