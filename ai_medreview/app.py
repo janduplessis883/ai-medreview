@@ -2945,11 +2945,6 @@ elif page == "Reports":
         key="badges_soon",
     )
 
-    # S Tips Plot --------------------------------------------------------------------------------------- Tips Plot ----
-
-    # Path for the generated report
-    report_path = "tips_report.pdf"
-
     # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
     if page not in ["**:blue-background[PCN Dashboard]**", "**About**"] and selected_surgery:
         surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
@@ -3003,15 +2998,27 @@ elif page == "Reports":
 
     # Your existing setup code...
 
-    if st.button("Generate CQRS Report"):
+    if st.button("Generate AI MedReview Report"):
+        # Initialize the progress bar
+        progress_bar = st.progress(5)
+
+        # Function to simulate progress
+        def update_progress(progress):
+            for percent_complete in range(progress, 101, 5):
+                time.sleep(0.2)  # Simulate a delay
+                progress_bar.progress(percent_complete)
+
         # Call the function with the parameters from Streamlit widgets
         simple_pdf(
             filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
         )
 
+        # Simulate progress completion
+        update_progress(100)
+
         # Inform the user of success
         ui.badges(
-            badge_list=[(f"Report Generated Successfully! - {selected_month} {selected_year}", "default")],
+            badge_list=[(f"Report generated successfully! - {selected_month} {selected_year}", "default")],
             class_name="flex gap-2",
             key="badges_success",
         )
@@ -3019,7 +3026,7 @@ elif page == "Reports":
         # Provide a download link for the generated PDF
         with open("reports/report.pdf", "rb") as file:
             st.download_button(
-                label="Download CQRS Report",
+                label="Download AI MedReview Report",
                 data=file,
                 file_name="reports/report.pdf",
                 mime="application/pdf",

@@ -179,16 +179,16 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(39, 69, 98)
     pdf.cell(0, 10, "AI MedReview", 0, 1)  # '0' for cell width, '1' for the new line
 
-    # Additional info in Arial, not bold
-    pdf.set_font("Arial", "", 16)
-    info_string = f"{selected_surgery}"
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 10, info_string, 0, 1)
-
-    pdf.set_font("Arial", "", 16)
+    pdf.set_font("Arial", "", 10)
     info_string2 = f"{selected_pcn}"
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 5, info_string2, 0, 1)
+
+    # Additional info in Arial, not bold
+    pdf.set_font("Arial", "B", 16)
+    info_string = f"{selected_surgery}"
+    pdf.set_text_color(35, 37, 41)
+    pdf.cell(0, 10, info_string, 0, 1)
 
     pdf.set_font("Arial", "B", 16)
     info_string = f"{selected_month} {selected_year}"
