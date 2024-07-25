@@ -171,6 +171,13 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     recommendation_plot(recomended, not_recomended, pcn_recomended, pcn_not_recomended, "reports/recommendation.png")
     # Create the PDF
     pdf = FPDF()
+    # Set document metadata
+    pdf.set_title(f"AI MedReview: FFT Monthly Report - {selected_surgery} {selected_month} {selected_year}")
+    pdf.set_author("Jan du Plessis")
+    pdf.set_subject("Monthly Medical Review Report")
+    pdf.set_keywords("AIMedReview, Medical, Report, Monthly, FFT")
+    pdf.set_creator("AI MedReview System")
+
     pdf.add_page()
 
     # Header "AI MedReview" with Arial in bold
