@@ -2993,18 +2993,23 @@ elif page == "Reports":
                 (surgery_data["time"].dt.year == selected_year)
                 & (surgery_data["time"].dt.month == selected_month_number)
             ]
+            pcn_filtered_data = pcn_data[
+                (pcn_data["time"].dt.year == selected_year)
+                & (pcn_data["time"].dt.month == selected_month_number)
+            ]
+
 
     # Your existing setup code...
 
     if st.button("Generate CQRS Report"):
         # Call the function with the parameters from Streamlit widgets
         simple_pdf(
-            filtered_data, selected_month, selected_year, selected_surgery, selected_pcn
+            filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
         )
 
         # Inform the user of success
         ui.badges(
-            badge_list=[(f"Report Generated Successfully! - {selected_month}-{selected_year}", "default")],
+            badge_list=[(f"Report Generated Successfully! - {selected_month} {selected_year}", "default")],
             class_name="flex gap-2",
             key="badges_success",
         )
