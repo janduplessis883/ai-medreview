@@ -3,6 +3,7 @@ from fpdf import FPDF
 import pandas as pd
 import seaborn as sns
 import numpy as np
+import requests
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):
     # Create a Seaborn count plot
@@ -127,6 +128,27 @@ def recommendation_plot(recomended, not_recomended, pcn_recomended, pcn_not_reco
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
+
+import requests
+
+def send_webhook(url, surgery, month, year):
+    payload = {
+        'surgery': surgery,
+        'month': month,
+        'year': year
+    }
+
+    headers = {
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        print("Webhook sent successfully!")
+    else:
+        print(f"Failed to send webhook. Status code: {response.status_code}, Response: {response.text}")
+
 
 
 def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, selected_pcn, plot_column):
@@ -255,3 +277,4 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.cell(0, 10, "AI MedReview: FFT Analysis - GitHub: janduplessis883 jan.duplessis@nhs.net", 0, 1)  # '0' for cell width, '1' for the new line
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
+    send_webhook('https://hook.eu1.make.com/nqpv7r14si8vu0qbv3eqw1r6jutrge6r', selected_surgery, selected_month, selected_year)

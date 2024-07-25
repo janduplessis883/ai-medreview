@@ -2999,22 +2999,11 @@ elif page == "Reports":
     # Your existing setup code...
 
     if st.button("Generate AI MedReview Report"):
-        # Initialize the progress bar
-        progress_bar = st.progress(15)
-
-        # Function to simulate progress
-        def update_progress(progress):
-            for percent_complete in range(progress, 101, 5):
-                time.sleep(0.2)  # Simulate a delay
-                progress_bar.progress(percent_complete)
-
+        with st.spinner("Generating Report..."):
         # Call the function with the parameters from Streamlit widgets
-        simple_pdf(
-            filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
-        )
-
-        # Simulate progress completion
-        update_progress(100)
+            simple_pdf(
+                filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
+            )
 
         # Inform the user of success
         st.write("")
