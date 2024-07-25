@@ -3017,11 +3017,11 @@ elif page == "Reports":
         )
 
         # Provide a download link for the generated PDF
-        with open("report.pdf", "rb") as file:
+        with open("reports/report.pdf", "rb") as file:
             st.download_button(
                 label="Download CQRS Report",
                 data=file,
-                file_name="report.pdf",
+                file_name="reports/report.pdf",
                 mime="application/pdf",
             )
 
