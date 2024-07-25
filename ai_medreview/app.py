@@ -3000,7 +3000,7 @@ elif page == "Reports":
 
     if st.button("Generate AI MedReview Report"):
         # Initialize the progress bar
-        progress_bar = st.progress(5)
+        progress_bar = st.progress(15)
 
         # Function to simulate progress
         def update_progress(progress):

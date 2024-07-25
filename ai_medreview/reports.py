@@ -173,20 +173,19 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf = FPDF()
     pdf.add_page()
 
-
     # Header "AI MedReview" with Arial in bold
     pdf.set_font("Arial", "B", 20)
     pdf.set_text_color(39, 69, 98)
     pdf.cell(0, 10, "AI MedReview", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.set_font("Arial", "", 10)
-    info_string2 = f"{selected_pcn}"
+    info_string2 = f"{selected_pcn.replace("-", " ")}"
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 5, info_string2, 0, 1)
 
     # Additional info in Arial, not bold
     pdf.set_font("Arial", "B", 16)
-    info_string = f"{selected_surgery}"
+    info_string = f"{selected_surgery.replace("-", " ")}"
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 10, info_string, 0, 1)
 
@@ -242,5 +241,10 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
     pdf.cell(0, 10, "SECTION 4: Topic Analysis", 0, 1)  # '0' for cell width, '1' for the new line
+
+    # Header "AI MedReview" with Arial in bold
+    pdf.set_font("Arial", "", 6)
+    pdf.set_text_color(131, 131, 130)
+    pdf.cell(0, 10, "AI MedReview: FFT Analysis - GitHub: janduplessis883 jan.duplessis@nhs.net", 0, 1)  # '0' for cell width, '1' for the new line
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
