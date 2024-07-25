@@ -2940,7 +2940,7 @@ elif page == "Reports":
     st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
     st.write("")
     ui.badges(
-        badge_list=[("NEW", "destructive"), ("coming soon...", "outline")],
+        badge_list=[("NEW", "destructive"), ("Beta v1.0.1", "outline")],
         class_name="flex gap-2",
         key="badges_soon",
     )
@@ -2966,7 +2966,7 @@ elif page == "Reports":
             # Create year and month selectors inside the columns
             with col1:
                 selected_year = st.selectbox(
-                    "Select the Year", options=years, index=years.index(max_date.year)
+                    "Select the **Year**", options=years, index=years.index(max_date.year)
                 )
 
             # Adjust month options based on selected year
@@ -2977,7 +2977,7 @@ elif page == "Reports":
 
             with col2:
                 selected_month = st.selectbox(
-                    "Select the Month", options=months, index=0
+                    "Select the **Month**", options=months, index=0
                 )
 
             # Convert selected month to number
