@@ -156,7 +156,7 @@ if page == "**:blue-background[PCN Dashboard]**":
 
 
     st.markdown(
-        """:orangebg[Accumulating and interpreting the **pooled patient feedback data** from member practices.]
+        """Accumulating and interpreting the **pooled patient feedback data** from member practices.
 """
     )
 

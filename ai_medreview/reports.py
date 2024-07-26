@@ -4,6 +4,10 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import requests
+import matplotlib.dates as mdates
+import unicodedata
+import re
+from wordcloud import WordCloud
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):
     # Create a Seaborn count plot
@@ -129,7 +133,50 @@ def recommendation_plot(recomended, not_recomended, pcn_recomended, pcn_not_reco
     plt.savefig(filename)
     plt.close()
 
-import requests
+
+def plot_daily_count(df, filename='reports/daily_count.png'):
+    daily_count = df.resample("D", on="time").size()
+    daily_count_df = daily_count.reset_index()
+    daily_count_df.columns = ["Date", "Daily Count"]
+    fig, ax = plt.subplots(figsize=(12, 4))
+    sns.lineplot(
+        data=daily_count_df, x="Date", y="Daily Count", color="#558387", linewidth=2
+    )
+
+    ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.xaxis.grid(False)
+
+    # Customizing the x-axis labels for better readability
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%d %b"))
+
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax_title = ax.set_title(
+        "Daily FFT Responses", loc="right"
+    )  # loc parameter aligns the title
+    ax_title.set_position(
+        (1, 1)
+    )  # Adjust these values to align your title as needed
+    plt.xlabel("")
+    plt.tight_layout()
+
+    plt.savefig(filename)
+    plt.close()
+
+
+def strip_emojis(text):
+    # Remove emojis using regex
+    text_without_emojis = re.sub(r'[^\x00-\x7F]+', '', text)
+
+    # Convert to 'latin1' encoding, replacing unencodable characters with a replacement marker
+    encoded_text = unicodedata.normalize('NFKD', text_without_emojis).encode('ascii', errors='ignore')
+
+    return encoded_text.decode('ascii')  # Decode back to string
+
+def col_to_list(df, colname):
+    df.dropna(subset=colname, inplace=True)
+    return df[colname].to_list()
 
 def send_webhook(url, surgery, month, year):
     payload = {
@@ -149,12 +196,21 @@ def send_webhook(url, surgery, month, year):
     else:
         print(f"Failed to send webhook. Status code: {response.status_code}, Response: {response.text}")
 
+def create_wordcloud(df, col_name, filename):
+        text = " ".join(df[col_name].dropna())
+        wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text)
+        plt.imshow(wordcloud, interpolation="bilinear")
+        plt.axis("off")
+
+        plt.savefig(filename)
+        plt.close()
 
 
 def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, selected_pcn, plot_column):
     # Generate the Seaborn count plot
     plot_filename = "reports/rating.png"
     generate_sns_countplot(df, plot_column, plot_filename)
+    plot_daily_count(df)
     total_feedback_count = df.shape[0]
     rating_value_counts = df['rating'].value_counts()
 
@@ -203,9 +259,9 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.add_page()
 
     # Header "AI MedReview" with Arial in bold
-    pdf.set_font("Arial", "B", 20)
+    pdf.set_font("Arial", "B", 10)
     pdf.set_text_color(39, 69, 98)
-    pdf.cell(0, 10, "AI MedReview", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 5, "AI MedReview: FFT Analysis", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.set_font("Arial", "", 10)
     info_string2 = f"{selected_pcn.replace('-', ' ')}"
@@ -213,7 +269,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.cell(0, 5, info_string2, 0, 1)
 
     # Additional info in Arial, not bold
-    pdf.set_font("Arial", "B", 16)
+    pdf.set_font("Arial", "B", 20)
     info_string = f"{selected_surgery.replace('-', ' ')}"
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 10, info_string, 0, 1)
@@ -255,26 +311,40 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(197, 58, 50)
     pdf.cell(0, 10, "SECTION 2: Response Rate", 0, 1)  # '0' for cell width, '1' for the new line
 
+    pdf.image("reports/daily_count.png", x=10, y=25, w=180)  # Adjust x, y, w as necessary
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(197, 58, 50)
+    pdf.cell(0, 10, "SECTION 3: Sentiment Analysis", 0, 1)  # '0' for cell width, '1' for the new line
+
     pdf.add_page()
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 3: Emontion Detection & Sentiment Analysis", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, "SECTION 4: Feedback - Responses", 0, 1)  # '0' for cell width, '1' for the new line
 
-    pdf.set_font("Arial", "", 10)
+
+    pdf.set_font("Arial", "", 8)
     pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 5, f"Emotion Detection identify and interpret human emotions from text. By analyzing the language used in patient feedback.", 0, 1)
+
+    text_list = col_to_list(df, 'free_text')
+    for index, text in enumerate(text_list):
+        pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
+
 
     pdf.add_page()
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 4: Topic Analysis", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, "SECTION 5: Improvemenet Suggestions - Responses", 0, 1)  # '0' for cell width, '1' for the new line
 
-    # Header "AI MedReview" with Arial in bold
-    pdf.set_font("Arial", "", 6)
-    pdf.set_text_color(131, 131, 130)
-    pdf.cell(0, 10, "AI MedReview: FFT Analysis - GitHub: janduplessis883 jan.duplessis@nhs.net", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.set_font("Arial", "", 8)
+    pdf.set_text_color(35, 37, 41)
+
+    text_list2 = col_to_list(df, 'do_better')
+    for index, text in enumerate(text_list2):
+        pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
+
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
     send_webhook('https://hook.eu1.make.com/nqpv7r14si8vu0qbv3eqw1r6jutrge6r', selected_surgery, selected_month, selected_year)
