@@ -59,6 +59,7 @@ if not st.session_state["authenticated"]:
         )
         check_passcode()
 
+
 else:
     # Styling with HTML
     html = """
