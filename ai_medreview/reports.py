@@ -374,7 +374,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.cell(0, 5, f"Improvement Suggestions (Red)", 0, 1)
 
     if display_wc1:
-        pdf.image("reports/wordcloud1.png", x=10, y=30, w=180)
+        pdf.image("reports/wordcloud1.png", x=10, y=20, w=180)
     if display_wc2:
         pdf.image("reports/wordcloud2.png", x=10, y=120, w=180)
 

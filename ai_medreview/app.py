@@ -137,7 +137,7 @@ else:
             "Feedback Classification",
             "Improvement Suggestions",
             "Feedback Timeline",
-            ":orange-background[Emotion Detection]",
+            "Emotion Detection",
             "Sentiment Analysis",
             "Private Directory",
             "GPT-4 Summary",
@@ -2202,7 +2202,7 @@ else:
 
 
     # -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
-    elif page == ":orange-background[Emotion Detection]":
+    elif page == "Emotion Detection":
         st.markdown(
             "# ![Emotion Detection](https://img.icons8.com/ios/50/happy--v1.png) Emotion Detection"
         )
