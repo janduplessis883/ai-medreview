@@ -208,6 +208,7 @@ def create_wordcloud(df, col_name, filename='reports/wordcloud1.png', colors='Bl
         plt.close()
 
 
+
 def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, selected_pcn, plot_column):
     # Generate the Seaborn count plot
     plot_filename = "reports/rating.png"
@@ -215,8 +216,17 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     plot_daily_count(df)
     total_feedback_count = df.shape[0]
     rating_value_counts = df['rating'].value_counts()
-    create_wordcloud(df, 'free_text', filename='reports/wordcloud1.png', colors='Blues')
-    create_wordcloud(df, 'do_better', filename='reports/wordcloud2.png', colors='Reds')
+    try:
+        create_wordcloud(df, 'free_text', filename='reports/wordcloud1.png', colors='Blues')
+        display_wc1 = True
+    except ValueError as e:
+        display_wc1 = False
+    try:
+        create_wordcloud(df, 'do_better', filename='reports/wordcloud2.png', colors='Reds')
+        display_wc2 = True
+    except ValueError as e:
+        display_wc2 = False
+
     send_webhook('https://hook.eu1.make.com/nqpv7r14si8vu0qbv3eqw1r6jutrge6r', selected_surgery, selected_month, selected_year)
     # Pivit DF to cature rating categories
     categories = [
@@ -363,8 +373,10 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 5, f"Improvement Suggestions (Red)", 0, 1)
 
-    pdf.image("reports/wordcloud1.png", x=10, y=30, w=180)
-    pdf.image("reports/wordcloud2.png", x=10, y=120, w=180)
+    if display_wc1:
+        pdf.image("reports/wordcloud1.png", x=10, y=30, w=180)
+    if display_wc2:
+        pdf.image("reports/wordcloud2.png", x=10, y=120, w=180)
 
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
