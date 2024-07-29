@@ -1,10 +1,11 @@
-import string
-import re
-import numpy as np
-import time
-from colorama import Fore, Back, Style, init
 import functools
+import re
+import string
+import time
+
+import numpy as np
 import streamlit as st
+from colorama import Back, Fore, Style, init
 from loguru import logger
 
 init(autoreset=True)

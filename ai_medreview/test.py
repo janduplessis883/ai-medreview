@@ -1,5 +1,6 @@
-from tqdm import tqdm
 import time  # Used to simulate delays in processing for demonstration
+
+from tqdm import tqdm
 
 if __name__ == "__main__":
     # Define tasks as a list of functions to be executed

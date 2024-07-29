@@ -1,13 +1,15 @@
-import matplotlib.pyplot as plt
-from fpdf import FPDF
-import pandas as pd
-import seaborn as sns
-import numpy as np
-import requests
-import matplotlib.dates as mdates
-import unicodedata
 import re
+import unicodedata
+
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import requests
+import seaborn as sns
+from fpdf import FPDF
 from wordcloud import WordCloud
+
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):
     # Create a Seaborn count plot

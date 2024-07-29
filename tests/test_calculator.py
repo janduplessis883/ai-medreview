@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture
 def example_data():
     return [1, 2, 3, 4, 5, 6]

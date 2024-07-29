@@ -1,18 +1,18 @@
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from wordcloud import WordCloud
-import seaborn as sns
-from datetime import datetime, timedelta
-from datetime import date
-from matplotlib.patches import Patch
 import time
-from openai import OpenAI
-import streamlit_shadcn_ui as ui
-import requests
-import plotly.graph_objects as go
+from datetime import date, datetime, timedelta
+
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+import requests
+import seaborn as sns
+import streamlit as st
+import streamlit_shadcn_ui as ui
+from matplotlib.patches import Patch
+from openai import OpenAI
+from wordcloud import WordCloud
 
 client = OpenAI()
 

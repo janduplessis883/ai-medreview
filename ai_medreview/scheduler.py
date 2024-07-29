@@ -1,6 +1,7 @@
-import time
 import subprocess
 import sys
+import time
+
 from colorama import Fore, Style, init
 
 init()  # Initializes Colorama
