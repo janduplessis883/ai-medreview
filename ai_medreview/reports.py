@@ -198,9 +198,9 @@ def send_webhook(url, surgery, month, year):
     else:
         print(f"Failed to send webhook. Status code: {response.status_code}, Response: {response.text}")
 
-def create_wordcloud(df, col_name, filename):
+def create_wordcloud(df, col_name, filename='reports/wordcloud1.png', colors='Blues'):
         text = " ".join(df[col_name].dropna())
-        wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text)
+        wordcloud = WordCloud(background_color="white", colormap=colors).generate(text)
         plt.imshow(wordcloud, interpolation="bilinear")
         plt.axis("off")
 
@@ -215,6 +215,8 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     plot_daily_count(df)
     total_feedback_count = df.shape[0]
     rating_value_counts = df['rating'].value_counts()
+    create_wordcloud(df, 'free_text', filename='reports/wordcloud1.png', colors='Blues')
+    create_wordcloud(df, 'do_better', filename='reports/wordcloud2.png', colors='Reds')
 
     # Pivit DF to cature rating categories
     categories = [
@@ -290,24 +292,26 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(197, 58, 50)
     pdf.cell(0, 10, "SECTION 1: Recommendation % and Rating Counts", 0, 1)  # '0' for cell width, '1' for the new line
 
-    pdf.set_font("Arial", "", 10)
+    pdf.set_font("Arial", "", 12)
     pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 5, f"The total feedback received during {selected_month} {selected_year} was {total_feedback_count}.", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, f"The total feedback received during {selected_month} {selected_year} was {total_feedback_count}.", 0, 1)
 
-    pdf.set_font("Arial", "", 14)
+    pdf.set_font("Arial", "", 12)
     pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 10, f"Recommended - {recomended}%  (PCN Average - {pcn_recomended}%)", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 5, f"Recommended - {recomended}%  (PCN Average - {pcn_recomended}%)", 0, 1)  # '0' for cell width, '1' for the new line
 
-    pdf.set_font("Arial", "", 14)
+    pdf.set_font("Arial", "", 12)
     pdf.set_text_color(35, 37, 41)
     pdf.cell(0, 5, f"Not Recommended - {not_recomended}%  (PCN Average - {pcn_not_recomended}%)", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.image("reports/recommendation.png", x=10, y=85, w=180)  # Adjust x, y, w as necessary
-    pdf.image(plot_filename, x=10, y=160, w=180)  # Adjust x, y, w as necessary
-    pdf.image('images/nhs_scoring.png', x=10, y=235, w=180)
+    pdf.image('images/nhs_scoring.png', x=50, y=165, w=100)
+
+    pdf.image(plot_filename, x=10, y=195, w=180)  # Adjust x, y, w as necessary
 
 
     pdf.add_page()
+
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
@@ -315,15 +319,12 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
 
     pdf.image("reports/daily_count.png", x=10, y=25, w=180)  # Adjust x, y, w as necessary
 
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 3: Sentiment Analysis", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.add_page()
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 4: Feedback - Responses", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, "SECTION 3: Feedback - Responses", 0, 1)  # '0' for cell width, '1' for the new line
 
 
     pdf.set_font("Arial", "", 8)
@@ -338,7 +339,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 5: Improvemenet Suggestions - Responses", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, "SECTION 4: Improvemenet Suggestions - Responses", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.set_font("Arial", "", 8)
     pdf.set_text_color(35, 37, 41)
@@ -346,6 +347,24 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     text_list2 = col_to_list(df, 'do_better')
     for index, text in enumerate(text_list2):
         pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
+
+
+    pdf.add_page()
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(197, 58, 50)
+    pdf.cell(0, 10, "SECTION 5: Word Clouds", 0, 1)  # '0' for cell width, '1' for the new line
+
+    pdf.set_font("Arial", "", 12)
+    pdf.set_text_color(35, 37, 41)
+    pdf.cell(0, 5, f"Feedback Free-Text (Blue)", 0, 1)
+
+    pdf.set_font("Arial", "", 12)
+    pdf.set_text_color(35, 37, 41)
+    pdf.cell(0, 5, f"Improvement Suggestions (Red)", 0, 1)
+
+    pdf.image("reports/wordcloud1.png", x=10, y=30, w=180)
+    pdf.image("reports/wordcloud2.png", x=10, y=120, w=180)
 
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
