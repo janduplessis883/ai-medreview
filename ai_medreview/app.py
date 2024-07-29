@@ -2942,7 +2942,7 @@ elif page == "Reports":
     st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
     st.write("")
     ui.badges(
-        badge_list=[("NEW", "destructive"), ("Beta v1.0.1", "outline")],
+        badge_list=[("NEW", "destructive"), ("beta v1.0.3", "outline")],
         class_name="flex gap-2",
         key="badges_soon",
     )
@@ -2959,7 +2959,7 @@ elif page == "Reports":
             # Generate a list of years and months based on the data range
             years = list(range(min_date.year, max_date.year + 1))
             months = [
-                datetime.strftime(datetime(2000, i, 1), "%B") for i in range(1, 13)
+                datetime.strftime(datetime(2023, i, 1), "%B") for i in range(1, 13)
             ]
 
             # Create two columns for selectors
