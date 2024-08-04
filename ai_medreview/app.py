@@ -1518,6 +1518,7 @@ else:
             plt.tight_layout()
             st.pyplot(plt)
 
+            st.divider()
             st.code(filtered_data['rating'].value_counts())
 
         elif surgery_tab_selector == "Surgery Responses":
