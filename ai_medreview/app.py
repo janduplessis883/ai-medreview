@@ -3030,7 +3030,8 @@ else:
                     & (pcn_data["time"].dt.month == selected_month_number)
                 ]
 
-
+                st.write(filtered_data)
+                st.write(pcn_filtered_data)
 
 
         # Your existing setup code...
