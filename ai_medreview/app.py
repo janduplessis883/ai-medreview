@@ -1518,6 +1518,8 @@ else:
             plt.tight_layout()
             st.pyplot(plt)
 
+            st.code(filtered_data['rating'].value_counts())
+
         elif surgery_tab_selector == "Surgery Responses":
             cols = st.columns(2)
             with cols[0]:
@@ -3029,9 +3031,6 @@ else:
                     (pcn_data["time"].dt.year == selected_year)
                     & (pcn_data["time"].dt.month == selected_month_number)
                 ]
-
-                st.write(filtered_data)
-                st.write(pcn_filtered_data)
 
 
         # Your existing setup code...
