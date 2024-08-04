@@ -6260,7 +6260,7 @@ time,rating,free_text,do_better,surgery,pcn,sentiment_free_text,sentiment_score_
 2024-06-18 09:12:05,Very good,I was given an appointment the same day the doctor was punctual and thorough and gave me the right medication,,Health-Partners-at-Violet-Melchett,Brompton-Health-PCN,positive,0.8347017169,neutral,0,20,1,5,Treatment Quality,,qv1xjg,MYjObE,neutral,
 2024-06-18 10:30:34,Good,Nothing was Good I thank Dr PERSON was very helpful kind and receptionist too,,Scarsdale-Medical-Centre,Brompton-Health-PCN,positive,0.7565700412,neutral,0,15,0,4,Reception Staff Interaction,,manual,upload,gratitude,
 2024-06-19 00:04:30,Very good,,,Earls-Court-Surgery,Brompton-Health-PCN,neutral,0,neutral,0,0,0,5,,,DM86lX,KDKW77,,
-2024-06-19 03:17:18,Neither Good or Good,I didnâ€™t get the phone from the doctor on the 18 06 15 15pm,,Scarsdale-Medical-Centre,Brompton-Health-PCN,negative,0.5489910245,neutral,0,13,0,,Appointment Availability,,manual,upload,neutral,
+2024-06-19 03:17:18,Neither good or poor,I didnâ€™t get the phone from the doctor on the 18 06 15 15pm,,Scarsdale-Medical-Centre,Brompton-Health-PCN,negative,0.5489910245,neutral,0,13,0,,Appointment Availability,,manual,upload,neutral,
 2024-06-19 03:23:56,Very good,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0,neutral,0,2,0,5,,,manual,upload,,
 2024-06-19 07:42:38,Very good,Have always felt this way for the past 50 odd years,,Stanhope-Mews-Surgery,Brompton-Health-PCN,negative,0.5623707175,neutral,0,11,1,5,Staff Empathy and Compassion,,pvQvZb,gZ6R7l,approval,
 2024-06-19 08:54:34,Very good,,,Scarsdale-Medical-Centre,Brompton-Health-PCN,neutral,0,neutral,0,5,0,5,,,manual,upload,,
