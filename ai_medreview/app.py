@@ -3037,29 +3037,31 @@ else:
         # Your existing setup code...
 
         if st.button("Generate AI MedReview Report"):
-            with st.spinner("Generating Report..."):
-            # Call the function with the parameters from Streamlit widgets
-                simple_pdf(
-                    filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
+            try:
+                with st.spinner("Generating Report..."):
+                # Call the function with the parameters from Streamlit widgets
+                    simple_pdf(
+                        filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
+                    )
+
+                # Inform the user of success
+                st.write("")
+                ui.badges(
+                    badge_list=[(f"Report generated successfully! - {selected_month} {selected_year}", "default")],
+                    class_name="flex gap-2",
+                    key="badges_success",
                 )
 
-            # Inform the user of success
-            st.write("")
-            ui.badges(
-                badge_list=[(f"Report generated successfully! - {selected_month} {selected_year}", "default")],
-                class_name="flex gap-2",
-                key="badges_success",
-            )
-
-            # Provide a download link for the generated PDF
-            with open("reports/report.pdf", "rb") as file:
-                st.download_button(
-                    label="Download AI MedReview Report",
-                    data=file,
-                    file_name="reports/report.pdf",
-                    mime="application/pdf",
-                )
-
+                # Provide a download link for the generated PDF
+                with open("reports/report.pdf", "rb") as file:
+                    st.download_button(
+                        label="Download AI MedReview Report",
+                        data=file,
+                        file_name="reports/report.pdf",
+                        mime="application/pdf",
+                    )
+            except AttributeError as e:
+                st.warning(f"Cannot generate report {e}")
 
     # -- About ------------------------------------------------------------------------------------------------------- About
     elif page == "**About**":
