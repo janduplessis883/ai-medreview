@@ -250,6 +250,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     recomended = round(((vg_count + g_count) / (vg_count + g_count + nn_count + p_count + vp_count + dk_count)) * 100, 1)
     not_recomended = round(((p_count + vp_count) / (vg_count + g_count + nn_count + p_count + vp_count + dk_count)) * 100, 1)
 
+
     pcn_rating_value_counts = pcn_df['rating'].value_counts().reindex(categories, fill_value=0)
     pcn_vg_count = pcn_rating_value_counts['Very good']
     pcn_g_count = pcn_rating_value_counts['Good']
