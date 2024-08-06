@@ -23,6 +23,7 @@ from utils import *
 from reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
+st.logo('images/mmlogo.png')
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
@@ -2984,7 +2985,11 @@ else:
             class_name="flex gap-2",
             key="badges_soon",
         )
-
+        st.write("Rate Report:")
+        sentiment_mapping = [":material/thumb_down:", ":material/thumb_up:"]
+        selected = st.feedback("thumbs")
+        if selected is not None:
+            st.markdown(f"You selected: {sentiment_mapping[selected]}")
         # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
         if page not in ["**:blue-background[PCN Dashboard]**", "**About**"] and selected_surgery:
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
@@ -3062,6 +3067,8 @@ else:
                     )
             except AttributeError as e:
                 st.warning(f"Cannot generate report {e}")
+
+
 
     # -- About ------------------------------------------------------------------------------------------------------- About
     elif page == "**About**":
