@@ -350,7 +350,7 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
 
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(197, 58, 50)
-    pdf.cell(0, 10, "SECTION 4: Improvemenet Suggestions - Responses", 0, 1)  # '0' for cell width, '1' for the new line
+    pdf.cell(0, 10, "SECTION 4: Improvement Suggestions - Responses", 0, 1)  # '0' for cell width, '1' for the new line
 
     pdf.set_font("Arial", "", 8)
     pdf.set_text_color(35, 37, 41)
