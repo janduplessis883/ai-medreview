@@ -17,6 +17,7 @@ from wordcloud import WordCloud
 # Initialize OpenAI API
 client = OpenAI()
 
+
 # Loading my OWN FUNCTIONS
 from utils import *
 
