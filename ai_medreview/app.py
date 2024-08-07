@@ -24,7 +24,6 @@ from utils import *
 from reports import *
 
 st.set_page_config(page_title="AI MedReview v2")
-st.logo('images/mmlogo.png')
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
