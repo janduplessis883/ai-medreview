@@ -1,6 +1,5 @@
 streamlit==1.34.0
 
-colorama
 matplotlib
 seaborn
 numpy
