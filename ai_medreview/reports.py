@@ -192,11 +192,7 @@ def send_webhook(url, surgery, month, year):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-
-    if response.status_code == 200:
-        print("Webhook sent successfully!")
-    else:
-        print(f"Failed to send webhook. Status code: {response.status_code}, Response: {response.text}")
+    return response
 
 def create_wordcloud(df, col_name, filename='reports/wordcloud1.png', colors='Blues'):
         text = " ".join(df[col_name].dropna())
