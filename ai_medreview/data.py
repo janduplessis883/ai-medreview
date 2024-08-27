@@ -16,12 +16,14 @@ from nlpretext.basic.preprocess import (lower_text, normalize_whitespace,
 from nlpretext.social.preprocess import (remove_emoji, remove_hashtag,
                                          remove_mentions)
 from tqdm import tqdm
-from transformers import (AutoModelForSequenceClassification, AutoTokenizer,
-                          pipeline)
+from transformers import (AutoModelForSequenceClassification, AutoTokenizer, pipeline)
 
 from ai_medreview.sheethelper import SheetHelper
 
 tqdm.pandas()
+
+import torch.multiprocessing as mp
+mp.set_start_method('spawn', force=True)
 
 from ai_medreview.automation.git_merge import *
 from ai_medreview.params import *
@@ -241,7 +243,7 @@ def batch_generator(data, column_name, batch_size):
 @time_it
 def feedback_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained(classification_model).to(
+    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
         "cpu"
     )
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
@@ -249,11 +251,18 @@ def feedback_classification(data, batch_size=16):
     # Create classifier pipeline
     try:
         classifier = pipeline(
-            "zero-shot-classification", model=model, tokenizer=tokenizer, device=-1
+            "zero-shot-classification",
+            model=model,
+            tokenizer=tokenizer,
+            device=-1,
+            framework="pt",  # specify PyTorch
+            num_workers=0  # Disable multiprocessing
         )  # -1 for CPU
     except Exception as e:
         print(f"Error in initializing the classifier pipeline: {e}")
         return data  # Exit if the pipeline cannot be created
+
+
 
     # Define the categories for classification
     categories = [
@@ -323,7 +332,7 @@ def feedback_classification(data, batch_size=16):
 @time_it
 def improvement_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained(classification_model).to(
+    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
         "cpu"
     )
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
@@ -567,8 +576,8 @@ if __name__ == "__main__":
         data = cleanup_neutral_sentiment(data, "free_text")
         data = cleanup_neutral_sentiment(data, "do_better")
 
-        data = feedback_classification(data, batch_size=1)
-        data = improvement_classification(data, batch_size=1)
+        data = feedback_classification(data, batch_size=8)
+        data = improvement_classification(data, batch_size=8)
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
