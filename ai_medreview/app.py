@@ -3046,7 +3046,7 @@ else:
                     )
 
                 # Inform the user of success
-                st.write("")
+
                 ui.badges(
                     badge_list=[(f"Report generated successfully! - {selected_month} {selected_year}", "default")],
                     class_name="flex gap-2",
