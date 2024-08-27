@@ -38,7 +38,6 @@ from loguru import logger
 logger.add("log/debug.log", rotation="5000 KB")
 
 # Select Classification Model - facebook/bart-large-mnli or FacebookAI/roberta-large-mnli
-classification_model = "facebook/bart-large-mnli"
 
 
 @time_it
@@ -243,10 +242,10 @@ def batch_generator(data, column_name, batch_size):
 @time_it
 def feedback_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
+    model = AutoModelForSequenceClassification.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c").to(
         "cpu"
     )
-    tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
+    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c")
 
     # Create classifier pipeline
     try:
@@ -332,10 +331,10 @@ def feedback_classification(data, batch_size=16):
 @time_it
 def improvement_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
+    model = AutoModelForSequenceClassification.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c").to(
         "cpu"
     )
-    tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
+    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c")
 
     # Create classifier pipeline
     try:
