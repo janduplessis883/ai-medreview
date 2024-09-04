@@ -242,10 +242,10 @@ def batch_generator(data, column_name, batch_size):
 @time_it
 def feedback_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c").to(
+    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
         "cpu"
     )
-    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
     # Create classifier pipeline
     try:
@@ -331,10 +331,10 @@ def feedback_classification(data, batch_size=16):
 @time_it
 def improvement_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c").to(
+    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
         "cpu"
     )
-    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0-c")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
     # Create classifier pipeline
     try:
