@@ -139,7 +139,7 @@ else:
             "Feedback Timeline",
             "Emotion Detection",
             "Sentiment Analysis",
-            "Private Directory",
+            "NER People",
             "GPT-4 Summary",
             "Word Cloud",
             "Dataframe",
@@ -3125,21 +3125,36 @@ else:
 
 
     # -- About ------------------------------------------------------------------------------------------------------- About
-    elif page == "Private Directory":
-        st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) Private Directory")
-        st.toast("**Private Directory** Coming Soon: This feature will enable you to review de-anonymized reviews.", icon=":material/lock:")
+    elif page == "NER People":
+        st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) NER - People")
+        st.markdown("**Named Entity Recognistion** - People")
+        st.toast("**NER People** De-anonymized reviews enabled.", icon=":material/lock:")
         # Set the correct PIN
-        correct_pin = "2027"
-        col1, col2 = st.columns(2)
-        with col1:
-            # Input field for the PIN
-            pin_input = st.text_input("Enter PIN", type="password")
-        with col2:
-            pass
 
-        if pin_input == correct_pin:
+        # Free Test
+        free_text_per = filtered_data.dropna(subset='free_text_PER')
+        do_better_per = filtered_data.dropna(subset='do_better_PER')
 
-            st.markdown("Welcome to the Private Directory")
-            # Add the content you want to display here
-        else:
-            st.warning("Please enter the correct PIN to access the Private Directory.")
+        with st.container(height=600, border=True):
+
+            st.markdown("### Free Text - People")
+            st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            for index, row in free_text_per.iterrows():
+
+                with st.container(border=True):
+                    date = row['time']
+                    free_text = row['free_text']
+                    names = row['free_text_PER']
+                    st.write(free_text)
+                    ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline")], key=f"free_text_name_{index}")
+
+            st.markdown("### Improvement Suggestion - People")
+            st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            for index, row in do_better_per.iterrows():
+
+                with st.container(border=True):
+                    date = row['time']
+                    do_better = row['do_better']
+                    names2 = row['do_better_PER']
+                    st.write(do_better)
+                    ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline")], key=f"do_better_name_{index}")

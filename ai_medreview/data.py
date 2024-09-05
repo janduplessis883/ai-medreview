@@ -529,6 +529,31 @@ def emotion_classification(df, column, classifier):
 
     return data
 
+def get_person_names_with_transformers(text):
+    # Check if the text is empty or not a string
+    if not text or not isinstance(text, str):
+        return []  # Return an empty list if the input is invalid or empty
+
+    # Initialize a list to store person names
+    person_names = []
+
+    try:
+        # Run the NER pipeline on the valid input text
+        entities = ner_pipeline(text)
+
+        # Iterate over detected entities
+        for entity in entities:
+            # Check if the entity is classified as a person
+            if entity["entity_group"] == "PER":
+                # Add the detected name to the list of person names
+                person_names.append(entity["word"])
+    except ValueError as e:
+        # Log the error for debugging
+        print(f"Error processing text: {text}")
+        raise e
+
+    return person_names
+
 
 if __name__ == "__main__":
 
@@ -550,6 +575,9 @@ if __name__ == "__main__":
         send_alert_webhook(int(data.shape[0]))
         data = word_count(data)  # word count
         data = add_rating_score(data)
+
+        data['free_text_PER'] = data['free_text'].progress_apply(get_person_names_with_transformers)
+        data['do_better_PER'] = data['do_better'].progress_apply(get_person_names_with_transformers)
 
         data = clean_data(data)
         logger.info("🫥 Annonymize with Transformer - free_text")
@@ -580,6 +608,7 @@ if __name__ == "__main__":
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
+
 
         logger.info("Data pre-processing completed")
 
