@@ -3137,7 +3137,7 @@ else:
         free_text_per = filtered_data.dropna(subset='free_text_PER')
         do_better_per = filtered_data.dropna(subset='do_better_PER')
 
-        with st.container(height=600, border=True):
+        with st.container(height=550, border=True):
 
             st.markdown("### Free Text - People")
             st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
