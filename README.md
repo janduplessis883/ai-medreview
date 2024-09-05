@@ -19,3 +19,4 @@ Explore the AI MedReview dashboard today and experience the transformative power
 # ![Streamlit](https://img.icons8.com/ios/50/streamlit.png) [View the Streamlit App](https://ai-medreview.streamlit.app)
 
 
+![Image](images/today.png)
