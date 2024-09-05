@@ -3070,6 +3070,8 @@ else:
     elif page == "**About**":
         st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
 
+
+
         st.markdown("### Patient Feedback Analysis in Healthcare")
         st.markdown("Welcome to **AI MedReview**, your powerful new dashboard for elevating healthcare providers' understanding and utilization of patient feedback. Our solution focuses on the essential Friends and Family Test (FFT), empowering you to extract deeper insights from this invaluable data source. At the core of AI MedReview lies a transformative approach that goes beyond mere quantitative metrics. By leveraging natural language processing and machine learning techniques, we unlock the nuanced sentiments behind patient responses. Our dashboard assigns detailed scores to each piece of feedback, painting a more comprehensive picture of patient satisfaction levels.")
         st.markdown("Through **sentiment analysis** powered by Hugging Face's `cardiffnlp/twitter-roberta-base-sentiment-latest model`, we precisely determine the emotional tone of patient comments, be it positive, negative, or neutral. This level of granular understanding enables you to celebrate areas of excellence and swiftly identify opportunities for improvement.")
