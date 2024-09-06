@@ -3126,7 +3126,7 @@ else:
         st.write("")
 
 
-    # -- About ------------------------------------------------------------------------------------------------------- About
+    # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
         st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) NER - People")
         st.markdown("**Named Entity Recognistion** - People")
@@ -3147,8 +3147,9 @@ else:
                     date = row['time']
                     free_text = row['free_text']
                     names = row['free_text_PER']
+                    sentiment = row['sentiment_free_text']
                     st.write(free_text)
-                    ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline")], key=f"free_text_name_{index}")
+                    ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
 
             st.markdown("### Improvement Suggestion - People")
             st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
@@ -3158,5 +3159,6 @@ else:
                     date = row['time']
                     do_better = row['do_better']
                     names2 = row['do_better_PER']
+                    sentiment2 = row['sentiment_do_better']
                     st.write(do_better)
-                    ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline")], key=f"do_better_name_{index}")
+                    ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
