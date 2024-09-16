@@ -533,7 +533,7 @@ def emotion_classification(df, column, classifier):
 def get_person_names_with_transformers(text):
     # Check if the text is empty or not a string
     if not text or not isinstance(text, str):
-        return np.nan  # Return an empty list if the input is invalid or empty
+        return None  # Return None if the input is invalid or empty
 
     # Initialize a list to store person names
     person_names = []
@@ -545,15 +545,16 @@ def get_person_names_with_transformers(text):
         # Iterate over detected entities
         for entity in entities:
             # Check if the entity is classified as a person
-            if entity["entity_group"] == "PER":
+            if entity.get("entity_group") == "PER":  # Ensure key exists
                 # Add the detected name to the list of person names
-                person_names.append(entity["word"])
+                person_names.append(entity.get("word", ""))  # Use get() to avoid key errors
     except ValueError as e:
         # Log the error for debugging
         print(f"Error processing text: {text}")
         raise e
 
-    return person_names
+    # Return None if no person names were found, otherwise return the list of names
+    return person_names if person_names else None
 
 
 if __name__ == "__main__":
