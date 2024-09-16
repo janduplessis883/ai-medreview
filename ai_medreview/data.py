@@ -533,7 +533,7 @@ def emotion_classification(df, column, classifier):
 def get_person_names_with_transformers(text):
     # Check if the text is empty or not a string
     if not text or not isinstance(text, str):
-        return []  # Return an empty list if the input is invalid or empty
+        return np.nan  # Return an empty list if the input is invalid or empty
 
     # Initialize a list to store person names
     person_names = []
