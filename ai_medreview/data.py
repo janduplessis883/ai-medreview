@@ -559,7 +559,7 @@ def get_person_names_with_transformers(text):
 
 if __name__ == "__main__":
 
-    logger.info("▶️ Friends & Family Test Analysis - MAKE DATA - Started")
+    logger.info("▶️ AI Medreview FFT - MAKE DATA - Started")
 
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
@@ -574,7 +574,7 @@ if __name__ == "__main__":
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
 
     if data.shape[0] != 0:
-        send_alert_webhook(int(data.shape[0]))
+
         data = word_count(data)  # word count
         data = add_rating_score(data)
 
@@ -582,6 +582,7 @@ if __name__ == "__main__":
         data['do_better_PER'] = data['do_better'].progress_apply(get_person_names_with_transformers)
 
         data = clean_data(data)
+
         logger.info("🫥 Annonymize with Transformer - free_text")
         data["free_text"] = data["free_text"].progress_apply(
             anonymize_names_with_transformers
