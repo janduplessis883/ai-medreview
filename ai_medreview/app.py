@@ -31,7 +31,6 @@ def check_passcode():
     with st.form("passcode_form", border=False):
         entered_passcode = st.text_input("Enter passcode:", type="password")
         submitted = st.form_submit_button("Submit")
-
         if submitted:
             if entered_passcode == passcode:
                 st.session_state["authenticated"] = True
@@ -58,11 +57,18 @@ if not st.session_state["authenticated"]:
             f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2"
         )
         check_passcode()
-        st.write()
-        st.write()
         with st.container(height=150, border=False):
             st.write()
-        st.html("""<centre><img alt="Static Badge" src="https://img.shields.io/badge/github-janduplessis883-%23eb924f"></centre>""")
+
+        c1, c2, c3 = st.columns([1,2,1])
+        with c1:
+            st.write()
+        with c2:
+            st.html("""<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">""")
+        with c3:
+            st.write()
+
+
 
 
 else:
