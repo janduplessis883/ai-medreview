@@ -68,9 +68,6 @@ if not st.session_state["authenticated"]:
         with c3:
             st.write()
 
-
-
-
 else:
     # Styling with HTML
     html = """
