@@ -58,6 +58,15 @@ if not st.session_state["authenticated"]:
             f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2"
         )
         check_passcode()
+        st.write()
+        st.write()
+        with st.container(height=150, border=False):
+            st.write()
+        ui.link_button(
+                text="GitHub",
+                url="https://github.com/janduplessis883/ai-medreview",
+                key="link_btn2",
+            )
 
 else:
     # Styling with HTML
