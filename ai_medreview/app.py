@@ -14,6 +14,7 @@ from matplotlib.patches import Patch
 from openai import OpenAI
 from wordcloud import WordCloud
 
+
 # Initialize OpenAI API
 client = OpenAI()
 
@@ -35,7 +36,6 @@ def check_passcode():
             if entered_passcode == passcode:
                 st.session_state["authenticated"] = True
             else:
-                st.write()
                 st.write()
                 ui.badges(
                     badge_list=[("Incorrect Passcode, please try again.", "default")],
