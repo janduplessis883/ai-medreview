@@ -62,11 +62,8 @@ if not st.session_state["authenticated"]:
         st.write()
         with st.container(height=150, border=False):
             st.write()
-        ui.link_button(
-                text="GitHub",
-                url="https://github.com/janduplessis883/ai-medreview",
-                key="link_btn2",
-            )
+        st.html("""<centre><img alt="Static Badge" src="https://img.shields.io/badge/github-janduplessis883-%23eb924f"></centre>""")
+
 
 else:
     # Styling with HTML
