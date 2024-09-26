@@ -529,7 +529,7 @@ def emotion_classification(df, column, classifier):
 
     return data
 
-@time_it
+
 def get_person_names_with_transformers(text):
     # Check if the text is empty or not a string
     if not text or not isinstance(text, str):
