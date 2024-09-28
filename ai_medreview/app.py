@@ -1381,7 +1381,7 @@ else:
     # -- Surgery Dashboard --------------------------------------------------------------------------- Surgery Dashboard ---
     elif page == "Surgery Dashboards":
         st.markdown(
-            f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_surgery}"
+            f"# :material/stethoscope: {selected_surgery}"
         )
         st.write("")
         surgery_tab_selector = ui.tabs(
