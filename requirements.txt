@@ -14,17 +14,8 @@ fastparquet
 
 nlpaug
 
-# prevent bq 3+ db-dtypes package error when running training from bq
-
-# API
-
-
-# jupiter notebook
 
 torch
-
-
-
 # Dependancies for sheethelper
 gspread
 transformers==4.37.0

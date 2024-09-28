@@ -2308,7 +2308,7 @@ else:
         ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
         plt.xlabel('Counts')
         plt.ylabel('Emotions')
-        plt.title('Distribution of Emotions in Feedback and Do Improvement Suggestions')
+        plt.title('Distribution of Emotions in Feedback and Improvement Suggestions')
         plt.legend(title='Source', loc='upper right')
         plt.tight_layout()
 
@@ -3152,8 +3152,7 @@ else:
 
         with st.container(height=550, border=True):
 
-            st.markdown("### Free Text - People")
-            st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            st.markdown("### :blue-background[Free-Text Feedback - 🙎🏻‍♂️ People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
             for index, row in free_text_per.iterrows():
 
                 with st.container(border=True):
@@ -3163,9 +3162,8 @@ else:
                     sentiment = row['sentiment_free_text']
                     st.write(free_text)
                     ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
-
-            st.markdown("### Improvement Suggestion - People")
-            st.markdown("`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            st.container(height=50, border=False)
+            st.markdown("### :blue-background[Improvement Suggestions - 🤦🏽‍♀️ People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
             for index, row in do_better_per.iterrows():
 
                 with st.container(border=True):
