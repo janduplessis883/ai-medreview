@@ -91,7 +91,7 @@ else:
     pcn_names = ["Brompton-Health-PCN", "Demo-PCN"]
 
     # PCN selection in sidebar
-    selected_pcn = st.sidebar.selectbox("Select a PCN:", pcn_names, key="pcn_selector")
+    selected_pcn = st.sidebar.selectbox("Select a **PCN**:", pcn_names, key="pcn_selector")
 
 
     # Function to load data
@@ -139,7 +139,7 @@ else:
 
     # Page selection
     page = st.sidebar.radio(
-        "Select a Page",
+        "Select a **Page**",
         [
             "**:blue-background[PCN Dashboard]**",
             "Surgery Dashboards",
@@ -161,7 +161,7 @@ else:
     if page not in ["**:blue-background[PCN Dashboard]**", "**About**"]:
         surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
         if len(surgery_list) > 0:
-            selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
+            selected_surgery = st.sidebar.selectbox("Select a **Surgery**", surgery_list)
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
             if not surgery_data.empty:
