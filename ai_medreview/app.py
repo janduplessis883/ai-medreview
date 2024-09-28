@@ -14,15 +14,13 @@ from matplotlib.patches import Patch
 from openai import OpenAI
 from wordcloud import WordCloud
 
-
 # Initialize OpenAI API
 client = OpenAI()
 
-
 # Loading my OWN FUNCTIONS
 from utils import *
-
 from reports import *
+
 
 st.set_page_config(page_title="AI MedReview v2")
 st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview')
@@ -198,7 +196,7 @@ else:
         ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
 
         st.markdown(
-            f"# ![dashboard](https://img.icons8.com/pastel-glyph/64/laptop-metrics--v1.png) {selected_pcn} "
+            f"# :material/health_metrics: {selected_pcn} "
         )
 
 
@@ -838,7 +836,7 @@ else:
                     )
                     plt.tight_layout()
                     st.pyplot(plt)
-            except KeyError as e:
+            except ValueError as e:
                 st.warning(f"Error plotting: {e}")
 
             st.markdown("---")
@@ -1691,7 +1689,7 @@ else:
     # -- Feedback Classification ------------------------------------------------------------------- Feedback Classification
     elif page == "Feedback Classification":
         st.markdown(
-            "# ![Feedback](https://img.icons8.com/ios/50/thumbs-up-down.png) Feedback Classification"
+            "# :material/recommend: Feedback Classification"
         )
         st.markdown("Responses to **FFT Q1**: Please tell us why you feel this way?")
 
@@ -1933,7 +1931,7 @@ else:
     # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
     elif page == "Improvement Suggestions":
         st.markdown(
-            "# ![Improvement](https://img.icons8.com/ios/50/improvement.png) Improvement Suggestions"
+            "# :material/home_improvement_and_tools: Improvement Suggestions"
         )
         st.markdown(
             "Responses to **FFT Q2**: Is there anything that would have made your experience better?"
@@ -2218,7 +2216,7 @@ else:
     # -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
     elif page == "Emotion Detection":
         st.markdown(
-            "# ![Emotion Detection](https://img.icons8.com/ios/50/happy--v1.png) Emotion Detection"
+            "# :material/add_reaction: Emotion Detection"
         )
         st.markdown(
             "Identifying and classifying the **emotions** expressed in FFT feedback."
@@ -2288,7 +2286,7 @@ else:
         fig, ax = plt.subplots(figsize=(10, 6))
 
         # Define the colors for the sources
-        colors = ["#4088a9", "#f1c045"]
+        colors = ["#985e5b", "#ca8f56"]
 
         # Plot each source as a stacked bar
         bottom = None
@@ -2323,7 +2321,7 @@ else:
     # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
     elif page == "Feedback Timeline":
         st.markdown(
-            "# ![Timeline](https://img.icons8.com/dotty/80/timeline.png) Feedback Timeline"
+            "# :material/view_timeline: Feedback Timeline"
         )
 
         daily_count = filtered_data.resample("D", on="time").size()
@@ -2386,7 +2384,7 @@ else:
     # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
     elif page == "Sentiment Analysis":
         st.markdown(
-            "# ![Sentiment Analysis](https://img.icons8.com/ios/50/like--v1.png) Sentiment Analysis"
+            "# :material/sentiment_neutral: Sentiment Analysis"
         )
 
         toggle = ui.switch(
@@ -2725,7 +2723,7 @@ else:
     # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
     elif page == "Word Cloud":
         st.markdown(
-            "# ![Word CLoud](https://img.icons8.com/ios/50/cloud-refresh--v1.png) Word Cloud"
+            "# :material/cloud: Word Cloud"
         )
         try:
             toggle = ui.switch(
@@ -2771,7 +2769,7 @@ else:
 
     # -- GPT4 Summary ----------------------------------------------------------------------------------------- GPT4 Summary
     elif page == "GPT-4 Summary":
-        st.markdown("# ![GPT-4](https://img.icons8.com/ios/50/chatgpt.png) GPT-4 Summary")
+        st.markdown("# :material/robot_2: GPT-4o Summary")
 
         toggle = ui.switch(
             default_checked=False, label="Explain this page.", key="switch_dash"
@@ -2965,7 +2963,7 @@ else:
     # -- Dataframe ----------------------------------------------------------------------------------------------- Dataframe
     elif page == "Dataframe":
         st.markdown(
-            "# ![Dataframe](https://img.icons8.com/ios/50/new-spreadsheet.png) Dataframe"
+            "# :material/table: Dataframe"
         )
 
         toggle = ui.switch(
@@ -2990,7 +2988,7 @@ else:
 
     # -- Reports --------------------------------------------------------------------------------------------------- Reports
     elif page == "Reports":
-        st.markdown("# ![Reports](https://img.icons8.com/ios/50/graph-report.png) Reports")
+        st.markdown("# :material/sim_card_download: Reports")
         st.write("")
         ui.badges(
             badge_list=[("NEW", "destructive"), ("beta v1.0.3", "outline")],
@@ -3080,7 +3078,7 @@ else:
 
     # -- About ------------------------------------------------------------------------------------------------------- About
     elif page == "**About**":
-        st.markdown("# ![About](https://img.icons8.com/ios/50/about.png) About")
+        st.markdown("# :material/info: About")
 
 
 
@@ -3142,7 +3140,7 @@ else:
 
     # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
-        st.markdown("# ![About](https://img.icons8.com/ios/50/private.png) NER - People")
+        st.markdown("# :material/psychology_alt: NER - People")
         st.markdown("**Named Entity Recognistion** - People")
         st.toast("**NER People** De-anonymized reviews enabled.", icon=":material/lock:")
         # Set the correct PIN
