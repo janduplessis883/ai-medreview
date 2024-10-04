@@ -1892,8 +1892,7 @@ else:
             negative_df.columns = ['Feedback Label', 'Count']
             negative_df['Cumulative Count'] = negative_df['Count'].cumsum()
             negative_df['Cumulative Percentage'] = 100 * negative_df['Cumulative Count'] / negative_df['Count'].sum()
-            # Plotting in Streamlit
-            # st.subheader('Negative Feedback Pareto Chart')
+
             # Create the figure for plotting
             fig, ax1 = plt.subplots(figsize=(12, 8))
 
