@@ -1908,7 +1908,7 @@ The process typically follows these steps:
 •	A line plot that shows the cumulative percentage of the total effect.
 6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
 """)
-            st.divider()
+            st.audio('images/pareto.wav')
             neg = filtered_data[filtered_data['sentiment_free_text'] == 'negative']
             negative_df = neg['feedback_labels'].value_counts().reset_index()
             negative_df.columns = ['Feedback Label', 'Count']
