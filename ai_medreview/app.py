@@ -1887,34 +1887,11 @@ else:
 
         elif tab_selector == "Pareto Analysis":
 
-            st.write("""**What is Pareto Analysis?**
-
-Pareto Analysis, also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
-
-**Why Use Pareto Analysis?**
-
-The purpose of Pareto analysis is to prioritize actions based on the potential impact they could have. By identifying and focusing on the critical issues that contribute the most to the problem, resources can be efficiently allocated for maximum effect. It’s commonly used in quality management, project management, and customer service improvement, among other fields.
-
-**How Does Pareto Analysis Work?**
-
-The process typically follows these steps:
-
-1.	Identify the Problem: Clearly define the issue you want to analyze, such as customer complaints, system defects, or productivity losses.
-2.	List the Causes: Identify and list the different causes that contribute to the problem. These could be based on data such as customer feedback, defect reports, or process observations.
-3.	Measure the Impact: Quantify the effect each cause has, such as the frequency of complaints or defects associated with each factor.
-4.	Sort by Importance: Arrange the causes in descending order, with the most significant cause (i.e., the one with the highest frequency) at the top.
-5.	Plot the Data: Use a Pareto Chart to visualize the data. A Pareto Chart consists of two elements:
-•	Bars that represent the frequency or magnitude of each cause.
-•	A line plot that shows the cumulative percentage of the total effect.
-6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
-""")
-            st.audio('images/pareto.wav')
             neg = filtered_data[filtered_data['sentiment_free_text'] == 'negative']
             negative_df = neg['feedback_labels'].value_counts().reset_index()
             negative_df.columns = ['Feedback Label', 'Count']
             negative_df['Cumulative Count'] = negative_df['Count'].cumsum()
             negative_df['Cumulative Percentage'] = 100 * negative_df['Cumulative Count'] / negative_df['Count'].sum()
-
             # Plotting in Streamlit
             st.subheader('Negative Feedback Pareto Chart')
             # Create the figure for plotting
@@ -1944,8 +1921,34 @@ The process typically follows these steps:
 
             # Display the plot in Streamlit
             st.pyplot(fig)
+            st.divider()
+            st.write("""**What is Pareto Analysis?**
 
-            with st.container(height=400, border=True):
+Pareto Analysis, also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
+
+**Why Use Pareto Analysis?**
+
+The purpose of Pareto analysis is to prioritize actions based on the potential impact they could have. By identifying and focusing on the critical issues that contribute the most to the problem, resources can be efficiently allocated for maximum effect. It’s commonly used in quality management, project management, and customer service improvement, among other fields.
+
+**How Does Pareto Analysis Work?**
+
+The process typically follows these steps:
+
+1.	Identify the Problem: Clearly define the issue you want to analyze, such as customer complaints, system defects, or productivity losses.
+2.	List the Causes: Identify and list the different causes that contribute to the problem. These could be based on data such as customer feedback, defect reports, or process observations.
+3.	Measure the Impact: Quantify the effect each cause has, such as the frequency of complaints or defects associated with each factor.
+4.	Sort by Importance: Arrange the causes in descending order, with the most significant cause (i.e., the one with the highest frequency) at the top.
+5.	Plot the Data: Use a Pareto Chart to visualize the data. A Pareto Chart consists of two elements:
+•	Bars that represent the frequency or magnitude of each cause.
+•	A line plot that shows the cumulative percentage of the total effect.
+6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
+""")
+            st.audio('images/pareto.wav')
+
+
+
+
+            with st.container(height=350, border=True):
                 st.write("""**In-depth Analysis of Individual Feedback Coming Soon**
 
                          """)
