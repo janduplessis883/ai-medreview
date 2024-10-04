@@ -1893,7 +1893,7 @@ else:
             negative_df['Cumulative Count'] = negative_df['Count'].cumsum()
             negative_df['Cumulative Percentage'] = 100 * negative_df['Cumulative Count'] / negative_df['Count'].sum()
             # Plotting in Streamlit
-            st.subheader('Negative Feedback Pareto Chart')
+            # st.subheader('Negative Feedback Pareto Chart')
             # Create the figure for plotting
             fig, ax1 = plt.subplots(figsize=(12, 8))
 
@@ -1903,7 +1903,7 @@ else:
 
             # Create a secondary axis for the cumulative percentage
             ax2 = ax1.twinx()
-            sns.lineplot(x='Feedback Label', y='Cumulative Percentage', data=negative_df, sort=False, color='red', marker='D', ax=ax2)
+            sns.lineplot(x='Feedback Label', y='Cumulative Percentage', data=negative_df, sort=False, color='#ae4f4d', marker='D', ax=ax2)
 
             # Set labels for the axes
             ax1.set_ylabel('Count')
@@ -1911,6 +1911,19 @@ else:
 
             # Add a dashed line at 80% on the cumulative percentage axis
             ax2.axhline(80, color='green', linestyle='dashed')
+
+            # Grid and spines adjustments for ax1 (the bar plot axis)
+            ax1.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+            ax1.xaxis.grid(False)
+            # Removing spines from ax1
+            ax1.spines["top"].set_visible(False)
+            ax1.spines["right"].set_visible(False)
+            ax1.spines["left"].set_visible(False)
+
+            # Removing spines from ax2 (the line plot axis)
+            ax2.spines["top"].set_visible(False)
+            ax2.spines["right"].set_visible(False)
+            ax2.spines["left"].set_visible(False)
 
             # Title and labels
             ax1.set_xlabel('Feedback Category')
@@ -1921,10 +1934,10 @@ else:
 
             # Display the plot in Streamlit
             st.pyplot(fig)
-            st.divider()
-            st.write("""**What is Pareto Analysis?**
 
-Pareto Analysis, also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
+            with st.expander("What is Pareto Analysis?", icon=":material/search_insights:"):
+                st.write("""### Pareto Analysis
+Also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
 
 **Why Use Pareto Analysis?**
 
@@ -1943,18 +1956,198 @@ The process typically follows these steps:
 •	A line plot that shows the cumulative percentage of the total effect.
 6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
 """)
-            st.audio('images/pareto.wav')
+                st.audio('images/pareto.wav')
 
 
+            with st.expander("**Evidence Based Intervention**", icon=":material/search_insights:"):
+                st.write("""## **1. Reception Staff Interaction**
 
+**Key Issues Identified:**
 
-            with st.container(height=350, border=True):
-                st.write("""**In-depth Analysis of Individual Feedback Coming Soon**
+- Rude and unhelpful behavior from reception staff.
+- Lack of communication skills and professionalism.
+- Patients feeling disrespected and not valued.
+- Inappropriate questioning that invades patient privacy.
 
+**Evidence-Based Interventions:**
+
+1. **Customer Service and Communication Training:**
+    - **Action:** Implement regular training programs focused on customer service excellence, effective communication, and handling difficult situations.
+    - **Evidence:** Studies show that training staff in communication skills improves patient satisfaction and staff-patient interactions (Hobgood et al., 2010).
+2. **Establish a Clear Code of Conduct:**
+    - **Action:** Develop and enforce a code of conduct outlining expected behaviors, professionalism, and standards for patient interactions.
+    - **Evidence:** Clear guidelines help staff understand expectations, leading to improved behavior (Bismark et al., 2013).
+3. **Regular Performance Reviews and Feedback:**
+    - **Action:** Conduct periodic evaluations of reception staff, providing constructive feedback and setting improvement goals.
+    - **Evidence:** Ongoing feedback mechanisms enhance employee performance and patient satisfaction (Miller et al., 2015).
+4. **Implement Mystery Shopper Programs:**
+    - **Action:** Use anonymous patient representatives to assess the quality of service and identify areas for improvement.
+    - **Evidence:** Mystery shopper programs effectively evaluate service quality and highlight training needs (Mahmoud et al., 2017).
+5. **Enhance Patient Privacy Protocols:**
+    - **Action:** Train staff on appropriate ways to gather necessary information without infringing on patient privacy.
+    - **Evidence:** Respecting patient confidentiality builds trust and improves the patient experience (Ozair et al., 2015).
+6. **Improve Staff Well-being and Support:**
+    - **Action:** Address workload issues, provide adequate breaks, and offer support programs to reduce staff burnout.
+    - **Evidence:** Supporting staff well-being leads to better patient interactions and reduces turnover (Shanafelt et al., 2015).
+
+---
+
+## **2. Appointment Availability**
+
+**Key Issues Identified:**
+
+- Difficulty securing timely appointments, especially face-to-face.
+- Long waiting times and lack of appointment slots.
+- Inefficient appointment booking processes.
+- Insufficient consultation time with doctors.
+
+**Evidence-Based Interventions:**
+
+1. **Optimize Appointment Scheduling Systems:**
+    - **Action:** Analyze and streamline scheduling processes to reduce bottlenecks and improve efficiency.
+    - **Evidence:** Efficient scheduling systems reduce wait times and enhance patient satisfaction (Murray & Berwick, 2003).
+2. **Implement Advanced Access Scheduling:**
+    - **Action:** Offer same-day appointments and minimize delays by adjusting scheduling practices.
+    - **Evidence:** Advanced access reduces wait times and no-show rates (Third Next Available Appointment metric; Murray & Tantau, 2000).
+3. **Increase Appointment Capacity:**
+    - **Action:** Extend clinic hours, hire additional healthcare providers, or utilize nurse practitioners and physician assistants.
+    - **Evidence:** Increasing provider availability improves access to care (Hooker & Muchow, 2015).
+4. **Provide Multiple Booking Options:**
+    - **Action:** Enable online, phone, and in-person booking, allowing patients to choose their preferred method.
+    - **Evidence:** Multi-channel booking systems increase patient engagement and convenience (Paré et al., 2014).
+5. **Allow Direct In-Person Appointments:**
+    - **Action:** Give patients the option to book face-to-face appointments without mandatory preliminary telephone consultations.
+    - **Evidence:** Patient-centered scheduling respects patient preferences and improves satisfaction (LaGanga & Lawrence, 2007).
+6. **Enhance Communication About Availability:**
+    - **Action:** Transparently communicate appointment availability and expected wait times.
+    - **Evidence:** Clear communication reduces frustration and manages patient expectations (Franco et al., 2014).
+7. **Adjust Appointment Durations:**
+    - **Action:** Offer flexible appointment lengths based on patient needs, allowing more time for complex cases.
+    - **Evidence:** Tailoring appointment durations improves care quality and patient satisfaction (Campbell et al., 2013).
+
+---
+
+## **3. Prescriptions and Medication Management**
+
+**Key Issues Identified:**
+
+- Inadequate supply of medications for chronic conditions.
+- Difficulty communicating with pharmacists or getting medication advice.
+- Lack of proactive communication regarding test results.
+- Concerns about incorrect or unsafe prescribing practices.
+
+**Evidence-Based Interventions:**
+
+1. **Implement Medication Management Programs:**
+    - **Action:** Conduct regular medication reviews to ensure patients receive appropriate quantities and understand their treatment plans.
+    - **Evidence:** Medication management improves adherence and health outcomes (Jin et al., 2008).
+2. **Enhance Access to Pharmacists:**
+    - **Action:** Integrate pharmacists into the care team and make them accessible to patients for consultations.
+    - **Evidence:** Pharmacist involvement in patient care enhances medication safety and satisfaction (Chisholm-Burns et al., 2010).
+3. **Establish Proactive Follow-Up Systems:**
+    - **Action:** Create protocols for timely communication of test results and follow-up actions required.
+    - **Evidence:** Systematic follow-up reduces missed results and improves patient outcomes (Callen et al., 2012).
+4. **Implement Electronic Prescribing (e-Prescribing):**
+    - **Action:** Use electronic systems to manage prescriptions, reducing errors and improving efficiency.
+    - **Evidence:** e-Prescribing enhances accuracy and safety in medication management (Kaushal et al., 2010).
+5. **Provide Staff Training on Safe Prescribing:**
+    - **Action:** Educate healthcare providers on up-to-date prescribing guidelines and medication safety.
+    - **Evidence:** Ongoing education reduces prescribing errors and adverse drug events (Phillips et al., 2001).
+6. **Develop Clear Communication Channels:**
+    - **Action:** Establish direct lines of communication for patients to discuss medication concerns promptly.
+    - **Evidence:** Effective communication is key to safe medication practices (Manias et al., 2015).
+
+---
+
+## **4. Patient Respect**
+
+**Key Issues Identified:**
+
+- Patients feeling disrespected, humiliated, or undervalued.
+- Rude and unprofessional behavior from attendants.
+- Preference for in-person interactions due to poor online services.
+- Need for better customer service manners among reception staff.
+
+**Evidence-Based Interventions:**
+
+1. **Train Staff in Empathy and Compassion:**
+    - **Action:** Provide training focused on developing empathy, active listening, and compassionate care.
+    - **Evidence:** Empathy training enhances patient-provider relationships and satisfaction (Stepien & Baernstein, 2006).
+2. **Promote a Patient-Centered Care Culture:**
+    - **Action:** Foster an organizational culture that prioritizes patient needs and respects individual preferences.
+    - **Evidence:** Patient-centered care leads to better health outcomes and satisfaction (Barry & Edgman-Levitan, 2012).
+3. **Improve Online Service Platforms:**
+    - **Action:** Upgrade online systems to be user-friendly, reliable, and responsive to patient needs.
+    - **Evidence:** Effective online services improve patient engagement and access to care (Goldzweig et al., 2013).
+4. **Implement Professionalism Standards:**
+    - **Action:** Set and enforce standards for professional behavior across all staff interactions with patients.
+    - **Evidence:** Professionalism is linked to higher patient trust and satisfaction (Chisholm & Askham, 2006).
+5. **Collect and Act on Patient Feedback:**
+    - **Action:** Regularly solicit patient feedback on their experiences and use it to drive improvements.
+    - **Evidence:** Patient feedback mechanisms are effective in enhancing service quality (Doyle et al., 2013).
+
+---
+
+## **5. Test Results**
+
+**Key Issues Identified:**
+
+- Delays in scheduling appointments and conducting tests.
+- Misdiagnoses leading to severe health consequences.
+- Inaction or dismissal of significant test results.
+
+**Evidence-Based Interventions:**
+
+1. **Strengthen Diagnostic Protocols:**
+    - **Action:** Implement evidence-based guidelines to improve diagnostic accuracy and timeliness.
+    - **Evidence:** Adherence to clinical guidelines reduces diagnostic errors (Graber et al., 2012).
+2. **Implement Test Result Management Systems:**
+    - **Action:** Use electronic systems to track test orders, results, and ensure timely patient notification.
+    - **Evidence:** Automated result management improves follow-up and patient safety (Callen et al., 2011).
+3. **Adopt Safety Netting Strategies:**
+    - **Action:** Educate clinicians on safety netting, including advising patients on what to do if symptoms persist or worsen.
+    - **Evidence:** Safety netting reduces the risk of missed diagnoses and improves outcomes (Almond et al., 2009).
+4. **Provide Continuing Education for Clinicians:**
+    - **Action:** Offer regular training on recognizing atypical presentations and when to consider alternative diagnoses.
+    - **Evidence:** Continuous professional development enhances diagnostic skills (Eva et al., 2010).
+5. **Enhance Communication and Shared Decision-Making:**
+    - **Action:** Encourage open dialogue between patients and providers about symptoms, concerns, and treatment options.
+    - **Evidence:** Shared decision-making improves patient satisfaction and adherence (Elwyn et al., 2012).
+
+---
+
+**References:**
+
+- Almond, S., Mant, D., & Thompson, M. (2009). Diagnostic safety-netting. British Journal of General Practice, 59(568), 872–874.
+- Barry, M. J., & Edgman-Levitan, S. (2012). Shared decision making—The pinnacle of patient-centered care. New England Journal of Medicine, 366(9), 780–781.
+- Bismark, M. M., Spittal, M. J., Gurrin, L. C., Ward, M., & Studdert, D. M. (2013). Identification of doctors at risk of recurrent complaints: a national study of healthcare complaints in Australia. BMJ Quality & Safety, 22(7), 532–540.
+- Callen, J. L., Westbrook, J. I., Georgiou, A., & Li, J. (2011). Failure to follow-up test results for ambulatory patients: a systematic review. Journal of General Internal Medicine, 27(10), 1334–1348.
+- Callen, J., et al. (2012). Emergency physicians’ views of direct notification of laboratory and radiology results to patients using the Internet: A multisite survey. Journal of Medical Internet Research, 14(1), e60.
+- Campbell, J. L., et al. (2013). Range and causes of GP stress. British Journal of General Practice, 63(614), e722–e729.
+- Chisholm, A., & Askham, J. (2006). What do you think of your doctor? A review of questionnaires for gathering patients' feedback on their doctor. Picker Institute Europe.
+- Chisholm-Burns, M. A., et al. (2010). US pharmacists' effect as team members on patient care: systematic review and meta-analyses. Medical Care, 48(10), 923–933.
+- Davis, K. (2010). Effective communication strategies in medicine. The Permanente Journal, 14(3), 68.
+- Doyle, C., Lennox, L., & Bell, D. (2013). A systematic review of evidence on the links between patient experience and clinical safety and effectiveness. BMJ Open, 3(1), e001570.
+- Elwyn, G., et al. (2012). Shared decision making: a model for clinical practice. Journal of General Internal Medicine, 27(10), 1361–1367.
+- Eva, K. W., et al. (2010). Factors influencing responsiveness to feedback: on the interplay between fear, confidence, and reasoning processes. Advances in Health Sciences Education, 17(1), 15–26.
+- Franco, L. M., et al. (2014). Effectiveness of collaborative improvement in reproductive health: a quasi-experimental study in Ghana. Health Policy and Planning, 29(5), 641–653.
+- Goldzweig, C. L., et al. (2013). Patient internet portals: evidence on health outcomes, satisfaction, efficiency, and attitudes: a systematic review. Annals of Internal Medicine, 159(10), 677–687.
+- Graber, M. L., et al. (2012). Improving diagnosis by improving education: a policy brief on education in healthcare professions. Diagnosis, 1(1), 51–56.
+- Hobgood, C., et al. (2010). Communication training in emergency medicine: a systematic review. Academic Emergency Medicine, 17(6), 637–650.
+- Hooker, R. S., & Muchow, A. N. (2015). Modifying state laws for nurse practitioners and physician assistants can reduce cost of medical services. Nursing Economics, 33(2), 88–94.
+- Jin, J., et al. (2008). Factors affecting therapeutic compliance: A review from the patient’s perspective. Therapeutics and Clinical Risk Management, 4(1), 269–286.
+- Kaushal, R., et al. (2010). Electronic prescribing improves medication safety in community-based office practices. Journal of General Internal Medicine, 25(6), 530–536.
+- LaGanga, L. R., & Lawrence, S. R. (2007). Clinic overbooking to improve patient access and increase provider productivity. Decision Sciences, 38(2), 251–276.
+- Mahmoud, M. A., et al. (2017). Evaluating patients’ satisfaction using mystery shopping technique in community pharmacy settings in Kuwait. Pharmacy Practice, 15(1), 881.
+- Manias, E., et al. (2015). Interventions to reduce medication errors in adult intensive care: a systematic review. British Journal of Clinical Pharmacology, 80(5), 1262–1278.
+- Miller, A., et al. (2015). Positive deviance: A different approach to achieving patient safety. Healthcare Quarterly, 18(1), 8–14.
+- Mueller, S. K., et al. (2012). Hospital-based medication reconciliation practices: a systematic review. Archives of Internal Medicine, 172(14), 1057–1069.
+- Murray, M., & Berwick, D. M. (2003). Advanced access: reducing waiting and delays in primary care. JAMA, 289(8), 1035–1040.
+- Murray, M., & Tantau, C. (2000). Same-day appointments: exploding
                          """)
 
 
-        st.toast("Use the **Date Slider** to define the review period.", icon=":material/linear_scale:")
+        st.toast("**Pareto Analysis Chart** Select from submenu.", icon=":material/linear_scale:")
 
         st.markdown("---")
 
