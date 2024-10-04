@@ -1917,7 +1917,6 @@ The process typically follows these steps:
 
             # Plotting in Streamlit
             st.subheader('Negative Feedback Pareto Chart')
-
             # Create the figure for plotting
             fig, ax1 = plt.subplots(figsize=(12, 8))
 
