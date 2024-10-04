@@ -1698,6 +1698,7 @@ else:
                 "Bar Chart - Totals",
                 "Time Series - Line Chart",
                 "Heatmap (Normalized)",
+                "Pareto Analysis",
             ],
             default_value="Bar Chart - Totals",
             key="tab_topic_surgery",
@@ -1883,6 +1884,73 @@ else:
 
             # Displaying the plot
             st.pyplot(plt)
+
+        elif tab_selector == "Pareto Analysis":
+
+            st.write("""**What is Pareto Analysis?**
+
+Pareto Analysis, also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
+
+**Why Use Pareto Analysis?**
+
+The purpose of Pareto analysis is to prioritize actions based on the potential impact they could have. By identifying and focusing on the critical issues that contribute the most to the problem, resources can be efficiently allocated for maximum effect. It’s commonly used in quality management, project management, and customer service improvement, among other fields.
+
+**How Does Pareto Analysis Work?**
+
+The process typically follows these steps:
+
+1.	Identify the Problem: Clearly define the issue you want to analyze, such as customer complaints, system defects, or productivity losses.
+2.	List the Causes: Identify and list the different causes that contribute to the problem. These could be based on data such as customer feedback, defect reports, or process observations.
+3.	Measure the Impact: Quantify the effect each cause has, such as the frequency of complaints or defects associated with each factor.
+4.	Sort by Importance: Arrange the causes in descending order, with the most significant cause (i.e., the one with the highest frequency) at the top.
+5.	Plot the Data: Use a Pareto Chart to visualize the data. A Pareto Chart consists of two elements:
+•	Bars that represent the frequency or magnitude of each cause.
+•	A line plot that shows the cumulative percentage of the total effect.
+6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
+""")
+            st.divider()
+            neg = filtered_data[filtered_data['sentiment_free_text'] == 'negative']
+            negative_df = neg['feedback_labels'].value_counts().reset_index()
+            negative_df.columns = ['Feedback Label', 'Count']
+            negative_df['Cumulative Count'] = negative_df['Count'].cumsum()
+            negative_df['Cumulative Percentage'] = 100 * negative_df['Cumulative Count'] / negative_df['Count'].sum()
+
+            # Plotting in Streamlit
+            st.subheader('Negative Feedback Pareto Chart')
+
+            # Create the figure for plotting
+            fig, ax1 = plt.subplots(figsize=(12, 8))
+
+            # Bar plot for the count of feedback labels
+            sns.barplot(x='Feedback Label', y='Count', data=negative_df, color='#4aa2e5', ax=ax1)
+            plt.xticks(rotation=45, ha='right')
+
+            # Create a secondary axis for the cumulative percentage
+            ax2 = ax1.twinx()
+            sns.lineplot(x='Feedback Label', y='Cumulative Percentage', data=negative_df, sort=False, color='red', marker='D', ax=ax2)
+
+            # Set labels for the axes
+            ax1.set_ylabel('Count')
+            ax2.set_ylabel('Cumulative Percentage (%)')
+
+            # Add a dashed line at 80% on the cumulative percentage axis
+            ax2.axhline(80, color='green', linestyle='dashed')
+
+            # Title and labels
+            ax1.set_xlabel('Feedback Category')
+            plt.title('Negative Feedback Pareto Chart')
+
+            # Adjust layout for better appearance
+            plt.tight_layout()
+
+            # Display the plot in Streamlit
+            st.pyplot(fig)
+
+            with st.container(height=400, border=True):
+                st.write("""**In-depth Analysis of Individual Feedback Coming Soon**
+
+                         """)
+
 
         st.toast("Use the **Date Slider** to define the review period.", icon=":material/linear_scale:")
 
