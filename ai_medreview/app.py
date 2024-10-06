@@ -1956,8 +1956,6 @@ The process typically follows these steps:
 6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
 """)
 
-
-
             with st.expander("**Evidence Based Intervention**", icon=":material/search_insights:"):
                 st.write("""## **1. Reception Staff Interaction**
 
