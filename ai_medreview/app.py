@@ -2609,7 +2609,7 @@ The process typically follows these steps:
         plt.tight_layout()
         st.pyplot(fig)
         st.markdown("---")
-        st.markdown(f"Showing **{filtered_data.shape[0]}** FFT Responses | Last 100 messages displayed.")
+        st.markdown(f"Showing 100/**{filtered_data.shape[0]}** FFT Responses.")
 
         sample = filtered_data.tail(100)
 
