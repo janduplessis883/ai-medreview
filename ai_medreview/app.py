@@ -1936,9 +1936,9 @@ else:
 
             with st.expander("What is Pareto Analysis?", icon=":material/search_insights:"):
                 st.write("""### Pareto Analysis
-Also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.
-
-**Why Use Pareto Analysis?**
+Also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.""")
+                st.audio('images/pareto.wav')
+                st.write("""**Why Use Pareto Analysis?**
 
 The purpose of Pareto analysis is to prioritize actions based on the potential impact they could have. By identifying and focusing on the critical issues that contribute the most to the problem, resources can be efficiently allocated for maximum effect. It’s commonly used in quality management, project management, and customer service improvement, among other fields.
 
@@ -1955,7 +1955,7 @@ The process typically follows these steps:
 •	A line plot that shows the cumulative percentage of the total effect.
 6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
 """)
-                st.audio('images/pareto.wav')
+
 
 
             with st.expander("**Evidence Based Intervention**", icon=":material/search_insights:"):
