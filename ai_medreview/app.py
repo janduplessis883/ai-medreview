@@ -2609,9 +2609,9 @@ The process typically follows these steps:
         plt.tight_layout()
         st.pyplot(fig)
         st.markdown("---")
-        st.markdown(f"Showing 200/**{filtered_data.shape[0]}** FFT Responses.")
+        st.markdown(f"Showing 150/**{filtered_data.shape[0]}** FFT Responses.")
 
-        sample = filtered_data.tail(200)
+        sample = filtered_data.tail(150)
 
         with st.container(height=500, border=True):
             with st.spinner(text="Loading Feedback..."):
