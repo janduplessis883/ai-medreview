@@ -1,5 +1,5 @@
 streamlit
-
+colorama
 matplotlib
 seaborn
 numpy
