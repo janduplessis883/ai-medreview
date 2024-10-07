@@ -480,7 +480,7 @@ def text_preprocessing(text):
 
 def send_alert_webhook(number):
     # URL of the webhook to which the data will be sent
-    webhook_url = "https://hook.eu1.make.com/ajlcdluav0xw6vnjgrvcghwmbedrr0u4"
+    webhook_url = "https://n8n-render-0yda.onrender.com/webhook/2d117d97-90cd-4c67-a7c3-b5da1d31a8f2"
     # Create a dictionary to hold the data
     data = {"number": number}
 
@@ -490,7 +490,7 @@ def send_alert_webhook(number):
     # Check if the request was successful
     if response.status_code == 200:
         logger.info(
-            f"Webhook sent to Pipedream with ** {number} ** new responses processed."
+            f"Webhook sent to n8n with ** {number} ** new responses processed."
         )
     else:
         logger.info(f"Failed to send data: {response.status_code}, {response.text}")
@@ -623,3 +623,4 @@ if __name__ == "__main__":
     else:
         print(f"{Fore.RED}[*] No New rows to add - terminated.")
         logger.error("❌ Make Data terminated - No now rows")
+        send_alert_webhook(0)
