@@ -572,6 +572,7 @@ if __name__ == "__main__":
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
+    send_alert_webhook(data.shape[0])
 
     if data.shape[0] != 0:
 
@@ -623,4 +624,3 @@ if __name__ == "__main__":
     else:
         print(f"{Fore.RED}[*] No New rows to add - terminated.")
         logger.error("❌ Make Data terminated - No now rows")
-        send_alert_webhook(0)
