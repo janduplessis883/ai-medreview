@@ -558,7 +558,6 @@ def get_person_names_with_transformers(text):
 
 
 if __name__ == "__main__":
-
     logger.info("▶️ AI Medreview FFT - MAKE DATA - Started")
 
     # Load new data from Google Sheet
