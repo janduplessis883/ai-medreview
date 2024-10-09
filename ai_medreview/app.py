@@ -1934,26 +1934,30 @@ else:
             # Display the plot in Streamlit
             st.pyplot(fig)
 
-            with st.expander("What is Pareto Analysis?", icon=":material/search_insights:"):
-                st.write("""### Pareto Analysis
-Also known as the 80/20 Rule or Pareto Principle, is a decision-making technique used to identify the most significant factors contributing to a particular outcome. It states that approximately 80% of the effects come from 20% of the causes. This concept helps focus on the few important causes that can lead to substantial improvements in a process or system.""")
-                st.audio('images/pareto.wav')
-                st.write("""**Why Use Pareto Analysis?**
+            with st.expander("How to Interpret the **Pareto Plot**", icon=":material/downloading:"):
 
-The purpose of Pareto analysis is to prioritize actions based on the potential impact they could have. By identifying and focusing on the critical issues that contribute the most to the problem, resources can be efficiently allocated for maximum effect. It’s commonly used in quality management, project management, and customer service improvement, among other fields.
+                st.write("""A **Pareto Analysis plot** is a useful tool for identifying the most significant factors that contribute to an overall problem or outcome. It is based on the **Pareto Principle**, often called the “80/20 rule,” which suggests that roughly 80% of the effects come from 20% of the causes. In the context of patient reviews, this plot highlights key areas that may need improvement in order to address the majority of negative feedback.
 
-**How Does Pareto Analysis Work?**
+### How to Interpret the Pareto Plot:
 
-The process typically follows these steps:
+1.	**Bar Chart** (Blue Bars) – Negative Feedback Count:
+    - Each bar represents a feedback category (e.g., “Waiting Time”, “Appointment Availability”, etc.).
+    - The height of the bar shows how frequently this particular issue was mentioned negatively. The taller the bar, the more common the complaint is.
+    - Categories are arranged in descending order of significance, with the most frequent complaints on the left.
+2.	**Line Chart** (Red Line) – Cumulative Percentage:
+    - The red line tracks the cumulative percentage of negative feedback as you move from left to right.
+    - It indicates how addressing the most frequent complaints (starting from the left) can significantly reduce the total number of negative reviews.
+    - The 80% threshold (green dashed line) is particularly important. Issues to the left of this line often represent the vital few—the critical areas that cause the most dissatisfaction.
+3.	**Focus on the Leftmost Bars**:
+    - The first few bars usually cover the bulk of complaints. For example, in this chart, addressing Waiting Time and Appointment Availability could potentially resolve a large proportion of negative feedback.
+    - The goal of a Pareto Analysis is to help prioritize improvements by focusing on these high-impact areas first, which is more efficient than spreading resources thinly across all categories.
+4.	**Cumulative Insights**:
+    - By fixing issues that make up 80% of the negative feedback (those left of the green dashed line), you can maximize patient satisfaction with minimal effort.
+    - The remaining feedback categories, while still important, may have less impact overall on improving the perception of the service.
 
-1.	Identify the Problem: Clearly define the issue you want to analyze, such as customer complaints, system defects, or productivity losses.
-2.	List the Causes: Identify and list the different causes that contribute to the problem. These could be based on data such as customer feedback, defect reports, or process observations.
-3.	Measure the Impact: Quantify the effect each cause has, such as the frequency of complaints or defects associated with each factor.
-4.	Sort by Importance: Arrange the causes in descending order, with the most significant cause (i.e., the one with the highest frequency) at the top.
-5.	Plot the Data: Use a Pareto Chart to visualize the data. A Pareto Chart consists of two elements:
-•	Bars that represent the frequency or magnitude of each cause.
-•	A line plot that shows the cumulative percentage of the total effect.
-6.	Analyze the Results: Identify the top contributors that account for around 80% of the issue. These are your priority areas for improvement.
+### Final Notes:
+
+This type of analysis can be customized per GP surgery based on patient reviews. The feedback categories will differ depending on each surgery’s specific circumstances. However, the general rule remains the same: focus on the most frequent and impactful issues first to efficiently improve overall patient experience.
 """)
 
             with st.expander("**Evidence Based Intervention**", icon=":material/search_insights:"):
