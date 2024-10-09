@@ -1886,7 +1886,7 @@ else:
             st.pyplot(plt)
 
         elif tab_selector == "Pareto Analysis":
-
+            st.html("<div class='status' style='background-color: #aa485b; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 12px; display: inline-block; text-align: center; box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);'><b>NEW Pareto Analysis</b></div>")
             neg = filtered_data[filtered_data['sentiment_free_text'] == 'negative']
             negative_df = neg['feedback_labels'].value_counts().reset_index()
             negative_df.columns = ['Feedback Label', 'Count']
