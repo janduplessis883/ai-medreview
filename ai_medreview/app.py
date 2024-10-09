@@ -101,6 +101,7 @@ else:
         return df
 
 
+
     data = load_data()
 
     def data_version(df):
@@ -151,6 +152,7 @@ else:
             "Word Cloud",
             "Dataframe",
             "Reports",
+            "Campaign Feedback",
             "**About**",
         ],
     )
