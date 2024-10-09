@@ -56,6 +56,9 @@ def load_google_sheet():
         "do_better",
         "pcn",
         "surgery",
+        "campaing_id",
+        "campaign_rating",
+        "campaign_freetext"
     ]
 
     data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
