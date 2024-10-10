@@ -100,8 +100,6 @@ else:
         df.sort_values(by='time')
         return df
 
-
-
     data = load_data()
 
     def data_version(df):
