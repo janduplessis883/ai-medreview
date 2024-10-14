@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-
+import numpy as np
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -3445,28 +3445,49 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown("# :material/campaign: Campaigns")
 
         campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
-        campaign_list = list(campaign_df['campaing_id'].unique())
         campaign_df = campaign_df.dropna(subset='campaing_id')
         campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
-        campaign_rating_mean = round(campaign_df['campaign_rating'].mean(), 2)
+        campaig_df_freetext = campaign_df.dropna(subset='campaign_freetext')
+        campaig_df_freetext = campaig_df_freetext.sort_values(by='campaign_rating', ascending=False)
+        campaign_rating_mean = round(campaign_df['campaign_rating'].mean(), 2) * 20
 
-        st.metric("Campaign Rating", value=campaign_rating_mean)
-        st.write(campaign_list)
-        try:
-            st.subheader("Campaign Word Cloud")
+        # Prepare list of campaigns
+        campaign_list = list(campaign_df['campaing_id'].unique())
+        # remove NaN from the list
+        campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
+        selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
+        if len(campaign_list) != 0:
+            st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
+            st.divider()
+            try:
+                st.subheader("Campaign Word Cloud")
 
-            text2 = " ".join(campaign_df["campaign_freetext"].dropna())
-            wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text2)
-            plt.imshow(wordcloud, interpolation="bilinear")
-            plt.axis("off")
-            st.pyplot(plt)
-        except:
+                text2 = " ".join(campaign_df["campaign_freetext"].dropna())
+                wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text2)
+                plt.imshow(wordcloud, interpolation="bilinear")
+                plt.axis("off")
+                st.pyplot(plt)
+
+                st.divider()
+                st.subheader("Campaign Free Text")
+                for _, row in campaig_df_freetext.iterrows():
+                    rating = row['campaign_rating']
+                    text = row['campaign_freetext']
+                    st.write(int(rating), text)
+            except:
+                ui.badges(
+                    badge_list=[
+                        ("No improvement suggestions available for this date range.", "outline")
+                    ],
+                    class_name="flex gap-2",
+                    key="badges113",
+                )
+
+        else:
             ui.badges(
                 badge_list=[
-                    ("No improvement suggestions available for this date range.", "outline")
+                    ("No campaign data captured for your practice.", "outline")
                 ],
                 class_name="flex gap-2",
-                key="badges113",
+                key="badges1134",
             )
-
-        st.write(campaign_df)
