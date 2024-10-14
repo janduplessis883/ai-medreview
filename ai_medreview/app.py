@@ -3477,7 +3477,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             except:
                 ui.badges(
                     badge_list=[
-                        ("No improvement suggestions available for this date range.", "outline")
+                        ("Cannot display word cloud, insufficient data.", "outline")
                     ],
                     class_name="flex gap-2",
                     key="badges113",
