@@ -150,7 +150,7 @@ else:
             "Word Cloud",
             "Dataframe",
             "Reports",
-            "Campaign Feedback",
+            "Campaigns",
             "**About**",
         ],
     )
@@ -3438,3 +3438,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     sentiment2 = row['sentiment_do_better']
                     st.write(do_better)
                     ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
+
+
+        # -- About ------------------------------------------------------------------------------------------------------- Campaings
+    elif page == "Campaigns":
+        st.markdown("# :material/psychology_alt: Campaigns")
