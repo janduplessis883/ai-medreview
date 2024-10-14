@@ -567,7 +567,6 @@ if __name__ == "__main__":
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
     logger.info("Google Sheet data loaded")
-    print(len(raw_data.columns))
 
     # Load local data.csv to dataframe
     processed_data = load_local_data()
