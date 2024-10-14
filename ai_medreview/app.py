@@ -3442,4 +3442,31 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
     elif page == "Campaigns":
-        st.markdown("# :material/psychology_alt: Campaigns")
+        st.markdown("# :material/campaign: Campaigns")
+
+        campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
+        campaign_list = list(campaign_df['campaing_id'].unique())
+        campaign_df = campaign_df.dropna(subset='campaing_id')
+        campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
+        campaign_rating_mean = round(campaign_df['campaign_rating'].mean(), 2)
+
+        st.metric("Campaign Rating", value=campaign_rating_mean)
+        st.write(campaign_list)
+        try:
+            st.subheader("Campaign Word Cloud")
+
+            text2 = " ".join(campaign_df["campaign_freetext"].dropna())
+            wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text2)
+            plt.imshow(wordcloud, interpolation="bilinear")
+            plt.axis("off")
+            st.pyplot(plt)
+        except:
+            ui.badges(
+                badge_list=[
+                    ("No improvement suggestions available for this date range.", "outline")
+                ],
+                class_name="flex gap-2",
+                key="badges113",
+            )
+
+        st.write(campaign_df)
