@@ -3449,7 +3449,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
         campaig_df_freetext = campaign_df.dropna(subset='campaign_freetext')
         campaig_df_freetext = campaig_df_freetext.sort_values(by='campaign_rating', ascending=False)
-        campaign_rating_mean = round(campaign_df['campaign_rating'].mean(), 2) * 20
+        campaign_rating_mean = round(campaign_df['campaign_rating'].mean() * 20, 2)
 
         # Prepare list of campaigns
         campaign_list = list(campaign_df['campaing_id'].unique())
