@@ -57,8 +57,9 @@ def load_google_sheet():
         "pcn",
         "surgery",
         "campaing_id",
+        "logic",
         "campaign_rating",
-        "campaign_freetext"
+        "campaign_freetext",
     ]
 
     data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
@@ -566,6 +567,7 @@ if __name__ == "__main__":
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
     logger.info("Google Sheet data loaded")
+    print(len(raw_data.columns))
 
     # Load local data.csv to dataframe
     processed_data = load_local_data()
