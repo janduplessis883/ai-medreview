@@ -3415,10 +3415,16 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         free_text_per = filtered_data.dropna(subset='free_text_PER')
         do_better_per = filtered_data.dropna(subset='do_better_PER')
 
+        free_text_list = free_text_per['free_text_PER'].unique().tolist()
+        selected_names = st.multiselect("Select People", options=free_text_list)
+
+        filtered_free_text_per = free_text_per[free_text_per['free_text_PER'].isin(selected_names)]
+        filtered_do_better_per = do_better_per[do_better_per['do_better_PER'].isin(selected_names)]
+
         with st.container(height=550, border=True):
 
-            st.markdown("### :blue-background[Free-Text Feedback - 🙎🏻‍♂️ People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
-            for index, row in free_text_per.iterrows():
+            st.markdown("### :blue-background[Free-Text Feedback - People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            for index, row in filtered_free_text_per.iterrows():
 
                 with st.container(border=True):
                     date = row['time']
@@ -3428,8 +3434,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     st.write(free_text)
                     ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
             st.container(height=50, border=False)
-            st.markdown("### :blue-background[Improvement Suggestions - 🤦🏽‍♀️ People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
-            for index, row in do_better_per.iterrows():
+            st.markdown("### :blue-background[Improvement Suggestions - People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
+            for index, row in filtered_do_better_per.iterrows():
 
                 with st.container(border=True):
                     date = row['time']
@@ -3438,6 +3444,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     sentiment2 = row['sentiment_do_better']
                     st.write(do_better)
                     ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
+
+        # Create a download button for selected entries outside of the container
+        selected_entries = "\n\n".join([f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}" for _, row in filtered_free_text_per.iterrows()])
+        selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
+
+        st.download_button(label="Download Selected Entries", data=selected_entries, file_name="selected_entries.txt", mime="text/plain")
 
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
