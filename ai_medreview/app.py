@@ -3471,6 +3471,25 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         if len(campaign_list) != 0:
             st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
             st.divider()
+
+            # Plot seaborn histogram of campaign ratings
+            st.subheader("Campaign Rating Distribution")
+            try:
+                fig, ax = plt.subplots(figsize=(12, 4))
+                sns.histplot(campaign_df['campaign_rating'], kde=True, ax=ax)
+                ax.set_title('Distribution of Campaign Ratings')
+                ax.spines["top"].set_visible(False)
+                ax.spines["right"].set_visible(False)
+                ax.spines["left"].set_visible(False)
+                ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+                plt.tight_layout()
+                ax.set_xlabel('Campaign Rating')
+                ax.set_ylabel('Frequency')
+                st.pyplot(fig)
+            except:
+                st.warning("Could not display histogram. Please ensure seaborn is installed.")
+
+            st.divider()
             try:
                 st.subheader("Campaign Word Cloud")
 
