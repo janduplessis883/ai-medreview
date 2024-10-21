@@ -3449,7 +3449,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         selected_entries = "\n\n".join([f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}" for _, row in filtered_free_text_per.iterrows()])
         selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
 
-        st.download_button(label="Download Selected Entries", data=selected_entries, file_name="selected_entries.txt", mime="text/plain")
+        st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain")
 
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
@@ -3475,8 +3475,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             # Plot seaborn histogram of campaign ratings
             st.subheader("Campaign Rating Distribution")
             try:
-                fig, ax = plt.subplots(figsize=(12, 4))
-                sns.histplot(campaign_df['campaign_rating'], kde=True, ax=ax)
+                fig, ax = plt.subplots(figsize=(12, 3))
+                sns.histplot(campaign_df['campaign_rating'], kde=True, bins=5, ax=ax, color="#f2a947")
                 ax.set_title('Distribution of Campaign Ratings')
                 ax.spines["top"].set_visible(False)
                 ax.spines["right"].set_visible(False)
