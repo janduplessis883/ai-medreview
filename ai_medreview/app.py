@@ -3470,10 +3470,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
         if len(campaign_list) != 0:
             st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
-            st.divider()
+
 
             # Plot seaborn histogram of campaign ratings
-            st.subheader("Campaign Rating Distribution")
             try:
                 fig, ax = plt.subplots(figsize=(12, 3))
                 sns.histplot(campaign_df['campaign_rating'], kde=True, bins=5, ax=ax, color="#f2a947")
