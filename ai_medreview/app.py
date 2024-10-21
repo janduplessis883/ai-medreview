@@ -3457,9 +3457,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown("# :material/campaign: Campaigns")
 
         campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
-        campaign_df = campaign_df.dropna(subset='campaing_id')
+        campaign_df = campaign_df.dropna(subset=['campaing_id'])
         campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
-        campaig_df_freetext = campaign_df.dropna(subset='campaign_freetext')
+        campaig_df_freetext = campaign_df.dropna(subset=['campaign_freetext'])
         campaig_df_freetext = campaig_df_freetext.sort_values(by='campaign_rating', ascending=False)
         campaign_rating_mean = round(campaign_df['campaign_rating'].mean() * 20, 2)
 
@@ -3467,10 +3467,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         campaign_list = list(campaign_df['campaing_id'].unique())
         # remove NaN from the list
         campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
-        selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
         if len(campaign_list) != 0:
+            selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
             st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
-
 
             # Plot seaborn histogram of campaign ratings
             try:
@@ -3486,7 +3485,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 ax.set_ylabel('Frequency')
                 st.pyplot(fig)
             except:
-                st.warning("Could not display histogram. Please ensure seaborn is installed.")
+                st.warning("Could not display histogram.")
 
             st.divider()
             try:
@@ -3494,9 +3493,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                 text2 = " ".join(campaign_df["campaign_freetext"].dropna())
                 wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text2)
-                plt.imshow(wordcloud, interpolation="bilinear")
-                plt.axis("off")
-                st.pyplot(plt)
+                fig2, ax2 = plt.subplots()
+                ax2.imshow(wordcloud, interpolation="bilinear")
+                ax2.axis("off")
+                st.pyplot(fig2)
 
                 st.divider()
                 st.subheader("Campaign Free Text")
