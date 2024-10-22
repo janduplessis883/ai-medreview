@@ -34,3 +34,4 @@ plotly
 reportlab
 fpdf
 tqdm
+groq

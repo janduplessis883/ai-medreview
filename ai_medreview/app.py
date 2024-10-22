@@ -13,6 +13,7 @@ import streamlit_shadcn_ui as ui
 from matplotlib.patches import Patch
 from openai import OpenAI
 from wordcloud import WordCloud
+from groq import Groq
 
 # Initialize OpenAI API
 client = OpenAI()
@@ -20,6 +21,26 @@ client = OpenAI()
 # Loading my OWN FUNCTIONS
 from utils import *
 from reports import *
+
+# Initialize the Groq client
+client = Groq(
+    api_key=st.secrets["GROQ_API_KEY"]
+)
+
+# Simple function to get a response from Groq
+@st.cache_resource
+def ask_groq(prompt: str, model: str = "llama3-8b-8192"):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model=model,
+    )
+
+    return chat_completion.choices[0].message.content
 
 
 st.set_page_config(page_title="AI MedReview v2")
@@ -3450,6 +3471,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
 
         st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain")
+        summarize = st.button("Summarize People Feedback", icon=":material/robot_2:")
+        if summarize == True:
+            st.markdown(ask_groq(f"Summarize this feedback recieved for memebers of staff, listing their names: {selected_entries}"))
 
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
@@ -3468,6 +3492,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         # remove NaN from the list
         campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
         if len(campaign_list) != 0:
+
             selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
             st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
 
@@ -3512,6 +3537,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     class_name="flex gap-2",
                     key="badges113",
                 )
+            # Aggregate all campaign free text for LLM summarization
+            aggregated_freetext = " ".join(campaign_df['campaign_freetext'].dropna())
+            st.divider()
+            with st.popover("Summarize campaign feedback", icon=":material/robot_2:"):
+                summary = ask_groq(f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}")
+                st.markdown(summary)
 
         else:
             ui.badges(
