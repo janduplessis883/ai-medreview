@@ -2200,6 +2200,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     filtered_classes["feedback_labels"] == rating
                 ]
                 st.subheader(f"{rating.capitalize()} ({str(specific_class.shape[0])})")
+                selected_text = ''
                 for index, row in specific_class.iterrows():
                     text = row["free_text"]
                     sentiment = row["sentiment_free_text"]
@@ -2212,6 +2213,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{str(text)}] ")
+
+                        selected_text = selected_text + ' ' + text
+
+                _ = st.popover(f"Summarize **{rating}** feedback", icon=":material/robot_2:")
+                with _:
+                    _ = st.button("Summarize with Groq LLM", key=f"{rating}")
+                    if _ == True:
+                        summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
+                        st.markdown(f"### {rating}:\n {summary}")
 
     # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
     elif page == "Improvement Suggestions":
@@ -2483,6 +2493,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     filtered_classes["improvement_labels"] == rating
                 ]
                 st.subheader(f"{str(rating).capitalize()} ({str(specific_class.shape[0])})")
+                selected_text = ''
                 for index, row in specific_class.iterrows():
                     text = row["do_better"]
                     text = text.replace("[PERSON]", "PERSON")
@@ -2496,6 +2507,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{str(text)}] ")
+
+                        selected_text = selected_text + ' ' + text
+
+                _ = st.popover(f"Summarize **{rating}** improvement suggestions", icon=":material/robot_2:")
+                with _:
+                    _ = st.button("Summarize with Groq LLM", key=f"{rating}")
+                    if _ == True:
+                        summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
+                        st.markdown(f"### {rating}:\n {summary}")
 
 
     # -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
@@ -3471,9 +3491,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
 
         st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain")
-        summarize = st.button("Summarize People Feedback", icon=":material/robot_2:")
-        if summarize == True:
-            st.markdown(ask_groq(f"Summarize this feedback recieved for memebers of staff, listing their names: {selected_entries}"))
+
+        with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
+            llm_button = st.button("Summarize with LLM")
+            if llm_button == True:
+                summary = ask_groq(f"Summarize the following personal feedback, PERSON is a NER placeholder for a person's name, individuals are listed below the feedback in the order they appear in the feedback text, summarize the following feedback highlighting trends and list the name of the person the feedback relates to (all the people mentioned are members of staff): {selected_entries}")
+                st.markdown(summary)
 
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
@@ -3541,8 +3564,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             aggregated_freetext = " ".join(campaign_df['campaign_freetext'].dropna())
             st.divider()
             with st.popover("Summarize campaign feedback", icon=":material/robot_2:"):
-                summary = ask_groq(f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}")
-                st.markdown(summary)
+                llm_button = st.button("Summarize with LLM")
+                if llm_button == True:
+                    summary = ask_groq(f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}")
+                    st.markdown(summary)
 
         else:
             ui.badges(
