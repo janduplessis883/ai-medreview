@@ -92,7 +92,6 @@ if not st.session_state["authenticated"]:
     alt="Powered by Groq for fast inference." width=130
   />
 </a>
-
 """)
         with c3:
             st.write()
