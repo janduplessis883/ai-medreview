@@ -2224,9 +2224,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                         selected_text = selected_text + ' ' + text
 
-                _ = st.popover(f"Summarize **{rating}** feedback", icon=":material/robot_2:")
+                _ = st.popover(f"Summarize **{rating}** Feedback", icon=":material/robot_2:")
                 with _:
-                    _ = st.button("Summarize with Groq LLM", key=f"{rating}")
+                    _ = st.button("Summarize with Groq LLM", key=f"{rating}", icon=":material/robot_2:")
                     if _ == True:
                         summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
                         st.markdown(f"### {rating}:\n {summary}")
@@ -2518,9 +2518,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                         selected_text = selected_text + ' ' + text
 
-                _ = st.popover(f"Summarize **{rating}** improvement suggestions", icon=":material/robot_2:")
+                _ = st.popover(f"Summarize **{rating}** Improvement Suggestions", icon=":material/robot_2:")
                 with _:
-                    _ = st.button("Summarize with Groq LLM", key=f"{rating}")
+                    _ = st.button("Summarize with Groq LLM", key=f"{rating}", icon=":material/robot_2:")
                     if _ == True:
                         summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
                         st.markdown(f"### {rating}:\n {summary}")
@@ -3462,7 +3462,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     elif page == "NER People":
         st.markdown("# :material/psychology_alt: NER - People")
         st.markdown("**Named Entity Recognistion** - People")
-        st.toast("**NER People** De-anonymized reviews enabled.", icon=":material/lock:")
+        st.toast("**NER People** De-anonymized reviews. **New** Summarize with Groq.", icon=":material/lock:")
         # Set the correct PIN
 
         # Free Test
@@ -3475,41 +3475,53 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         filtered_free_text_per = free_text_per[free_text_per['free_text_PER'].isin(selected_names)]
         filtered_do_better_per = do_better_per[do_better_per['do_better_PER'].isin(selected_names)]
 
-        with st.container(height=550, border=True):
+        if len(selected_names) > 0:
 
-            st.markdown("### :blue-background[Free-Text Feedback - People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
-            for index, row in filtered_free_text_per.iterrows():
+            with st.container(height=550, border=True):
 
-                with st.container(border=True):
-                    date = row['time']
-                    free_text = row['free_text']
-                    names = row['free_text_PER']
-                    sentiment = row['sentiment_free_text']
-                    st.write(free_text)
-                    ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
-            st.container(height=50, border=False)
-            st.markdown("### :blue-background[Improvement Suggestions - People]", help="`NaN` values represent empty fields. During pre-processing, all comments containing fewer than 6 words are removed to ensure a more meaningful analysis.")
-            for index, row in filtered_do_better_per.iterrows():
+                st.html("<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Free-Text Feedback</b> - NER People</div>")
+                for index, row in filtered_free_text_per.iterrows():
 
-                with st.container(border=True):
-                    date = row['time']
-                    do_better = row['do_better']
-                    names2 = row['do_better_PER']
-                    sentiment2 = row['sentiment_do_better']
-                    st.write(do_better)
-                    ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
+                    with st.container(border=True):
+                        date = row['time']
+                        free_text = row['free_text']
+                        names = row['free_text_PER']
+                        sentiment = row['sentiment_free_text']
+                        st.write(free_text)
+                        ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
 
-        # Create a download button for selected entries outside of the container
-        selected_entries = "\n\n".join([f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}" for _, row in filtered_free_text_per.iterrows()])
-        selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
+                st.divider()
+                st.html("<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Improvement Suggestions</b> - NER People</div>")
+                for index, row in filtered_do_better_per.iterrows():
 
-        st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain")
+                    with st.container(border=True):
+                        date = row['time']
+                        do_better = row['do_better']
+                        names2 = row['do_better_PER']
+                        sentiment2 = row['sentiment_do_better']
+                        st.write(do_better)
+                        ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
+                st.divider()
+            # Create a download button for selected entries outside of the container
+            selected_entries = "\n\n".join([f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}" for _, row in filtered_free_text_per.iterrows()])
+            selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
 
-        with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
-            llm_button = st.button("Summarize with LLM")
-            if llm_button == True:
-                summary = ask_groq(f"Summarize the following personal feedback, PERSON is a NER placeholder for a person's name, individuals are listed below the feedback in the order they appear in the feedback text, summarize the following feedback highlighting trends and list the name of the person the feedback relates to (all the people mentioned are members of staff): {selected_entries}")
-                st.markdown(summary)
+            st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain", icon=":material/download:")
+
+            with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
+                llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
+                if llm_button == True:
+                    summary = ask_groq(f"Summarize the following personal feedback, PERSON is a NER placeholder for a person's name, individuals are listed below the feedback in the order they appear in the feedback text, summarize the following feedback highlighting trends and list the name of the person the feedback relates to (all the people mentioned are members of staff): {selected_entries}")
+                    st.markdown(summary)
+
+        else:
+            ui.badges(
+                    badge_list=[
+                        ("There’s nothing to display at the moment. Select names from the dropdown list.", "outline")
+                    ],
+                    class_name="flex gap-2",
+                    key="badges113empty",
+                )
 
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
@@ -3576,8 +3588,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             # Aggregate all campaign free text for LLM summarization
             aggregated_freetext = " ".join(campaign_df['campaign_freetext'].dropna())
             st.divider()
-            with st.popover("Summarize campaign feedback", icon=":material/robot_2:"):
-                llm_button = st.button("Summarize with LLM")
+            with st.popover(f"Summarize **{selected_campaign}** feedback", icon=":material/robot_2:"):
+                llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
                     summary = ask_groq(f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}")
                     st.markdown(summary)
