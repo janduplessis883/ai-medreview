@@ -396,8 +396,6 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(39, 69, 98)
     pdf.multi_cell(0, 4, ask_groq(f"Summarize this GP Surgery improvement suggestions, identifying trends: {all_improvement}, your output should be plain text only, don't use markdown in your output.").replace("*", "").replace("#", ""))
 
-
-
     pdf.add_page()
 
     pdf.set_font("Arial", "B", 14)
