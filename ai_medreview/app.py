@@ -29,7 +29,7 @@ client = Groq(
 
 # Simple function to get a response from Groq
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "llama3-8b-8192"):
+def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
