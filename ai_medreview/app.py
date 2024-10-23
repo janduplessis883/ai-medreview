@@ -69,19 +69,19 @@ if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
 if not st.session_state["authenticated"]:
-    c1, c2, c3 = st.columns([1,3,1])
+    c1, c2, c3 = st.columns([1,5,1])
 
     with c2:
         # st.image("images/private.png")
         st.image("images/private.png")
         st.markdown(
-            f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2"
+            f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2.2.1"
         )
         check_passcode()
         with st.container(height=80, border=False):
             st.write()
 
-        c1, c2, c3 = st.columns([1,2,1])
+        c1, c2, c3 = st.columns([1,1,1])
         with c1:
             st.write()
         with c2:
@@ -3302,6 +3302,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     # -- Reports --------------------------------------------------------------------------------------------------- Reports
     elif page == "Reports":
         st.markdown("# :material/sim_card_download: Reports")
+        st.toast("**Reports Updated** now included insights generated with Groq LLM.", icon=":material/robot_2:")
         st.write("")
         ui.badges(
             badge_list=[("NEW", "destructive"), ("beta v1.0.3", "outline")],
@@ -3407,15 +3408,19 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown("This comprehensive suite of advanced analytics empowers healthcare providers like yourself to move beyond mere data presentation and unlock a clearer, more actionable understanding of patient experiences. Armed with these insights, you can drive continuous improvements, elevate service quality, and enhance patient outcomes.")
         st.markdown("Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare.")
 
+        st.markdown("## Change Log")
+        with st.container(height=400, border=True):
+            st.markdown("### version 2.2.1")
+            st.markdown("**GROQ LLM Summaries added for All monthly Feedback.** Integrated GROQ LLM with the `llama-3.1-8b-instant` model for generating summaries in all monthly reports. The AI-powered summaries now provide insights into key trends and suggest areas for improvement.")
+            st.markdown("""**PARETO ANALYSIS Plots**  In the Feedback Classification section of app you will see a new tab **Pareto Analysis**. A Pareto plot is created here from feedback classification information. There is an overview of how to interoperate the plot and some suggestions for evidence backed interventions.""")
+            st.markdown("### version 2.2.0")
+            st.markdown("**GROQ LLM Summaries / Insights** introduced across the app. You can now generate insights from feedback in the following pages: NER People, Campaigns, Feedback Classification and Improvmeent Suggestions.")
+
         st.markdown("![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.")
         st.markdown("![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)")
 
         st.write("")
         st.write("")
-        st.image(
-            image="images/tsneplot2.png",
-            caption="3D t-sne Plot - 'Reviews' in vector space",
-        )
         st.write("")
 
         debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")

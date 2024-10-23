@@ -18,5 +18,8 @@ Explore the AI MedReview dashboard today and experience the transformative power
 
 # ![Streamlit](https://img.icons8.com/ios/50/streamlit.png) [View the Streamlit App](https://ai-medreview.streamlit.app)
 
+## Get it for your PCN!
+Looking to enhance patient feedback in your PCN or ICB with cutting-edge AI? 🚀 Our Friends & Family Test AI Tool is here to help! Get in touch to see how it can transform your practice: jan.duplessis@nhs.net. Let’s take healthcare insights to the next level! 💡
+#HealthcareInnovation #AI #primarycare
 
 ![Image](images/today.png)
