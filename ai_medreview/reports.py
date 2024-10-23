@@ -9,6 +9,27 @@ import requests
 import seaborn as sns
 from fpdf import FPDF
 from wordcloud import WordCloud
+import streamlit as st
+from groq import Groq
+
+# Initialize the Groq client
+client = Groq(
+    api_key=st.secrets["GROQ_API_KEY"]
+)
+
+@st.cache_resource
+def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model=model,
+    )
+
+    return chat_completion.choices[0].message.content
 
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):
@@ -338,8 +359,18 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(35, 37, 41)
 
     text_list = col_to_list(df, 'free_text')
+    all_feedback = ''
     for index, text in enumerate(text_list):
         pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
+        all_feedback = all_feedback + f"{index} - {text} "
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(39, 69, 98)
+    pdf.cell(0, 20, "Feedback Insights by Groq LLM", 0, 1)
+
+    pdf.set_font("Arial", "", 10)
+    pdf.set_text_color(39, 69, 98)
+    pdf.multi_cell(0, 4, ask_groq(f"Summarize this GP Surgery feedback, identifying positive and negative trends: {all_feedback}, your output should be plain text only, don't use markdown in your output.").replace("*", "").replace("#", ""))
 
 
     pdf.add_page()
@@ -352,8 +383,19 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
     pdf.set_text_color(35, 37, 41)
 
     text_list2 = col_to_list(df, 'do_better')
+    all_improvement = ''
     for index, text in enumerate(text_list2):
         pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
+        all_improvement = all_improvement + f"{index} - {text} "
+
+    pdf.set_font("Arial", "B", 14)
+    pdf.set_text_color(39, 69, 98)
+    pdf.cell(0, 20, "Improvement Suggestion Insights by Groq LLM", 0, 1)
+
+    pdf.set_font("Arial", "", 10)
+    pdf.set_text_color(39, 69, 98)
+    pdf.multi_cell(0, 4, ask_groq(f"Summarize this GP Surgery improvement suggestions, identifying trends: {all_improvement}, your output should be plain text only, don't use markdown in your output.").replace("*", "").replace("#", ""))
+
 
 
     pdf.add_page()
