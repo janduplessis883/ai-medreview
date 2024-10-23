@@ -78,7 +78,7 @@ if not st.session_state["authenticated"]:
             f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2"
         )
         check_passcode()
-        with st.container(height=150, border=False):
+        with st.container(height=80, border=False):
             st.write()
 
         c1, c2, c3 = st.columns([1,2,1])
@@ -86,6 +86,14 @@ if not st.session_state["authenticated"]:
             st.write()
         with c2:
             st.html("""<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">""")
+            st.html("""<a href="https://groq.com" target="_blank" rel="noopener noreferrer"><BR>
+  <img
+    src="https://groq.com/wp-content/uploads/2024/03/PBG-mark1-color.svg"
+    alt="Powered by Groq for fast inference." width=130
+  />
+</a>
+
+""")
         with c3:
             st.write()
 
