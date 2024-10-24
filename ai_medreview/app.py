@@ -3412,7 +3412,13 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         with st.container(height=400, border=True):
             st.markdown("### version 2.2.1")
             st.markdown("**GROQ LLM Summaries added for All monthly Feedback.** Integrated GROQ LLM with the `llama-3.1-8b-instant` model for generating summaries in all monthly reports. The AI-powered summaries now provide insights into key trends and suggest areas for improvement.")
-            st.markdown("""**PARETO ANALYSIS Plots**  In the Feedback Classification section of app you will see a new tab **Pareto Analysis**. A Pareto plot is created here from feedback classification information. There is an overview of how to interoperate the plot and some suggestions for evidence backed interventions.""")
+            st.markdown("""**PARETO ANALYSIS Plots**  In the Feedback Classification section of app you will see a new tab **Pareto Analysis**. A Pareto plot is created here from feedback classification information. There is an overview of how to interoperate the plot and some suggestions for evidence backed interventions.
+
+**Improvments made to**
+- Campaigns
+- NER People
+- Reports
+- About""")
             st.markdown("### version 2.2.0")
             st.markdown("**GROQ LLM Summaries / Insights** introduced across the app. You can now generate insights from feedback in the following pages: NER People, Campaigns, Feedback Classification and Improvmeent Suggestions.")
 
@@ -3533,7 +3539,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
         campaig_df_freetext = campaign_df.dropna(subset=['campaign_freetext'])
         campaig_df_freetext = campaig_df_freetext.sort_values(by='campaign_rating', ascending=False)
-        campaign_rating_mean = round(campaign_df['campaign_rating'].mean() * 20, 2)
+        campaign_rating_mean = str(round(campaign_df['campaign_rating'].mean() * 20, 1))
+
+        pcn_campaign_df = pcn_data[['campaing_id', 'campaign_rating']]
+        pcn_campaign_df = pcn_campaign_df.dropna(subset=['campaing_id'])
+        pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaign_rating'] != 0]
+        pcn_campaign_rating_mean = str(round(pcn_campaign_df['campaign_rating'].mean() * 20, 1))
 
         # Prepare list of campaigns
         campaign_list = list(campaign_df['campaing_id'].unique())
@@ -3545,7 +3556,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             st.markdown(f"# {selected_campaign}")
 
 
-            st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
+            st.metric(f"Campaign Satisfaction: {selected_surgery}", value=campaign_rating_mean + "%", delta=f"{pcn_campaign_rating_mean}% - {selected_pcn}", delta_color="off")
 
             # Plot seaborn histogram of campaign ratings
             try:
