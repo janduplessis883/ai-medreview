@@ -3560,7 +3560,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             except:
                 st.warning("Could not display histogram.")
 
-            st.divider()
             try:
                 st.subheader("Campaign Word Cloud")
 
@@ -3573,10 +3572,11 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
                 st.divider()
                 st.subheader("Campaign Free Text")
-                for _, row in campaig_df_freetext.iterrows():
-                    rating = row['campaign_rating']
-                    text = row['campaign_freetext']
-                    st.write(int(rating), text)
+                with st.container(height=400, border=True):
+                    for _, row in campaig_df_freetext.iterrows():
+                        rating = row['campaign_rating']
+                        text = row['campaign_freetext']
+                        st.write(int(rating), text)
             except:
                 ui.badges(
                     badge_list=[
@@ -3587,7 +3587,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 )
             # Aggregate all campaign free text for LLM summarization
             aggregated_freetext = " ".join(campaign_df['campaign_freetext'].dropna())
-            st.divider()
+
             with st.popover(f"Summarize **{selected_campaign}** feedback", icon=":material/robot_2:"):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
