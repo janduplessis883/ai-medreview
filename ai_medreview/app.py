@@ -3567,7 +3567,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 st.subheader("Campaign Word Cloud")
 
                 text2 = " ".join(campaign_df["campaign_freetext"].dropna())
-                wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text2)
+                wordcloud = WordCloud(background_color="white", colormap="Oranges").generate(text2)
                 fig2, ax2 = plt.subplots()
                 ax2.imshow(wordcloud, interpolation="bilinear")
                 ax2.axis("off")
