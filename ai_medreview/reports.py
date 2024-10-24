@@ -364,11 +364,12 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
         pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
         all_feedback = all_feedback + f"{index} - {text} "
 
+    pdf.ln(8)
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(39, 69, 98)
-    pdf.cell(0, 20, "Feedback Insights by Groq LLM", 0, 1)
+    pdf.cell(0, 10, "Feedback Insights by Groq LLM", 0, 1)
 
-    pdf.set_font("Arial", "", 10)
+    pdf.set_font("Arial", "", 9)
     pdf.set_text_color(39, 69, 98)
     pdf.multi_cell(0, 4, ask_groq(f"Summarize this GP Surgery feedback, identifying positive and negative trends: {all_feedback}, your output should be plain text only, don't use markdown in your output.").replace("*", "").replace("#", ""))
 
@@ -388,11 +389,12 @@ def simple_pdf(df, pcn_df, selected_month, selected_year, selected_surgery, sele
         pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
         all_improvement = all_improvement + f"{index} - {text} "
 
+    pdf.ln(8)
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(39, 69, 98)
-    pdf.cell(0, 20, "Improvement Suggestion Insights by Groq LLM", 0, 1)
+    pdf.cell(0, 10, "Improvement Suggestions Insights by Groq LLM", 0, 1)
 
-    pdf.set_font("Arial", "", 10)
+    pdf.set_font("Arial", "", 9)
     pdf.set_text_color(39, 69, 98)
     pdf.multi_cell(0, 4, ask_groq(f"Summarize this GP Surgery improvement suggestions, identifying trends: {all_improvement}, your output should be plain text only, don't use markdown in your output.").replace("*", "").replace("#", ""))
 

@@ -14,7 +14,7 @@ from matplotlib.patches import Patch
 from openai import OpenAI
 from wordcloud import WordCloud
 from groq import Groq
-from streamlit_timeline import timeline
+
 
 # Initialize OpenAI API
 client = OpenAI()

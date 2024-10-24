@@ -35,4 +35,3 @@ reportlab
 fpdf
 tqdm
 groq
-streamlit-timeline
