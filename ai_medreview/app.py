@@ -3551,6 +3551,129 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         campaign_list = list(campaign_df['campaing_id'].unique())
         # remove NaN from the list
         campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
+
+        with st.container(height=300, border=False):
+            st.html("""<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8f8f8;
+                padding: 20px;
+            }
+            .timeline {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .day {
+                color: #e11d48;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            .event {
+                border-left: 3px solid #eab308;
+                padding-left: 20px;
+                margin-bottom: 20px;
+                position: relative;
+            }
+            .event:before {
+                content: '';
+                width: 10px;
+                height: 10px;
+                background-color: #eab308;
+                border-radius: 50%;
+                position: absolute;
+                left: -7px;
+                top: 5px;
+            }
+            .time {
+                font-size: 0.9em;
+                color: #9ca3af;
+            }
+            .id {
+                font-size: 0.9em;
+                color: #364153;
+            }
+            .time_placeholder {
+                font-size: 0.9em;
+                color: #d1d5db;;
+            }
+            .title {
+                font-size: 1.1em;
+                color: #334155;
+                font-weight: bold;
+            }
+            .placeholder {
+            font-size: 1.1em;
+            color: #d1d5db;
+            font-weight: bold;
+        }
+        </style>
+        <title>Timeline Example</title>
+    </head>
+    <body>
+
+    <div class="timeline">
+        <div class="day">1 September 2024</div>
+        <div class="event">
+        <div class="title">Influenza Campaign 24/25</div>
+        <div class="id">ID: flu_campaign_24</div>
+        <div class="time">Influenza - GP Surgeries</div>
+        <div class="time">RSV - GP Surgeries</div>
+        <div class="time">Covid-19 & Housbound Influenza - GP Federation</div>
+        <div class="time_placeholder">.</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 December 2024</div>
+        <div class="event">
+        <div class="title">NHS App Survey 24</div>
+        <div class="id">ID: nhs_app_24</div>
+        <div class="time">Category of poor preformance during GP Patient Survey 23/24</div>
+        <div class="time">Appointment booking & Repeat Prescribing</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 February 2025</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 April 2025</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 June 2025</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 August 2025</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 September 2025</div>
+        <div class="event">
+        <div class="placeholder">Influenza Campaign 25/26</div>
+        <div class="time_placeholder">Influenza - GP Surgeries</div>
+        <div class="time_placeholder">RSV - GP Surgeries</div>
+        <div class="time_placeholder">Covid-19 & Housbound Influenza - GP Federation</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+    </body>
+    </html>
+                    """)
+        st.container(height=8, border=False)
         if len(campaign_list) != 0:
 
             selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
