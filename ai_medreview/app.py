@@ -3542,6 +3542,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         if len(campaign_list) != 0:
 
             selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
+            st.markdown(f"# {selected_campaign}")
+
+
             st.metric("Campaign Satisfaction Rating", value=str(campaign_rating_mean) + "%")
 
             # Plot seaborn histogram of campaign ratings
