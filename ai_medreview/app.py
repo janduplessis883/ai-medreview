@@ -3564,7 +3564,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 st.warning("Could not display histogram.")
 
             try:
-                st.subheader("Campaign Word Cloud")
+                st.markdown("**Campaign Word Cloud**")
 
                 text2 = " ".join(campaign_df["campaign_freetext"].dropna())
                 wordcloud = WordCloud(background_color="white", colormap="Oranges").generate(text2)
