@@ -3597,7 +3597,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         else:
             ui.badges(
                 badge_list=[
-                    ("No campaign data captured for your practice.", "outline")
+                    ("No campaign data captured for this practice.", "outline")
                 ],
                 class_name="flex gap-2",
                 key="badges1134",
