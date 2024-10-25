@@ -113,7 +113,7 @@ else:
     # <div class="gradient-text">AI MedReview v2</div>
     # """
     # st.sidebar.markdown(html, unsafe_allow_html=True)
-    # st.sidebar.image("images/transparent2.png")
+    st.sidebar.image("images/transparent2.png")
 
     # Define a list of PCNs
     pcn_names = ["Brompton-Health-PCN", "Demo-PCN"]
