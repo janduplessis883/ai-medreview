@@ -2637,7 +2637,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown(
             "# :material/view_timeline: Feedback Timeline"
         )
-
+        st.caption("The Latest Patient Reviews :  Displays the latest 150 patient reviews, with a focus on providing context and relevance to our services.")
         daily_count = filtered_data.resample("D", on="time").size()
         daily_count_df = daily_count.reset_index()
         daily_count_df.columns = ["Date", "Daily Count"]
