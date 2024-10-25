@@ -99,21 +99,21 @@ if not st.session_state["authenticated"]:
 
 else:
     # Styling with HTML
-    html = """
-    <style>
-    .gradient-text {
-        background: linear-gradient(45deg, #284d74, #d8ad45, #ae4f4d);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        font-size: 2em;
-        font-weight: bold;
-    }
-    </style>
-    <div class="gradient-text">AI MedReview v2</div>
-    """
-    st.sidebar.markdown(html, unsafe_allow_html=True)
-    st.sidebar.image("images/transparent2.png")
+    # html = """
+    # <style>
+    # .gradient-text {
+    #     background: linear-gradient(45deg, #284d74, #d8ad45, #ae4f4d);
+    #     -webkit-background-clip: text;
+    #     background-clip: text;
+    #     color: transparent;
+    #     font-size: 2em;
+    #     font-weight: bold;
+    # }
+    # </style>
+    # <div class="gradient-text">AI MedReview v2</div>
+    # """
+    # st.sidebar.markdown(html, unsafe_allow_html=True)
+    # st.sidebar.image("images/transparent2.png")
 
     # Define a list of PCNs
     pcn_names = ["Brompton-Health-PCN", "Demo-PCN"]
