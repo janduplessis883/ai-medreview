@@ -46,7 +46,7 @@ def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
 
 
 st.set_page_config(page_title="AI MedReview v2")
-st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview')
+st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview', size="medium")
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
@@ -230,7 +230,7 @@ else:
         )
 
 
-        st.markdown(
+        st.caption(
             """Accumulating and interpreting the **pooled patient feedback data** from member practices.
     """
         )
@@ -1721,7 +1721,7 @@ else:
         st.markdown(
             "# :material/recommend: Feedback Classification"
         )
-        st.markdown("Responses to **FFT Q1**: Please tell us why you feel this way?")
+        st.caption("Responses to **FFT Q1**: Please tell us why you feel this way?")
 
         tab_selector = ui.tabs(
             options=[
@@ -2237,7 +2237,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown(
             "# :material/home_improvement_and_tools: Improvement Suggestions"
         )
-        st.markdown(
+        st.caption(
             "Responses to **FFT Q2**: Is there anything that would have made your experience better?"
         )
 
@@ -2532,7 +2532,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown(
             "# :material/add_reaction: Emotion Detection"
         )
-        st.markdown(
+        st.caption(
             "Identifying and classifying the **emotions** expressed in FFT feedback."
         )
 
@@ -2663,7 +2663,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         plt.tight_layout()
         st.pyplot(fig)
         st.markdown("---")
-        st.markdown(f"Showing 150/**{filtered_data.shape[0]}** FFT Responses.")
+        st.caption(f"Showing 150/**{filtered_data.shape[0]}** FFT Responses.")
 
         sample = filtered_data.tail(150)
 
@@ -2971,7 +2971,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 plt.tight_layout()
                 st.pyplot(plt)
                 st.write("")
-                st.markdown(f"Showing **{neg1.shape[0]}** Feedback Responses.")
+                st.caption(f"Showing **{neg1.shape[0]}** Feedback Responses.")
                 with st.container(height=500, border=True):
                     icounter = 1
                     for _, row in neg1.iterrows():
@@ -3005,7 +3005,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 plt.tight_layout()
                 st.pyplot(plt)
                 st.write("")
-                st.markdown(f"Showing **{neg2.shape[0]}** Improvement Suggestions.")
+                st.caption(f"Showing **{neg2.shape[0]}** Improvement Suggestions.")
                 with st.container(height=550, border=True):
                     icounter = 1
                     for _, row in neg2.iterrows():
@@ -3102,7 +3102,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.
     3. **Receive Your Summary**: Get a well-structured, comprehensive summary that highlights the core sentiments and suggestions from your patients."""
             )
-        st.markdown("**Follow the steps below to summarise free-text with GPT4.**")
+        st.caption("**Follow the steps below to summarise free-text with GPT4.**")
 
         def call_chatgpt_api(text):
             # Example OpenAI Python library request
@@ -3292,7 +3292,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
     Rows are labeled with an Index, which you can think of as the address of the data. This makes finding specific records simple and fast."""
             )
-        st.write("The data below is filtered based on the date range selected above.")
+        st.caption("The data below is filtered based on the date range selected above.")
 
         # Display the filtered DataFrame
         st.dataframe(filtered_data)
@@ -3304,6 +3304,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     elif page == "Reports":
         st.markdown("# :material/sim_card_download: Reports")
         st.toast("**Reports Updated** now included insights generated with Groq LLM.", icon=":material/robot_2:")
+        st.caption("Generate **monthly reports**, including performance comparison with PCN and Groq LLM Insights.")
         st.write("")
         ui.badges(
             badge_list=[("NEW", "destructive"), ("beta v1.0.3", "outline")],
@@ -3423,8 +3424,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             st.markdown("### version 2.2.0")
             st.markdown("**GROQ LLM Summaries / Insights** introduced across the app. You can now generate insights from feedback in the following pages: NER People, Campaigns, Feedback Classification and Improvmeent Suggestions.")
 
-        st.markdown("![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.")
-        st.markdown("![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)")
+        st.caption("![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.")
+        st.caption("![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)")
 
         st.write("")
         st.write("")
@@ -3468,7 +3469,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
         st.markdown("# :material/psychology_alt: NER - People")
-        st.markdown("**Named Entity Recognistion** - People")
+        st.caption("**Named Entity Recognistion** - People")
         st.toast("**NER People** De-anonymized reviews. **New** Summarize with Groq.", icon=":material/lock:")
         # Set the correct PIN
 
@@ -3552,6 +3553,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         # remove NaN from the list
         campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
 
+        st.caption("Caqmpaigns **Timeline**")
         with st.container(height=300, border=False):
             st.html("""<!DOCTYPE html>
     <html lang="en">
