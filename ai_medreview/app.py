@@ -3618,7 +3618,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         <title>Timeline Example</title>
     </head>
     <body>
-
     <div class="timeline">
         <div class="day">1 September 2024</div>
         <div class="event">
