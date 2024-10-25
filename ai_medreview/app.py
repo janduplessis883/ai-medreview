@@ -3483,6 +3483,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         filtered_free_text_per = free_text_per[free_text_per['free_text_PER'].isin(selected_names)]
         filtered_do_better_per = do_better_per[do_better_per['do_better_PER'].isin(selected_names)]
 
+
         if len(selected_names) > 0:
 
             with st.container(height=550, border=True):
