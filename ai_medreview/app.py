@@ -3670,6 +3670,45 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         <div class="time_placeholder">.</div>
         </div>
 
+        <div class="day">1 Decemmber 2025</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 February 2026</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 April 2026</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 June 2026</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 August 2026</div>
+        <div class="event">
+        <div class="placeholder">Future Campaign</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
+        <div class="day">1 September 2026</div>
+        <div class="event">
+        <div class="placeholder">Influenza Campaign 26/27</div>
+        <div class="time_placeholder">Influenza - GP Surgeries</div>
+        <div class="time_placeholder">RSV - GP Surgeries</div>
+        <div class="time_placeholder">Covid-19 & Housbound Influenza - GP Federation</div>
+        <div class="time_placeholder">.</div>
+        </div>
+
     </body>
     </html>
                     """)
