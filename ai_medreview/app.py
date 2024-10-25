@@ -3638,6 +3638,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         <div class="id">ID: nhs_app_24</div>
         <div class="time">Category of poor preformance during GP Patient Survey 23/24</div>
         <div class="time">Appointment booking & Repeat Prescribing</div>
+        <img src="https://github.com/janduplessis883/ai-medreview/blob/master/images/timeline05.png?raw=true" alt="Event Image" width="60">
         <div class="time_placeholder">.</div>
         </div>
 
