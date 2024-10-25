@@ -3627,7 +3627,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         <div class="time">Influenza - GP Surgeries</div>
         <div class="time">RSV - GP Surgeries</div>
         <div class="time">Covid-19 & Housbound Influenza - GP Federation</div>
-        <img src="https://github.com/janduplessis883/ai-medreview/blob/master/images/timeline01.png?raw=true" alt="Event Image" width="60">
+        <img src="https://github.com/janduplessis883/ai-medreview/blob/master/images/timeline02.png?raw=true" alt="Event Image" width="60">
         <div class="time_placeholder">.</div>
         <div class="time_placeholder">.</div>
         </div>
