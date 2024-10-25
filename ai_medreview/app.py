@@ -46,7 +46,7 @@ def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
 
 
 st.set_page_config(page_title="AI MedReview v2")
-st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview', size="medium")
+st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview', size="large")
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
