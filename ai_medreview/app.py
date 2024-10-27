@@ -76,7 +76,10 @@ if not st.session_state["authenticated"]:
         # st.image("images/private.png")
         st.image("images/private.png")
         st.markdown(
-            f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview v2.2.1"
+            f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
+        )
+        st.markdown(
+            f"version 2.2.1"
         )
         check_passcode()
         with st.container(height=80, border=False):
