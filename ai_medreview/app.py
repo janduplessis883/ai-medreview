@@ -70,16 +70,13 @@ if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
 if not st.session_state["authenticated"]:
-    c1, c2, c3 = st.columns([1,5,1])
+    c1, c2, c3 = st.columns([1,3,1])
 
     with c2:
         # st.image("images/private.png")
         st.image("images/private.png")
         st.markdown(
             f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
-        )
-        st.markdown(
-            f"version 2.2.1"
         )
         check_passcode()
         with st.container(height=80, border=False):
