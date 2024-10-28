@@ -3505,7 +3505,11 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
-                    summary = ask_groq(f"Summarize the following personal feedback, PERSON is a NER placeholder for a person's name, individuals are listed below the feedback in the order they appear in the feedback text, summarize the following feedback highlighting trends and list the name of the person the feedback relates to (all the people mentioned are members of staff): {selected_entries}")
+                    summary = ask_groq(f"""Please take the personal feedback provided below and perform the following tasks:
+Replace any instances of 'PERSON' (a placeholder for a person's name) with the actual name(s) listed at the bottom of the feedback in a list.
+Summarize the feedback in your own words, highlighting any key points or trends that emerge from the text, for each person identified.
+Example Feedback Text: Dr PERSON is very friendly.
+['Jones'] - the above feedback refers to Dr Jones is very friendly. With this in mind summarize the feedback trands received for each person mentioned: {selected_entries}""")
                     st.markdown(summary)
 
         else:
