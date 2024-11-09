@@ -56,6 +56,7 @@ def check_passcode():
         if submitted:
             if entered_passcode == passcode:
                 st.session_state["authenticated"] = True
+                st.rerun()
             else:
                 st.write()
                 ui.badges(
@@ -63,6 +64,7 @@ def check_passcode():
                     class_name="flex gap-2",
                     key="error1",
                 )
+
                 st.toast(body="**Incorrect Password?** [Get Passcode](mailto:jan.duplessis@nhs.net?subject=AI-MedReview-Passcode)", icon=":material/lock_person:")
 
 # Check if the user is authenticated
