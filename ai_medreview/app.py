@@ -106,7 +106,7 @@ else:
     pcn_names = ["Brompton-Health-PCN", "Integrated-Care-Partnership", "Ribblesdale-PCN", "Teldoc", "Demo-PCN"]
 
     # PCN selection in sidebar
-    selected_pcn = st.sidebar.selectbox("Select a **Primary Care Network**", pcn_names, key="pcn_selector")
+    selected_pcn = st.sidebar.selectbox("Select a Primary Care Network", pcn_names, key="pcn_selector")
 
 
     # Function to load data
