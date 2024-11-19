@@ -153,7 +153,7 @@ else:
 
     # Page selection
     page = st.sidebar.radio(
-        "Site Navigation",
+        "Select a Page",
         [
             "**:blue-background[PCN Dashboard]**",
             "Surgery Dashboards",
