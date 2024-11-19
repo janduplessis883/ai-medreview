@@ -62,7 +62,7 @@ def load_google_sheet():
         "campaign_freetext",
     ]
 
-    data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
+    data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M")
 
     data.sort_values(by="time", inplace=True)
     return data
