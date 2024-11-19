@@ -103,7 +103,7 @@ else:
     st.sidebar.image("images/transparent2.png")
 
     # Define a list of PCNs
-    pcn_names = ["Brompton-Health-PCN", "Demo-PCN"]
+    pcn_names = ["Brompton-Health-PCN", "Ribblesdale-PCN", "Integrated-Care-Partnership", "Demo-PCN"]
 
     # PCN selection in sidebar
     selected_pcn = st.sidebar.selectbox("Select a Primary Care Network", pcn_names, key="pcn_selector")
