@@ -454,8 +454,8 @@ else:
             data['time'] = pd.to_datetime(data['time'])
 
             # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
-            pooled_data = pd.concat([data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
-                                    data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+            pooled_data = pd.concat([pcn_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
+                                    pcn_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
 
             # Extract the year and month from the 'time' column
             pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
@@ -498,8 +498,8 @@ else:
 
             # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
             pooled_data_with_source = pd.concat([
-                data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
-                data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
+                pcn_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
+                pcn_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
             ])
 
             # Filter out rows with NaN values in 'emotion'
