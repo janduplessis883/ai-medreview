@@ -113,7 +113,7 @@ else:
     @st.cache_data(ttl=3600)
     def load_data():
         df = pd.read_csv("ai_medreview/data/data.csv")
-        df["time"] = pd.to_datetime(df["time"])
+        df["time"] = pd.to_datetime(df["time"], dayfirst=False)
         df.sort_values(by='time')
         return df
 
