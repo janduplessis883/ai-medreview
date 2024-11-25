@@ -46,12 +46,12 @@ def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
 
 
 st.set_page_config(page_title="AI MedReview")
-st.logo('images/logo2.png', link='https://github.com/janduplessis883/ai-medreview', size="large")
+st.logo('images/logo3.png', link='https://github.com/janduplessis883/ai-medreview', size="large")
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
     with st.form("passcode_form", border=False):
-        entered_passcode = st.text_input("Enter passcode:", type="password")
+        entered_passcode = st.text_input("Enter **AI MedReview** passcode:", type="password")
         submitted = st.form_submit_button("Submit")
         if submitted:
             if entered_passcode == passcode:
@@ -77,11 +77,11 @@ if not st.session_state["authenticated"]:
     with c2:
         # st.image("images/private.png")
         st.image("images/private.png")
-        st.markdown(
-            f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
-        )
+        # st.markdown(
+        #     f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
+        # )
         check_passcode()
-        with st.container(height=80, border=False):
+        with st.container(height=300, border=False):
             st.write()
 
         c1, c2, c3 = st.columns([1,1,1])
@@ -89,13 +89,7 @@ if not st.session_state["authenticated"]:
             st.write()
         with c2:
             st.html("""<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">""")
-            st.html("""<a href="https://groq.com" target="_blank" rel="noopener noreferrer"><BR>
-  <img
-    src="https://groq.com/wp-content/uploads/2024/03/PBG-mark1-color.svg"
-    alt="Powered by Groq for fast inference." width=130
-  />
-</a>
-""")
+            # st.html("""<a href="https://groq.com" target="_blank" rel="noopener noreferrer"><BR""")
         with c3:
             st.write()
 
