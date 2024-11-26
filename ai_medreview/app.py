@@ -51,7 +51,7 @@ st.logo('images/logo3.png', link='https://github.com/janduplessis883/ai-medrevie
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
     with st.form("passcode_form", border=False):
-        entered_passcode = st.text_input("Enter **AI MedReview** passcode:", type="password")
+        entered_passcode = st.text_input("Enter **AI MedReview** passcode:", type="password", placeholder="Enter Passcode")
         submitted = st.form_submit_button("Submit")
         if submitted:
             if entered_passcode == passcode:
