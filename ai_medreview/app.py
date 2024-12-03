@@ -3523,187 +3523,51 @@ Example Feedback Text: Dr PERSON is very friendly.
         st.markdown("# :material/campaign: Campaigns")
 
         campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
-        campaign_df = campaign_df.dropna(subset=['campaing_id'])
-        campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
-        campaig_df_freetext = campaign_df.dropna(subset=['campaign_freetext'])
-        campaig_df_freetext = campaig_df_freetext.sort_values(by='campaign_rating', ascending=False)
-        campaign_rating_mean = str(round(campaign_df['campaign_rating'].mean() * 20, 1))
-
-        pcn_campaign_df = pcn_data[['campaing_id', 'campaign_rating']]
-        pcn_campaign_df = pcn_campaign_df.dropna(subset=['campaing_id'])
-        pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaign_rating'] != 0]
-        pcn_campaign_rating_mean = str(round(pcn_campaign_df['campaign_rating'].mean() * 20, 1))
-
         # Prepare list of campaigns
         campaign_list = list(campaign_df['campaing_id'].unique())
         # remove NaN from the list
         campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
 
-        st.caption("Caqmpaigns **Timeline**")
-        with st.container(height=300, border=False):
-            st.html("""<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f8f8f8;
-                padding: 20px;
-            }
-            .timeline {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            .day {
-                color: #e11d48;
-                font-weight: bold;
-                margin-bottom: 20px;
-            }
-            .event {
-                border-left: 3px solid #eab308;
-                padding-left: 20px;
-                margin-bottom: 20px;
-                position: relative;
-            }
-            .event:before {
-                content: '';
-                width: 10px;
-                height: 10px;
-                background-color: #eab308;
-                border-radius: 50%;
-                position: absolute;
-                left: -7px;
-                top: 5px;
-            }
-            .time {
-                font-size: 0.9em;
-                color: #9ca3af;
-            }
-            .id {
-                font-size: 0.9em;
-                color: #364153;
-            }
-            .time_placeholder {
-                font-size: 0.9em;
-                color: #d1d5db;;
-            }
-            .title {
-                font-size: 1.1em;
-                color: #334155;
-                font-weight: bold;
-            }
-            .placeholder {
-            font-size: 1.1em;
-            color: #d1d5db;
-            font-weight: bold;
-        }
-        </style>
-        <title>Timeline Example</title>
-    </head>
-    <body>
-    <div class="timeline">
-        <div class="day">1 September 2024</div>
-        <div class="event">
-        <div class="title">Influenza Campaign 24/25</div>
-        <div class="id">ID: flu_campaign_24</div>
-        <div class="time">Influenza, RSV - GP Surgeries</div>
-        <div class="time">Covid-19 & Housbound Influenza - GP Federation</div>
-        <img src="https://github.com/janduplessis883/ai-medreview/blob/master/images/timeline03.png?raw=true" alt="Event Image" width="50">
-        <div class="time_placeholder">.</div>
-        <div class="time_placeholder">.</div>
-        </div>
 
-        <div class="day">1 December 2024</div>
-        <div class="event">
-        <div class="title">NHS App Survey 24</div>
-        <div class="id">ID: nhs_app_24</div>
-        <div class="time">Category of poor preformance during GP Patient Survey 23/24</div>
-        <div class="time">Appointment booking & Repeat Prescribing</div>
-        <img src="https://github.com/janduplessis883/ai-medreview/blob/master/images/timeline06.png?raw=true" alt="Event Image" width="50">
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 February 2025</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 April 2025</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 June 2025</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 August 2025</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 September 2025</div>
-        <div class="event">
-        <div class="placeholder">Influenza Campaign 25/26</div>
-        <div class="time_placeholder">Influenza - GP Surgeries</div>
-        <div class="time_placeholder">RSV - GP Surgeries</div>
-        <div class="time_placeholder">Covid-19 & Housbound Influenza - GP Federation</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 Decemmber 2025</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 February 2026</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 April 2026</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 June 2026</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 August 2026</div>
-        <div class="event">
-        <div class="placeholder">Future Campaign</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-        <div class="day">1 September 2026</div>
-        <div class="event">
-        <div class="placeholder">Influenza Campaign 26/27</div>
-        <div class="time_placeholder">Influenza - GP Surgeries</div>
-        <div class="time_placeholder">RSV - GP Surgeries</div>
-        <div class="time_placeholder">Covid-19 & Housbound Influenza - GP Federation</div>
-        <div class="time_placeholder">.</div>
-        </div>
-
-    </body>
-    </html>
-                    """)
         st.container(height=8, border=False)
         if len(campaign_list) != 0:
 
-            selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=0)
+
+
+            selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=1)
+
+            # Filter campaign_df by selected_campaign
+            campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
+            campaign_df = campaign_df.dropna(subset=['campaing_id'])
+            campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
+
+            # Filter by selected_campaign
+            campaign_df = campaign_df[campaign_df['campaing_id'] == selected_campaign]
+
+            # Handle free-text filtering
+            campaign_df_freetext = campaign_df.dropna(subset=['campaign_freetext'])
+            campaign_df_freetext = campaign_df_freetext.sort_values(by='campaign_rating', ascending=False)
+
+            # Calculate campaign rating mean
+            if not campaign_df.empty:
+                campaign_rating_mean = str(round(campaign_df['campaign_rating'].mean() * 20, 1))
+            else:
+                campaign_rating_mean = "No data"
+
+            # Filter and calculate PCN campaign data
+            pcn_campaign_df = pcn_data[['campaing_id', 'campaign_rating']]
+            pcn_campaign_df = pcn_campaign_df.dropna(subset=['campaing_id'])
+            pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaign_rating'] != 0]
+
+            # Filter by selected_campaign
+            pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaing_id'] == selected_campaign]
+
+            if not pcn_campaign_df.empty:
+                pcn_campaign_rating_mean = str(round(pcn_campaign_df['campaign_rating'].mean() * 20, 1))
+            else:
+                pcn_campaign_rating_mean = "No data"
+
+
             st.markdown(f"# {selected_campaign}")
 
 
@@ -3719,7 +3583,7 @@ Example Feedback Text: Dr PERSON is very friendly.
                 ax.spines["left"].set_visible(False)
                 ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
                 plt.tight_layout()
-                ax.set_xlabel('Campaign Rating')
+                ax.set_xlabel(f'Campaign Rating - {selected_campaign}')
                 ax.set_ylabel('Frequency')
                 st.pyplot(fig)
             except:
@@ -3737,7 +3601,7 @@ Example Feedback Text: Dr PERSON is very friendly.
                 st.divider()
                 st.subheader("Campaign Free Text")
                 with st.container(height=400, border=True):
-                    for _, row in campaig_df_freetext.iterrows():
+                    for _, row in campaign_df_freetext.iterrows():
                         rating = row['campaign_rating']
                         text = row['campaign_freetext']
                         st.write(int(rating), text)
