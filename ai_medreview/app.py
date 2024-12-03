@@ -24,9 +24,7 @@ from utils import *
 from reports import *
 
 # Initialize the Groq client
-client = Groq(
-    api_key=st.secrets["GROQ_API_KEY"]
-)
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 
 # Simple function to get a response from Groq
@@ -46,12 +44,22 @@ def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
 
 
 st.set_page_config(page_title="AI MedReview")
-st.logo('images/logo3.png', link='https://github.com/janduplessis883/ai-medreview', size="large")
+st.logo(
+    "images/logo3.png",
+    link="https://github.com/janduplessis883/ai-medreview",
+    size="large",
+)
+
+
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
     with st.form("passcode_form", border=False):
-        entered_passcode = st.text_input("Enter **AI MedReview** passcode:", type="password", placeholder="Enter Passcode")
+        entered_passcode = st.text_input(
+            "Enter **AI MedReview** passcode:",
+            type="password",
+            placeholder="Enter Passcode",
+        )
         submitted = st.form_submit_button("Submit")
         if submitted:
             if entered_passcode == passcode:
@@ -65,14 +73,18 @@ def check_passcode():
                     key="error1",
                 )
 
-                st.toast(body="**Incorrect Password?** [Get Passcode](mailto:jan.duplessis@nhs.net?subject=AI-MedReview-Passcode)", icon=":material/lock_person:")
+                st.toast(
+                    body="**Incorrect Password?** [Get Passcode](mailto:jan.duplessis@nhs.net?subject=AI-MedReview-Passcode)",
+                    icon=":material/lock_person:",
+                )
+
 
 # Check if the user is authenticated
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
 if not st.session_state["authenticated"]:
-    c1, c2, c3 = st.columns([1,3,1])
+    c1, c2, c3 = st.columns([1, 3, 1])
 
     with c2:
         # st.image("images/private.png")
@@ -84,11 +96,13 @@ if not st.session_state["authenticated"]:
         with st.container(height=300, border=False):
             st.write()
 
-        c1, c2, c3 = st.columns([1,1,1])
+        c1, c2, c3 = st.columns([1, 1, 1])
         with c1:
             st.write()
         with c2:
-            st.html("""<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">""")
+            st.html(
+                """<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">"""
+            )
             # st.html("""<a href="https://groq.com" target="_blank" rel="noopener noreferrer"><BR""")
         with c3:
             st.write()
@@ -97,24 +111,31 @@ else:
     st.sidebar.image("images/transparent2.png")
 
     # Define a list of PCNs
-    pcn_names = ["Brompton-Health-PCN", "Ribblesdale-PCN", "Integrated-Care-Partnership", "Teldoc", "Demo-PCN"]
+    pcn_names = [
+        "Brompton-Health-PCN",
+        "Ribblesdale-PCN",
+        "Integrated-Care-Partnership",
+        "Teldoc",
+        "Demo-PCN",
+    ]
 
     # PCN selection in sidebar
-    selected_pcn = st.sidebar.selectbox("Select a Primary Care Network", pcn_names, key="pcn_selector")
-
+    selected_pcn = st.sidebar.selectbox(
+        "Select a Primary Care Network", pcn_names, key="pcn_selector"
+    )
 
     # Function to load data
     @st.cache_data(ttl=3600)
     def load_data():
         df = pd.read_csv("ai_medreview/data/data.csv")
         df["time"] = pd.to_datetime(df["time"], dayfirst=False)
-        df.sort_values(by='time')
+        df.sort_values(by="time")
         return df
 
     data = load_data()
 
     def data_version(df):
-        last_time = df.iloc[-1]['time']
+        last_time = df.iloc[-1]["time"]
         return last_time
 
     # Function to load PCN specific data
@@ -123,10 +144,8 @@ else:
         df = load_data()
         return df[df["pcn"] == pcn_name]
 
-
     # Load PCN specific data
     pcn_data = load_pcn_data(selected_pcn)
-
 
     # Function to get surgeries by PCN
     @st.cache_data(ttl=3600)
@@ -135,7 +154,6 @@ else:
         surgeries = sorted(filtered_data["surgery"].unique())
         return surgeries
 
-
     # Define the function to filter data based on selected date range
     @st.cache_data(ttl=3600)
     def filter_data_by_date_range(data, date_range):
@@ -143,7 +161,6 @@ else:
             (data["time"].dt.date >= date_range[0])
             & (data["time"].dt.date <= date_range[1])
         ]
-
 
     # Page selection
     page = st.sidebar.radio(
@@ -192,24 +209,33 @@ else:
                     st.error(f"Cannot display slider: {str(e)}")
 
                 # Create data filtered by date via slider
-                filtered_data = filter_data_by_date_range(surgery_data, selected_date_range)
+                filtered_data = filter_data_by_date_range(
+                    surgery_data, selected_date_range
+                )
 
     else:
         selected_surgery = None
         filtered_data = None
 
-
     # Content Start ========================================================================================== Content Start
 
     # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
     if page == "**:blue-background[PCN Dashboard]**":
-        st.toast(f"Listen to the **AI-MedReview podcast** for insightful discussions—find it on the **About** page!", icon=":material/mic:")
-        ui.badges(badge_list=[("Data version:", "outline"), (f"{data_version(data)}", "secondary"), (f"{pcn_data.shape[0]}", "secondary")], class_name="flex gap-2", key="badges_pcn_dashboard_alert")
-
-        st.markdown(
-            f"# :material/health_metrics: {selected_pcn} "
+        st.toast(
+            f"Listen to the **AI-MedReview podcast** for insightful discussions—find it on the **About** page!",
+            icon=":material/mic:",
+        )
+        ui.badges(
+            badge_list=[
+                ("Data version:", "outline"),
+                (f"{data_version(data)}", "secondary"),
+                (f"{pcn_data.shape[0]}", "secondary"),
+            ],
+            class_name="flex gap-2",
+            key="badges_pcn_dashboard_alert",
         )
 
+        st.markdown(f"# :material/health_metrics: {selected_pcn} ")
 
         st.caption(
             """Accumulating and interpreting the **pooled patient feedback data** from member practices.
@@ -445,62 +471,92 @@ else:
             # Assuming 'data' is already defined and processed
             # Define labels and colors outside since they are the same for both plots
 
-            data['time'] = pd.to_datetime(data['time'])
+            data["time"] = pd.to_datetime(data["time"])
 
             # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
-            pooled_data = pd.concat([pcn_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
-                                    pcn_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+            pooled_data = pd.concat(
+                [
+                    pcn_data[["time", "emotion_free_text"]].rename(
+                        columns={"emotion_free_text": "emotion"}
+                    ),
+                    pcn_data[["time", "emotion_do_better"]].rename(
+                        columns={"emotion_do_better": "emotion"}
+                    ),
+                ]
+            )
 
             # Extract the year and month from the 'time' column
-            pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
+            pooled_data["year_month"] = (
+                pooled_data["time"].dt.to_period("M").astype(str)
+            )  # Convert Period to string
 
             # Group by 'year_month' and 'emotion' to get the monthly counts
-            pooled_monthly_emotion_counts = pooled_data.groupby(['year_month', 'emotion']).size().unstack(fill_value=0)
+            pooled_monthly_emotion_counts = (
+                pooled_data.groupby(["year_month", "emotion"])
+                .size()
+                .unstack(fill_value=0)
+            )
 
             # Normalize the counts by dividing each emotion's count by the total counts for that month
-            pooled_normalized_monthly_emotion_counts = pooled_monthly_emotion_counts.div(pooled_monthly_emotion_counts.sum(axis=1), axis=0)
+            pooled_normalized_monthly_emotion_counts = (
+                pooled_monthly_emotion_counts.div(
+                    pooled_monthly_emotion_counts.sum(axis=1), axis=0
+                )
+            )
 
             # Convert the normalized monthly counts dataframe to long format for Plotly
-            pooled_normalized_long = pooled_normalized_monthly_emotion_counts.reset_index().melt(id_vars='year_month', var_name='emotion', value_name='proportion')
+            pooled_normalized_long = (
+                pooled_normalized_monthly_emotion_counts.reset_index().melt(
+                    id_vars="year_month", var_name="emotion", value_name="proportion"
+                )
+            )
 
             # Create a Plotly line plot
             fig = px.line(
                 pooled_normalized_long,
-                x='year_month',
-                y='proportion',
-                color='emotion',
+                x="year_month",
+                y="proportion",
+                color="emotion",
                 markers=True,
-                title='Normalized Monthly Counts of Pooled Emotions Over Time',
-                labels={'year_month': 'Time (Year-Month)', 'proportion': 'Proportion'}
+                title="Normalized Monthly Counts of Pooled Emotions Over Time",
+                labels={"year_month": "Time (Year-Month)", "proportion": "Proportion"},
             )
 
             # Update layout for better appearance
             fig.update_layout(
-                legend_title_text='Emotion',
-                xaxis_title='Time (Year-Month)',
-                yaxis_title='Proportion',
+                legend_title_text="Emotion",
+                xaxis_title="Time (Year-Month)",
+                yaxis_title="Proportion",
                 autosize=False,
                 width=750,
                 height=550,
-                margin=dict(l=40, r=40, b=40, t=40)
+                margin=dict(l=40, r=40, b=40, t=40),
             )
 
             st.plotly_chart(fig)
             st.markdown("---")
-        # Convert the 'time' column to datetime format
-            data['time'] = pd.to_datetime(data['time'])
+            # Convert the 'time' column to datetime format
+            data["time"] = pd.to_datetime(data["time"])
 
             # Combine the data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
-            pooled_data_with_source = pd.concat([
-                pcn_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
-                pcn_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
-            ])
+            pooled_data_with_source = pd.concat(
+                [
+                    pcn_data[["time", "emotion_free_text"]]
+                    .rename(columns={"emotion_free_text": "emotion"})
+                    .assign(source="emotion_free_text"),
+                    pcn_data[["time", "emotion_do_better"]]
+                    .rename(columns={"emotion_do_better": "emotion"})
+                    .assign(source="emotion_do_better"),
+                ]
+            )
 
             # Filter out rows with NaN values in 'emotion'
-            pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
+            pooled_data_with_source = pooled_data_with_source.dropna(subset=["emotion"])
 
             # Pivot the data to get counts of each emotion per source
-            pivot_table = pooled_data_with_source.pivot_table(index='emotion', columns='source', aggfunc='size', fill_value=0)
+            pivot_table = pooled_data_with_source.pivot_table(
+                index="emotion", columns="source", aggfunc="size", fill_value=0
+            )
 
             # Plotting
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -512,7 +568,13 @@ else:
             bottom = None
             for i, source in enumerate(pivot_table.columns):
                 counts = pivot_table[source]
-                ax.barh(pivot_table.index, counts, left=bottom, label=source, color=colors[i])
+                ax.barh(
+                    pivot_table.index,
+                    counts,
+                    left=bottom,
+                    label=source,
+                    color=colors[i],
+                )
                 if bottom is None:
                     bottom = counts
                 else:
@@ -524,10 +586,12 @@ else:
             ax.spines["left"].set_visible(False)
             ax.yaxis.grid(False)
             ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-            plt.xlabel('Counts')
-            plt.ylabel('Emotions')
-            plt.title('Distribution of Emotions in Feedback and Improvement Suggestions')
-            plt.legend(title='Source', loc='upper right')
+            plt.xlabel("Counts")
+            plt.ylabel("Emotions")
+            plt.title(
+                "Distribution of Emotions in Feedback and Improvement Suggestions"
+            )
+            plt.legend(title="Source", loc="upper right")
             plt.tight_layout()
 
             # Display the plot in Streamlit
@@ -725,7 +789,9 @@ else:
             data_sorted = pcn_data.sort_values("time")
 
             # Group by 'surgery' and 'time', then calculate the cumulative count
-            data_sorted["cumulative_count"] = data_sorted.groupby("surgery").cumcount() + 1
+            data_sorted["cumulative_count"] = (
+                data_sorted.groupby("surgery").cumcount() + 1
+            )
 
             # Pivot the table to have surgeries as columns and their cumulative counts as values
             data_pivot = data_sorted.pivot_table(
@@ -775,7 +841,9 @@ else:
                     mirror=True,
                 ),
                 plot_bgcolor="white",
-                legend=dict(title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"),
+                legend=dict(
+                    title="Surgery", x=1.05, y=1, xanchor="left", yanchor="top"
+                ),
                 width=750,  # Set the width to 750 pixels
                 height=750,  # Set the height to 850 pixels
             )
@@ -800,7 +868,9 @@ else:
                         pcn_data.groupby("date")["rating_score"].mean().reset_index()
                     )
                     # Ensure the 'date' column is in datetime format for resampling
-                    daily_mean_rating["date"] = pd.to_datetime(daily_mean_rating["date"])
+                    daily_mean_rating["date"] = pd.to_datetime(
+                        daily_mean_rating["date"]
+                    )
 
                     # Set the 'date' column as the index
                     daily_mean_rating.set_index("date", inplace=True)
@@ -895,7 +965,6 @@ else:
                 key="tab_topic_pcn",
             )
 
-
             # implement PCN Slider to load data by date for comparison -------------------------------PCN TOPIC A Slider----
             start_date = pcn_data["time"].dt.date.min()
             end_date = pcn_data["time"].dt.date.max()
@@ -910,7 +979,7 @@ else:
                     max_value=end_date,
                     value=(start_date, end_date),
                     format="MM/DD/YYYY",
-                    help="Use to adjust the time frame for Topic Analaysis"
+                    help="Use to adjust the time frame for Topic Analaysis",
                 )
             except ValueError as e:
                 st.error(f"Cannot display slider: {str(e)}")
@@ -950,13 +1019,17 @@ else:
                 filtered_pcn_data.index = filtered_pcn_data.index.to_period("M")
 
                 monthly_feedback_counts = (
-                    filtered_pcn_data.groupby([filtered_pcn_data.index, "feedback_labels"])
+                    filtered_pcn_data.groupby(
+                        [filtered_pcn_data.index, "feedback_labels"]
+                    )
                     .size()
                     .unstack(fill_value=0)
                 )
 
                 # Converting the period index back to a timestamp for compatibility with Plotly
-                monthly_feedback_counts.index = monthly_feedback_counts.index.to_timestamp()
+                monthly_feedback_counts.index = (
+                    monthly_feedback_counts.index.to_timestamp()
+                )
 
                 # Plotting the data using Plotly Express
                 fig1 = px.line(
@@ -1149,7 +1222,9 @@ else:
                             gridwidth=0.5,
                             showgrid=True,
                         ),
-                        yaxis=dict(title="Improvement Suggestion Labels", showgrid=False),
+                        yaxis=dict(
+                            title="Improvement Suggestion Labels", showgrid=False
+                        ),
                         barmode="stack",
                         plot_bgcolor="white",
                         showlegend=True,
@@ -1202,12 +1277,16 @@ else:
 
                 filtered_pcn_data["time"] = pd.to_datetime(filtered_pcn_data["time"])
                 # Setting the 'time' column as the index
-                filtered_pcn_data = filtered_pcn_data[["time", "feedback_labels"]].copy()
+                filtered_pcn_data = filtered_pcn_data[
+                    ["time", "feedback_labels"]
+                ].copy()
                 filtered_pcn_data.set_index("time", inplace=True)
                 filtered_pcn_data.index = filtered_pcn_data.index.to_period("M")
 
                 monthly_feedback_counts = (
-                    filtered_pcn_data.groupby([filtered_pcn_data.index, "feedback_labels"])
+                    filtered_pcn_data.groupby(
+                        [filtered_pcn_data.index, "feedback_labels"]
+                    )
                     .size()
                     .unstack(fill_value=0)
                 )
@@ -1223,7 +1302,11 @@ else:
 
                 # Creating a heatmap
                 sns.heatmap(
-                    normalized_df.T, annot=True, cmap="Oranges", fmt=".2f", linewidths=0.5
+                    normalized_df.T,
+                    annot=True,
+                    cmap="Oranges",
+                    fmt=".2f",
+                    linewidths=0.5,
                 )
 
                 # Adding titles and labels
@@ -1236,7 +1319,9 @@ else:
 
                 st.markdown("---")
                 pcn_data2 = load_pcn_data(selected_pcn)
-                filtered_pcn_data2 = filter_data_by_date_range(pcn_data2, pcn_date_range)
+                filtered_pcn_data2 = filter_data_by_date_range(
+                    pcn_data2, pcn_date_range
+                )
 
                 if radio_value == "pos":
                     filtered_pcn_data2 = filtered_pcn_data2[
@@ -1245,7 +1330,9 @@ else:
                             | (filtered_pcn_data2["sentiment_do_better"] == "positive")
                         )
                     ]
-                    title_string = "Heatmap of Normalized Improvement Sugg. (NEUT + POS)"
+                    title_string = (
+                        "Heatmap of Normalized Improvement Sugg. (NEUT + POS)"
+                    )
                 elif radio_value == "neg":
                     filtered_pcn_data2 = filtered_pcn_data2[
                         (filtered_pcn_data2["sentiment_do_better"] == "negative")
@@ -1288,7 +1375,11 @@ else:
 
                 # Creating a heatmap
                 sns.heatmap(
-                    normalized_df2.T, annot=True, cmap="Greys", fmt=".2f", linewidths=0.5
+                    normalized_df2.T,
+                    annot=True,
+                    cmap="Greys",
+                    fmt=".2f",
+                    linewidths=0.5,
                 )
 
                 # Adding titles and labels
@@ -1345,7 +1436,9 @@ else:
                 heatmap_data = pd.crosstab(
                     filtered_pcn_data["surgery"], filtered_pcn_data["feedback_labels"]
                 )
-                normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
+                normalized_heatmap_data = heatmap_data.div(
+                    heatmap_data.sum(axis=1), axis=0
+                )
 
                 # Create a new heatmap using the normalized data
                 plt.figure(figsize=(14, 10))
@@ -1368,9 +1461,12 @@ else:
                 )
                 filtered_pcn_data.dropna(subset="do_better", inplace=True)
                 heatmap_data = pd.crosstab(
-                    filtered_pcn_data["surgery"], filtered_pcn_data["improvement_labels"]
+                    filtered_pcn_data["surgery"],
+                    filtered_pcn_data["improvement_labels"],
                 )
-                normalized_heatmap_data = heatmap_data.div(heatmap_data.sum(axis=1), axis=0)
+                normalized_heatmap_data = heatmap_data.div(
+                    heatmap_data.sum(axis=1), axis=0
+                )
 
                 # Create a new heatmap using the normalized data
                 plt.figure(figsize=(14, 10))
@@ -1386,12 +1482,9 @@ else:
                 # Show the normalized heatmap
                 st.pyplot(plt)
 
-
     # -- Surgery Dashboard --------------------------------------------------------------------------- Surgery Dashboard ---
     elif page == "Surgery Dashboards":
-        st.markdown(
-            f"# :material/stethoscope: {selected_surgery}"
-        )
+        st.markdown(f"# :material/stethoscope: {selected_surgery}")
         st.write("")
         surgery_tab_selector = ui.tabs(
             options=[
@@ -1409,7 +1502,9 @@ else:
 
             try:
                 # Resample to get monthly average rating
-                monthly_avg = filtered_data.resample("MS", on="time")["rating_score"].mean()
+                monthly_avg = filtered_data.resample("MS", on="time")[
+                    "rating_score"
+                ].mean()
 
                 # Reset index to make 'time' a column again
                 monthly_avg_df = monthly_avg.reset_index()
@@ -1469,12 +1564,12 @@ else:
                 f"**Total Responses** for selected time period: **{filtered_data.shape[0]}**"
             )
             order = [
-                    "Very good",
-                    "Good",
-                    "Neither good nor poor",
-                    "Poor",
-                    "Very poor",
-                    "Don't know",
+                "Very good",
+                "Good",
+                "Neither good nor poor",
+                "Poor",
+                "Very poor",
+                "Don't know",
             ]
 
             palette = {
@@ -1538,7 +1633,7 @@ else:
             st.pyplot(plt)
 
             st.divider()
-            st.code(filtered_data['rating'].value_counts())
+            st.code(filtered_data["rating"].value_counts())
 
         elif surgery_tab_selector == "Surgery Responses":
             cols = st.columns(2)
@@ -1559,7 +1654,11 @@ else:
             daily_count_df.columns = ["Date", "Daily Count"]
             fig, ax = plt.subplots(figsize=(12, 4))
             sns.lineplot(
-                data=daily_count_df, x="Date", y="Daily Count", color="#558387", linewidth=2
+                data=daily_count_df,
+                x="Date",
+                y="Daily Count",
+                color="#558387",
+                linewidth=2,
             )
 
             ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
@@ -1585,7 +1684,9 @@ else:
             monthly_count_filtered = filtered_data.resample("MS", on="time").size()
             monthly_count_filtered_df = monthly_count_filtered.reset_index()
             monthly_count_filtered_df.columns = ["Month", "Monthly Count"]
-            monthly_count_filtered_df["Month"] = monthly_count_filtered_df["Month"].dt.date
+            monthly_count_filtered_df["Month"] = monthly_count_filtered_df[
+                "Month"
+            ].dt.date
 
             # Create the figure and the bar plot
             fig, ax = plt.subplots(figsize=(12, 5))
@@ -1635,7 +1736,9 @@ else:
             )  # figsize can be adjusted as needed
 
             # Plot the first histogram on the first subplot
-            sns.histplot(filtered_data["free_text_len"], ax=ax[0], color="#708695", bins=25)
+            sns.histplot(
+                filtered_data["free_text_len"], ax=ax[0], color="#708695", bins=25
+            )
             ax[0].yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
             ax[0].xaxis.grid(False)
             ax[0].spines["top"].set_visible(False)
@@ -1646,7 +1749,9 @@ else:
             )  # Optional title for the first plot
 
             # Plot the second histogram on the second subplot
-            sns.histplot(filtered_data["do_better_len"], ax=ax[1], color="#985e5b", bins=25)
+            sns.histplot(
+                filtered_data["do_better_len"], ax=ax[1], color="#985e5b", bins=25
+            )
             ax[1].yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
             ax[1].xaxis.grid(False)
             ax[1].spines["top"].set_visible(False)
@@ -1692,16 +1797,15 @@ else:
             surgery_tab_selector == "Missing Data"
         ):  # -----------------------------------------------------Missing Data -
             plt.figure(figsize=(12, 5))
-            sns.heatmap(filtered_data.isnull(), cbar=False, cmap="Blues", yticklabels=False)
+            sns.heatmap(
+                filtered_data.isnull(), cbar=False, cmap="Blues", yticklabels=False
+            )
             plt.title("Missing Data")
             st.pyplot(plt)
 
-
     # -- Feedback Classification ------------------------------------------------------------------- Feedback Classification
     elif page == "Feedback Classification":
-        st.markdown(
-            "# :material/recommend: Feedback Classification"
-        )
+        st.markdown("# :material/recommend: Feedback Classification")
         st.caption("Responses to **FFT Q1**: Please tell us why you feel this way?")
 
         tab_selector = ui.tabs(
@@ -1786,7 +1890,11 @@ else:
             st.plotly_chart(fig)
 
         elif tab_selector == "Bar Chart - Totals":
-            palette = {"positive": "#2e5f77", "negative": "#d7662a", "neutral": "#d7d8d7"}
+            palette = {
+                "positive": "#2e5f77",
+                "negative": "#d7662a",
+                "neutral": "#d7d8d7",
+            }
             hue_order = ["negative", "neutral", "positive"]
 
             # Create a cross-tabulation of feedback labels and sentiment categories
@@ -1813,7 +1921,10 @@ else:
                 layout=go.Layout(
                     title="Feedback Classification",
                     xaxis=dict(
-                        title="Counts", gridcolor="#888888", gridwidth=0.5, showgrid=True
+                        title="Counts",
+                        gridcolor="#888888",
+                        gridwidth=0.5,
+                        showgrid=True,
                     ),
                     yaxis=dict(title="Feedback Labels", showgrid=False),
                     barmode="stack",
@@ -1877,7 +1988,10 @@ else:
             )
             monthly_feedback_counts["TOTAL"] = monthly_feedback_counts.sum(axis=1)
             normalized_df = monthly_feedback_counts.loc[
-                :, monthly_feedback_counts.columns[0] : monthly_feedback_counts.columns[-2]
+                :,
+                monthly_feedback_counts.columns[0] : monthly_feedback_counts.columns[
+                    -2
+                ],
             ].div(monthly_feedback_counts["TOTAL"], axis=0)
             st.markdown("#### Feedback Classification")
             # Setting the plot size
@@ -1897,30 +2011,44 @@ else:
             st.pyplot(plt)
 
         elif tab_selector == "Pareto Analysis":
-            st.html("<div class='status' style='background-color: #aa485b; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 12px; display: inline-block; text-align: center; box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);'><b>NEW Pareto Analysis</b></div>")
-            neg = filtered_data[filtered_data['sentiment_free_text'] == 'negative']
-            negative_df = neg['feedback_labels'].value_counts().reset_index()
-            negative_df.columns = ['Feedback Label', 'Count']
-            negative_df['Cumulative Count'] = negative_df['Count'].cumsum()
-            negative_df['Cumulative Percentage'] = 100 * negative_df['Cumulative Count'] / negative_df['Count'].sum()
+            st.html(
+                "<div class='status' style='background-color: #aa485b; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 12px; display: inline-block; text-align: center; box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);'><b>NEW Pareto Analysis</b></div>"
+            )
+            neg = filtered_data[filtered_data["sentiment_free_text"] == "negative"]
+            negative_df = neg["feedback_labels"].value_counts().reset_index()
+            negative_df.columns = ["Feedback Label", "Count"]
+            negative_df["Cumulative Count"] = negative_df["Count"].cumsum()
+            negative_df["Cumulative Percentage"] = (
+                100 * negative_df["Cumulative Count"] / negative_df["Count"].sum()
+            )
 
             # Create the figure for plotting
             fig, ax1 = plt.subplots(figsize=(12, 8))
 
             # Bar plot for the count of feedback labels
-            sns.barplot(x='Feedback Label', y='Count', data=negative_df, color='#4aa2e5', ax=ax1)
-            plt.xticks(rotation=45, ha='right')
+            sns.barplot(
+                x="Feedback Label", y="Count", data=negative_df, color="#4aa2e5", ax=ax1
+            )
+            plt.xticks(rotation=45, ha="right")
 
             # Create a secondary axis for the cumulative percentage
             ax2 = ax1.twinx()
-            sns.lineplot(x='Feedback Label', y='Cumulative Percentage', data=negative_df, sort=False, color='#ae4f4d', marker='D', ax=ax2)
+            sns.lineplot(
+                x="Feedback Label",
+                y="Cumulative Percentage",
+                data=negative_df,
+                sort=False,
+                color="#ae4f4d",
+                marker="D",
+                ax=ax2,
+            )
 
             # Set labels for the axes
-            ax1.set_ylabel('Count')
-            ax2.set_ylabel('Cumulative Percentage (%)')
+            ax1.set_ylabel("Count")
+            ax2.set_ylabel("Cumulative Percentage (%)")
 
             # Add a dashed line at 80% on the cumulative percentage axis
-            ax2.axhline(80, color='green', linestyle='dashed')
+            ax2.axhline(80, color="green", linestyle="dashed")
 
             # Grid and spines adjustments for ax1 (the bar plot axis)
             ax1.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
@@ -1936,8 +2064,8 @@ else:
             ax2.spines["left"].set_visible(False)
 
             # Title and labels
-            ax1.set_xlabel('Feedback Category')
-            plt.title('Negative Feedback Pareto Chart')
+            ax1.set_xlabel("Feedback Category")
+            plt.title("Negative Feedback Pareto Chart")
 
             # Adjust layout for better appearance
             plt.tight_layout()
@@ -1945,9 +2073,12 @@ else:
             # Display the plot in Streamlit
             st.pyplot(fig)
 
-            with st.expander("How to Interpret the **Pareto Plot**", icon=":material/downloading:"):
+            with st.expander(
+                "How to Interpret the **Pareto Plot**", icon=":material/downloading:"
+            ):
 
-                st.write("""A **Pareto Analysis plot** is a useful tool for identifying the most significant factors that contribute to an overall problem or outcome. It is based on the **Pareto Principle**, often called the “80/20 rule,” which suggests that roughly 80% of the effects come from 20% of the causes. In the context of patient reviews, this plot highlights key areas that may need improvement in order to address the majority of negative feedback.
+                st.write(
+                    """A **Pareto Analysis plot** is a useful tool for identifying the most significant factors that contribute to an overall problem or outcome. It is based on the **Pareto Principle**, often called the “80/20 rule,” which suggests that roughly 80% of the effects come from 20% of the causes. In the context of patient reviews, this plot highlights key areas that may need improvement in order to address the majority of negative feedback.
 
 ### How to Interpret the Pareto Plot:
 
@@ -1969,10 +2100,14 @@ else:
 ### Final Notes:
 
 This type of analysis can be customized per GP surgery based on patient reviews. The feedback categories will differ depending on each surgery’s specific circumstances. However, the general rule remains the same: focus on the most frequent and impactful issues first to efficiently improve overall patient experience.
-""")
+"""
+                )
 
-            with st.expander("**Evidence Based Intervention**", icon=":material/search_insights:"):
-                st.write("""## **1. Reception Staff Interaction**
+            with st.expander(
+                "**Evidence Based Intervention**", icon=":material/search_insights:"
+            ):
+                st.write(
+                    """## **1. Reception Staff Interaction**
 
 **Key Issues Identified:**
 
@@ -2156,10 +2291,13 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 - Mueller, S. K., et al. (2012). Hospital-based medication reconciliation practices: a systematic review. Archives of Internal Medicine, 172(14), 1057–1069.
 - Murray, M., & Berwick, D. M. (2003). Advanced access: reducing waiting and delays in primary care. JAMA, 289(8), 1035–1040.
 - Murray, M., & Tantau, C. (2000). Same-day appointments: exploding
-                         """)
+                         """
+                )
 
-
-        st.toast("**Pareto Analysis Chart** Select from submenu.", icon=":material/linear_scale:")
+        st.toast(
+            "**Pareto Analysis Chart** Select from submenu.",
+            icon=":material/linear_scale:",
+        )
 
         st.markdown("---")
 
@@ -2190,34 +2328,40 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     filtered_classes["feedback_labels"] == rating
                 ]
                 st.subheader(f"{rating.capitalize()} ({str(specific_class.shape[0])})")
-                selected_text = ''
+                selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["free_text"]
                     sentiment = row["sentiment_free_text"]
                     if sentiment == "neutral":
                         text_color = "gray"
-                    elif sentiment == 'negative':
+                    elif sentiment == "negative":
                         text_color = "orange"
-                    elif sentiment == 'positive':
+                    elif sentiment == "positive":
                         text_color = "blue"
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{str(text)}] ")
 
-                        selected_text = selected_text + ' ' + text
+                        selected_text = selected_text + " " + text
 
-                _ = st.popover(f"Summarize **{rating}** Feedback", icon=":material/robot_2:")
+                _ = st.popover(
+                    f"Summarize **{rating}** Feedback", icon=":material/robot_2:"
+                )
                 with _:
-                    _ = st.button("Summarize with Groq LLM", key=f"{rating}", icon=":material/robot_2:")
+                    _ = st.button(
+                        "Summarize with Groq LLM",
+                        key=f"{rating}",
+                        icon=":material/robot_2:",
+                    )
                     if _ == True:
-                        summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
+                        summary = ask_groq(
+                            f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}"
+                        )
                         st.markdown(f"### {rating}:\n {summary}")
 
     # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
     elif page == "Improvement Suggestions":
-        st.markdown(
-            "# :material/home_improvement_and_tools: Improvement Suggestions"
-        )
+        st.markdown("# :material/home_improvement_and_tools: Improvement Suggestions")
         st.caption(
             "Responses to **FFT Q2**: Is there anything that would have made your experience better?"
         )
@@ -2296,10 +2440,16 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         yanchor="top",
                     ),
                     xaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     yaxis=dict(
-                        gridcolor="lightgray", showline=True, linewidth=1, linecolor="black"
+                        gridcolor="lightgray",
+                        showline=True,
+                        linewidth=1,
+                        linecolor="black",
                     ),
                     plot_bgcolor="white",
                 )
@@ -2332,12 +2482,17 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             label_counts_df.columns = ["Improvement Labels", "Counts"]
 
             # Define the palette conditionally based on the category names
-            palette = {"positive": "#90bfca", "negative": "#f3aa49", "neutral": "#ece7e3"}
+            palette = {
+                "positive": "#90bfca",
+                "negative": "#f3aa49",
+                "neutral": "#ece7e3",
+            }
             hue_order = ["negative", "neutral", "positive"]
 
             # Create a cross-tabulation of feedback labels and sentiment categories
             crosstab = pd.crosstab(
-                filtered_data["improvement_labels"], filtered_data["sentiment_do_better"]
+                filtered_data["improvement_labels"],
+                filtered_data["sentiment_do_better"],
             )
             crosstab = crosstab.reindex(columns=hue_order)
 
@@ -2359,7 +2514,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 layout=go.Layout(
                     title="Improvement Suggestion Classification",
                     xaxis=dict(
-                        title="Counts", gridcolor="#888888", gridwidth=0.5, showgrid=True
+                        title="Counts",
+                        gridcolor="#888888",
+                        gridwidth=0.5,
+                        showgrid=True,
                     ),
                     yaxis=dict(title="Improvement Suggestion Labels", showgrid=False),
                     barmode="stack",
@@ -2445,7 +2603,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             st.pyplot(plt)
 
         st.markdown("---")
-        st.toast("Use the **Date Slider** to define the review period.", icon=":material/linear_scale:")
+        st.toast(
+            "Use the **Date Slider** to define the review period.",
+            icon=":material/linear_scale:",
+        )
 
         st.subheader("View Patient Improvement Suggestions")
         improvement_data = filtered_data[
@@ -2482,100 +2643,134 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 specific_class = filtered_classes[
                     filtered_classes["improvement_labels"] == rating
                 ]
-                st.subheader(f"{str(rating).capitalize()} ({str(specific_class.shape[0])})")
-                selected_text = ''
+                st.subheader(
+                    f"{str(rating).capitalize()} ({str(specific_class.shape[0])})"
+                )
+                selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["do_better"]
                     text = text.replace("[PERSON]", "PERSON")
                     sentiment = row["sentiment_do_better"]
                     if sentiment == "neutral":
                         text_color = "gray"
-                    elif sentiment == 'negative':
+                    elif sentiment == "negative":
                         text_color = "orange"
-                    elif sentiment == 'positive':
+                    elif sentiment == "positive":
                         text_color = "blue"
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{str(text)}] ")
 
-                        selected_text = selected_text + ' ' + text
+                        selected_text = selected_text + " " + text
 
-                _ = st.popover(f"Summarize **{rating}** Improvement Suggestions", icon=":material/robot_2:")
+                _ = st.popover(
+                    f"Summarize **{rating}** Improvement Suggestions",
+                    icon=":material/robot_2:",
+                )
                 with _:
-                    _ = st.button("Summarize with Groq LLM", key=f"{rating}", icon=":material/robot_2:")
+                    _ = st.button(
+                        "Summarize with Groq LLM",
+                        key=f"{rating}",
+                        icon=":material/robot_2:",
+                    )
                     if _ == True:
-                        summary = ask_groq(f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}")
+                        summary = ask_groq(
+                            f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}"
+                        )
                         st.markdown(f"### {rating}:\n {summary}")
-
 
     # -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
     elif page == "Emotion Detection":
-        st.markdown(
-            "# :material/add_reaction: Emotion Detection"
-        )
+        st.markdown("# :material/add_reaction: Emotion Detection")
         st.caption(
             "Identifying and classifying the **emotions** expressed in FFT feedback."
         )
 
         # Convert the 'time' column to datetime format
-        filtered_data['time'] = pd.to_datetime(filtered_data['time'])
+        filtered_data["time"] = pd.to_datetime(filtered_data["time"])
 
         # Combine the filtered_data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe
-        pooled_data = pd.concat([filtered_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}),
-                                filtered_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'})])
+        pooled_data = pd.concat(
+            [
+                filtered_data[["time", "emotion_free_text"]].rename(
+                    columns={"emotion_free_text": "emotion"}
+                ),
+                filtered_data[["time", "emotion_do_better"]].rename(
+                    columns={"emotion_do_better": "emotion"}
+                ),
+            ]
+        )
 
         # Extract the year and month from the 'time' column
-        pooled_data['year_month'] = pooled_data['time'].dt.to_period('M').astype(str)  # Convert Period to string
+        pooled_data["year_month"] = (
+            pooled_data["time"].dt.to_period("M").astype(str)
+        )  # Convert Period to string
 
         # Group by 'year_month' and 'emotion' to get the monthly counts
-        pooled_monthly_emotion_counts = pooled_data.groupby(['year_month', 'emotion']).size().unstack(fill_value=0)
+        pooled_monthly_emotion_counts = (
+            pooled_data.groupby(["year_month", "emotion"]).size().unstack(fill_value=0)
+        )
 
         # Normalize the counts by dividing each emotion's count by the total counts for that month
-        pooled_normalized_monthly_emotion_counts = pooled_monthly_emotion_counts.div(pooled_monthly_emotion_counts.sum(axis=1), axis=0)
+        pooled_normalized_monthly_emotion_counts = pooled_monthly_emotion_counts.div(
+            pooled_monthly_emotion_counts.sum(axis=1), axis=0
+        )
 
         # Convert the normalized monthly counts dataframe to long format for Plotly
-        pooled_normalized_long = pooled_normalized_monthly_emotion_counts.reset_index().melt(id_vars='year_month', var_name='emotion', value_name='proportion')
+        pooled_normalized_long = (
+            pooled_normalized_monthly_emotion_counts.reset_index().melt(
+                id_vars="year_month", var_name="emotion", value_name="proportion"
+            )
+        )
 
         # Create a Plotly line plot
         fig = px.line(
             pooled_normalized_long,
-            x='year_month',
-            y='proportion',
-            color='emotion',
+            x="year_month",
+            y="proportion",
+            color="emotion",
             markers=True,
-            title='Normalized Monthly Counts of Pooled Emotions Over Time',
-            labels={'year_month': 'Time (Year-Month)', 'proportion': 'Proportion'}
+            title="Normalized Monthly Counts of Pooled Emotions Over Time",
+            labels={"year_month": "Time (Year-Month)", "proportion": "Proportion"},
         )
 
         # Update layout for better appearance
         fig.update_layout(
-            legend_title_text='Emotion',
-            xaxis_title='Time (Year-Month)',
-            yaxis_title='Proportion',
+            legend_title_text="Emotion",
+            xaxis_title="Time (Year-Month)",
+            yaxis_title="Proportion",
             autosize=False,
             width=750,
             height=550,
-            margin=dict(l=40, r=40, b=40, t=40)
+            margin=dict(l=40, r=40, b=40, t=40),
         )
 
         st.plotly_chart(fig)
         st.markdown("---")
         # Convert the 'time' column to datetime format
         # Assuming filtered_data is your DataFrame
-    # Convert the 'time' column to datetime
-        filtered_data['time'] = pd.to_datetime(filtered_data['time'])
+        # Convert the 'time' column to datetime
+        filtered_data["time"] = pd.to_datetime(filtered_data["time"])
 
         # Combine the filtered_data from 'emotion_free_text' and 'emotion_do_better' into a single dataframe with a source column
-        pooled_data_with_source = pd.concat([
-            filtered_data[['time', 'emotion_free_text']].rename(columns={'emotion_free_text': 'emotion'}).assign(source='emotion_free_text'),
-            filtered_data[['time', 'emotion_do_better']].rename(columns={'emotion_do_better': 'emotion'}).assign(source='emotion_do_better')
-        ])
+        pooled_data_with_source = pd.concat(
+            [
+                filtered_data[["time", "emotion_free_text"]]
+                .rename(columns={"emotion_free_text": "emotion"})
+                .assign(source="emotion_free_text"),
+                filtered_data[["time", "emotion_do_better"]]
+                .rename(columns={"emotion_do_better": "emotion"})
+                .assign(source="emotion_do_better"),
+            ]
+        )
 
         # Filter out rows with NaN values in 'emotion'
-        pooled_data_with_source = pooled_data_with_source.dropna(subset=['emotion'])
+        pooled_data_with_source = pooled_data_with_source.dropna(subset=["emotion"])
 
         # Pivot the data to get counts of each emotion per source
-        pivot_table = pooled_data_with_source.pivot_table(index='emotion', columns='source', aggfunc='size', fill_value=0)
+        pivot_table = pooled_data_with_source.pivot_table(
+            index="emotion", columns="source", aggfunc="size", fill_value=0
+        )
 
         # Plotting
         fig, ax = plt.subplots(figsize=(10, 6))
@@ -2587,7 +2782,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         bottom = None
         for i, source in enumerate(pivot_table.columns):
             counts = pivot_table[source]
-            ax.barh(pivot_table.index, counts, left=bottom, label=source, color=colors[i])
+            ax.barh(
+                pivot_table.index, counts, left=bottom, label=source, color=colors[i]
+            )
             if bottom is None:
                 bottom = counts
             else:
@@ -2599,26 +2796,21 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         ax.spines["left"].set_visible(False)
         ax.yaxis.grid(False)
         ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-        plt.xlabel('Counts')
-        plt.ylabel('Emotions')
-        plt.title('Distribution of Emotions in Feedback and Improvement Suggestions')
-        plt.legend(title='Source', loc='upper right')
+        plt.xlabel("Counts")
+        plt.ylabel("Emotions")
+        plt.title("Distribution of Emotions in Feedback and Improvement Suggestions")
+        plt.legend(title="Source", loc="upper right")
         plt.tight_layout()
 
         # Display the plot in Streamlit
         st.pyplot(fig)
 
-
-
-
-
-
     # -- Feedback Timeline ------------------------------------------------------------------------------- Feedback Timeline
     elif page == "Feedback Timeline":
-        st.markdown(
-            "# :material/view_timeline: Feedback Timeline"
+        st.markdown("# :material/view_timeline: Feedback Timeline")
+        st.caption(
+            "The Latest Patient Reviews :  Displays the latest 150 patient reviews, with a focus on providing context and relevance to our services."
         )
-        st.caption("The Latest Patient Reviews :  Displays the latest 150 patient reviews, with a focus on providing context and relevance to our services.")
         daily_count = filtered_data.resample("D", on="time").size()
         daily_count_df = daily_count.reset_index()
         daily_count_df.columns = ["Date", "Daily Count"]
@@ -2639,7 +2831,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         ax_title = ax.set_title(
             "Daily FFT Responses", loc="right"
         )  # loc parameter aligns the title
-        ax_title.set_position((1, 1))  # Adjust these values to align your title as needed
+        ax_title.set_position(
+            (1, 1)
+        )  # Adjust these values to align your title as needed
         plt.xlabel("")
         plt.tight_layout()
         st.pyplot(fig)
@@ -2659,28 +2853,44 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     imp_labels = row["improvement_labels"]
                     time_ = row["time"]
                     rating = row["rating"]
-                    fb_emotion = row['emotion_free_text']
-                    ip_emotion = row['emotion_do_better']
+                    fb_emotion = row["emotion_free_text"]
+                    ip_emotion = row["emotion_do_better"]
 
                     with st.container(border=True):
-                        ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], key=f"badge_ratingss_{icounter}")
+                        ui.badges(
+                            badge_list=[
+                                (f"{icounter}", "destructive"),
+                                (f"{rating}", "default"),
+                                (f"{time_}", "secondary"),
+                            ],
+                            key=f"badge_ratingss_{icounter}",
+                        )
 
                         if str(free_text) not in ["nan"]:
                             st.markdown(f"🤔 " + str(free_text))
-                            ui.badges(badge_list=[(f"{fb_emotion}", "outline"), (f"{feedback_labels}", "outline")], key=f"badges_feedback_{icounter}")
+                            ui.badges(
+                                badge_list=[
+                                    (f"{fb_emotion}", "outline"),
+                                    (f"{feedback_labels}", "outline"),
+                                ],
+                                key=f"badges_feedback_{icounter}",
+                            )
 
                             if str(do_better) not in ["nan"]:
                                 st.markdown("🛠️ " + str(do_better))
-                                ui.badges(badge_list=[(f"{ip_emotion}", "outline"), (f"{imp_labels}", "outline")], key=f"badges_improve_{icounter}")
+                                ui.badges(
+                                    badge_list=[
+                                        (f"{ip_emotion}", "outline"),
+                                        (f"{imp_labels}", "outline"),
+                                    ],
+                                    key=f"badges_improve_{icounter}",
+                                )
 
                     icounter += 1
 
-
     # -- Sentiment Analysis ----------------------------------------------------------------------------- Sentiment Analysis
     elif page == "Sentiment Analysis":
-        st.markdown(
-            "# :material/sentiment_neutral: Sentiment Analysis"
-        )
+        st.markdown("# :material/sentiment_neutral: Sentiment Analysis")
 
         toggle = ui.switch(
             default_checked=False, label="Explain this page.", key="switch_dash"
@@ -2720,7 +2930,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 autopct="%1.1f%%",
                 startangle=140,
             )
-            ax1.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+            ax1.axis(
+                "equal"
+            )  # Equal aspect ratio ensures that pie is drawn as a circle.
             centre_circle = plt.Circle((0, 0), 0.50, fc="white")
             ax1.add_artist(centre_circle)
             ax1.set_title("Cum Sentiment - Feedback")
@@ -2898,7 +3110,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
         st.markdown("---")
 
-        st.markdown(f"### FFT Feedback with a :red-background[NEGATIVE] Sentiment Score.")
+        st.markdown(
+            f"### FFT Feedback with a :red-background[NEGATIVE] Sentiment Score."
+        )
 
         toggle = ui.switch(
             default_checked=True, label="Show last 30 days only.", key="switch_dash_neg"
@@ -2943,7 +3157,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
             if neg.shape[0] > 0:
                 fig, ax = plt.subplots(figsize=(12, 2.5))
-                sns.histplot(neg1["sentiment_score_free_text"], color="#ae4f4d", kde=True)
+                sns.histplot(
+                    neg1["sentiment_score_free_text"], color="#ae4f4d", kde=True
+                )
                 ax.spines["top"].set_visible(False)
                 ax.spines["right"].set_visible(False)
                 ax.spines["left"].set_visible(False)
@@ -2965,19 +3181,36 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         emotion = row["emotion_free_text"]
 
                         with st.container(border=True):
-                        # st.markdown(f"**{rating}** `{time_}`")
-                            ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
+                            # st.markdown(f"**{rating}** `{time_}`")
+                            ui.badges(
+                                badge_list=[
+                                    (f"{icounter}", "destructive"),
+                                    (f"{rating}", "default"),
+                                    (f"{time_}", "secondary"),
+                                ],
+                                class_name=f"badges_improve_head_{icounter}",
+                            )
                             if str(free_text) not in ["nan"]:
                                 st.markdown("🤔 " + str(free_text))
                                 # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                                ui.badges(badge_list=[(f"{emotion}", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
+                                ui.badges(
+                                    badge_list=[
+                                        (f"{emotion}", "outline"),
+                                        (f"{cat}", "outline"),
+                                        (f"{sentiment}", "secondary"),
+                                        (f"{score}", "secondary"),
+                                    ],
+                                    class_name=f"badges_improve_{icounter}",
+                                )
 
                         icounter += 1
 
         elif sentiment_tab_selector == "Improvement Suggestions":
             if neg.shape[0] > 0:
                 fig, ax = plt.subplots(figsize=(12, 2.5))
-                sns.histplot(neg2["sentiment_score_do_better"], color="#d7662a", kde=True)
+                sns.histplot(
+                    neg2["sentiment_score_do_better"], color="#d7662a", kde=True
+                )
                 ax.spines["top"].set_visible(False)
                 ax.spines["right"].set_visible(False)
                 ax.spines["left"].set_visible(False)
@@ -3007,19 +3240,32 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         #     ui.badges(badge_list=[(f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "outline")], class_name=f"badges_improve_{icounter}")
 
                         with st.container(border=True):
-                        # st.markdown(f"**{rating}** `{time_}`")
-                            ui.badges(badge_list=[(f"{icounter}", "destructive"), (f"{rating}", "default"), (f"{time_}", "secondary")], class_name=f"badges_improve_head_{icounter}")
+                            # st.markdown(f"**{rating}** `{time_}`")
+                            ui.badges(
+                                badge_list=[
+                                    (f"{icounter}", "destructive"),
+                                    (f"{rating}", "default"),
+                                    (f"{time_}", "secondary"),
+                                ],
+                                class_name=f"badges_improve_head_{icounter}",
+                            )
                             if str(do_better) not in ["nan"]:
                                 st.markdown("🛠️ " + str(do_better))
                                 # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                                ui.badges(badge_list=[(f"{emotion}", "outline"), (f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "secondary")], class_name=f"badges_improve_{icounter}")
+                                ui.badges(
+                                    badge_list=[
+                                        (f"{emotion}", "outline"),
+                                        (f"{cat}", "outline"),
+                                        (f"{sentiment}", "secondary"),
+                                        (f"{score}", "secondary"),
+                                    ],
+                                    class_name=f"badges_improve_{icounter}",
+                                )
 
                         icounter += 1
     # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
     elif page == "Word Cloud":
-        st.markdown(
-            "# :material/cloud: Word Cloud"
-        )
+        st.markdown("# :material/cloud: Word Cloud")
         try:
             toggle = ui.switch(
                 default_checked=False, label="Explain this page.", key="switch_dash"
@@ -3034,7 +3280,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 )
             st.subheader("Feedback Word Cloud")
             text = " ".join(filtered_data["free_text"].dropna())
-            wordcloud = WordCloud(background_color="white", colormap="Blues").generate(text)
+            wordcloud = WordCloud(background_color="white", colormap="Blues").generate(
+                text
+            )
             plt.imshow(wordcloud, interpolation="bilinear")
             plt.axis("off")
             st.pyplot(plt)
@@ -3048,19 +3296,23 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             st.subheader("Improvement Suggestions Word Cloud")
 
             text2 = " ".join(filtered_data["do_better"].dropna())
-            wordcloud = WordCloud(background_color="white", colormap="Reds").generate(text2)
+            wordcloud = WordCloud(background_color="white", colormap="Reds").generate(
+                text2
+            )
             plt.imshow(wordcloud, interpolation="bilinear")
             plt.axis("off")
             st.pyplot(plt)
         except:
             ui.badges(
                 badge_list=[
-                    ("No improvement suggestions available for this date range.", "outline")
+                    (
+                        "No improvement suggestions available for this date range.",
+                        "outline",
+                    )
                 ],
                 class_name="flex gap-2",
                 key="badges11",
             )
-
 
     # -- GPT4 Summary ----------------------------------------------------------------------------------------- GPT4 Summary
     elif page == "GPT-4 Summary":
@@ -3179,12 +3431,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                             True  # Avoid sending the webhook again on rerun
                         )
                         ui.badges(
-                        badge_list=[
-                    (f"⚡️Webhook sent successfully!", "outline"),
-                ],
-                class_name="flex gap-2",
-                key="badges50",
-            )
+                            badge_list=[
+                                (f"⚡️Webhook sent successfully!", "outline"),
+                            ],
+                            class_name="flex gap-2",
+                            key="badges50",
+                        )
 
             # Conditionally show the 'Summarize with GPT-4' button based on the submission state
             if st.session_state.get("submitted", False):
@@ -3257,9 +3509,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
     # -- Dataframe ----------------------------------------------------------------------------------------------- Dataframe
     elif page == "Dataframe":
-        st.markdown(
-            "# :material/table: Dataframe"
-        )
+        st.markdown("# :material/table: Dataframe")
 
         toggle = ui.switch(
             default_checked=False, label="Explain this page.", key="switch_dash"
@@ -3284,8 +3534,13 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     # -- Reports --------------------------------------------------------------------------------------------------- Reports
     elif page == "Reports":
         st.markdown("# :material/sim_card_download: Reports")
-        st.toast("**Reports Updated** now included insights generated with Groq LLM.", icon=":material/robot_2:")
-        st.caption("Generate **monthly reports**, including performance comparison with PCN and Groq LLM Insights.")
+        st.toast(
+            "**Reports Updated** now included insights generated with Groq LLM.",
+            icon=":material/robot_2:",
+        )
+        st.caption(
+            "Generate **monthly reports**, including performance comparison with PCN and Groq LLM Insights."
+        )
         st.write("")
         ui.badges(
             badge_list=[("NEW", "destructive"), ("beta v1.0.3", "outline")],
@@ -3294,7 +3549,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         )
 
         # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
-        if page not in ["**:blue-background[PCN Dashboard]**", "**About**"] and selected_surgery:
+        if (
+            page not in ["**:blue-background[PCN Dashboard]**", "**About**"]
+            and selected_surgery
+        ):
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
             if not surgery_data.empty:
@@ -3314,7 +3572,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 # Create year and month selectors inside the columns
                 with col1:
                     selected_year = st.selectbox(
-                        "Select the **Year**", options=years, index=years.index(max_date.year)
+                        "Select the **Year**",
+                        options=years,
+                        index=years.index(max_date.year),
                     )
 
                 # Adjust month options based on selected year
@@ -3341,21 +3601,31 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     & (pcn_data["time"].dt.month == selected_month_number)
                 ]
 
-
         # Your existing setup code...
 
         if st.button("Generate AI MedReview Report"):
             try:
                 with st.spinner("Generating Report..."):
-                # Call the function with the parameters from Streamlit widgets
+                    # Call the function with the parameters from Streamlit widgets
                     simple_pdf(
-                        filtered_data, pcn_filtered_data, selected_month, selected_year, selected_surgery, selected_pcn, 'rating'
+                        filtered_data,
+                        pcn_filtered_data,
+                        selected_month,
+                        selected_year,
+                        selected_surgery,
+                        selected_pcn,
+                        "rating",
                     )
 
                 # Inform the user of success
 
                 ui.badges(
-                    badge_list=[(f"Report generated successfully! - {selected_month} {selected_year}", "default")],
+                    badge_list=[
+                        (
+                            f"Report generated successfully! - {selected_month} {selected_year}",
+                            "default",
+                        )
+                    ],
                     class_name="flex gap-2",
                     key="badges_success",
                 )
@@ -3371,42 +3641,60 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             except AttributeError as e:
                 st.warning(f"Cannot generate report {e}")
 
-
-
     # -- About ------------------------------------------------------------------------------------------------------- About
     elif page == "**About**":
         st.markdown("# :material/info: About")
 
-
-
         st.markdown("### Patient Feedback Analysis in Healthcare")
-        st.markdown("Welcome to **AI MedReview**, your powerful new dashboard for elevating healthcare providers' understanding and utilization of patient feedback. Our solution focuses on the essential Friends and Family Test (FFT), empowering you to extract deeper insights from this invaluable data source. At the core of AI MedReview lies a transformative approach that goes beyond mere quantitative metrics. By leveraging natural language processing and machine learning techniques, we unlock the nuanced sentiments behind patient responses. Our dashboard assigns detailed scores to each piece of feedback, painting a more comprehensive picture of patient satisfaction levels.")
+        st.markdown(
+            "Welcome to **AI MedReview**, your powerful new dashboard for elevating healthcare providers' understanding and utilization of patient feedback. Our solution focuses on the essential Friends and Family Test (FFT), empowering you to extract deeper insights from this invaluable data source. At the core of AI MedReview lies a transformative approach that goes beyond mere quantitative metrics. By leveraging natural language processing and machine learning techniques, we unlock the nuanced sentiments behind patient responses. Our dashboard assigns detailed scores to each piece of feedback, painting a more comprehensive picture of patient satisfaction levels."
+        )
         with st.popover("Listern to **Podcast** -  Sept 2024", icon=":material/mic:"):
-            st.image('images/podcast2.png')
-            st.audio('images/ai-medreview_podcast.wav')
+            st.image("images/podcast2.png")
+            st.audio("images/ai-medreview_podcast.wav")
 
-        st.markdown("Through **sentiment analysis** powered by Hugging Face's `cardiffnlp/twitter-roberta-base-sentiment-latest model`, we precisely determine the emotional tone of patient comments, be it positive, negative, or neutral. This level of granular understanding enables you to celebrate areas of excellence and swiftly identify opportunities for improvement.")
-        st.markdown("But we don't stop there. To protect patient privacy, we employ robust named **entity recognition (NER)** capabilities, utilizing the Hugging Face `dbmdz/bert-large-cased-finetuned-conll03-english model`. This ensures any personally identifiable information (PII) is seamlessly anonymized, safeguarding the confidentiality of your valuable data.")
-        st.markdown("Furthermore, our innovative **zero-shot classification** approach, powered by the Facebook `BART-large-mnli` architecture, allows us to categorize patient feedback with remarkable accuracy – even without specialized healthcare training data. By carefully curating our classification labels, we achieved a striking 0.91 accuracy, demonstrating the remarkable versatility of this model.")
-        st.markdown("This comprehensive suite of advanced analytics empowers healthcare providers like yourself to move beyond mere data presentation and unlock a clearer, more actionable understanding of patient experiences. Armed with these insights, you can drive continuous improvements, elevate service quality, and enhance patient outcomes.")
-        st.markdown("Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare.")
+        st.markdown(
+            "Through **sentiment analysis** powered by Hugging Face's `cardiffnlp/twitter-roberta-base-sentiment-latest model`, we precisely determine the emotional tone of patient comments, be it positive, negative, or neutral. This level of granular understanding enables you to celebrate areas of excellence and swiftly identify opportunities for improvement."
+        )
+        st.markdown(
+            "But we don't stop there. To protect patient privacy, we employ robust named **entity recognition (NER)** capabilities, utilizing the Hugging Face `dbmdz/bert-large-cased-finetuned-conll03-english model`. This ensures any personally identifiable information (PII) is seamlessly anonymized, safeguarding the confidentiality of your valuable data."
+        )
+        st.markdown(
+            "Furthermore, our innovative **zero-shot classification** approach, powered by the Facebook `BART-large-mnli` architecture, allows us to categorize patient feedback with remarkable accuracy – even without specialized healthcare training data. By carefully curating our classification labels, we achieved a striking 0.91 accuracy, demonstrating the remarkable versatility of this model."
+        )
+        st.markdown(
+            "This comprehensive suite of advanced analytics empowers healthcare providers like yourself to move beyond mere data presentation and unlock a clearer, more actionable understanding of patient experiences. Armed with these insights, you can drive continuous improvements, elevate service quality, and enhance patient outcomes."
+        )
+        st.markdown(
+            "Explore the AI MedReview dashboard today and experience the transformative power of data-driven decision-making in healthcare."
+        )
 
         st.markdown("## Change Log")
         with st.container(height=400, border=True):
             st.markdown("### version 2.2.1")
-            st.markdown("**GROQ LLM Summaries added for All monthly Feedback.** Integrated GROQ LLM with the `llama-3.1-8b-instant` model for generating summaries in all monthly reports. The AI-powered summaries now provide insights into key trends and suggest areas for improvement.")
-            st.markdown("""**PARETO ANALYSIS Plots**  In the Feedback Classification section of app you will see a new tab **Pareto Analysis**. A Pareto plot is created here from feedback classification information. There is an overview of how to interoperate the plot and some suggestions for evidence backed interventions.
+            st.markdown(
+                "**GROQ LLM Summaries added for All monthly Feedback.** Integrated GROQ LLM with the `llama-3.1-8b-instant` model for generating summaries in all monthly reports. The AI-powered summaries now provide insights into key trends and suggest areas for improvement."
+            )
+            st.markdown(
+                """**PARETO ANALYSIS Plots**  In the Feedback Classification section of app you will see a new tab **Pareto Analysis**. A Pareto plot is created here from feedback classification information. There is an overview of how to interoperate the plot and some suggestions for evidence backed interventions.
 
 **Improvments made to**
 - Campaigns
 - NER People
 - Reports
-- About""")
+- About"""
+            )
             st.markdown("### version 2.2.0")
-            st.markdown("**GROQ LLM Summaries / Insights** introduced across the app. You can now generate insights from feedback in the following pages: NER People, Campaigns, Feedback Classification and Improvmeent Suggestions.")
+            st.markdown(
+                "**GROQ LLM Summaries / Insights** introduced across the app. You can now generate insights from feedback in the following pages: NER People, Campaigns, Feedback Classification and Improvmeent Suggestions."
+            )
 
-        st.caption("![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed.")
-        st.caption("![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)")
+        st.caption(
+            "![GitHub](https://img.icons8.com/material-outlined/24/github.png) [AI MedReview on GitHub](https://github.com/janduplessis883/ai-medreview), where collaboration and contributions are warmly welcomed."
+        )
+        st.caption(
+            "![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)"
+        )
 
         st.write("")
         st.write("")
@@ -3418,10 +3706,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.write("")
         st.write("")
         with st.expander(label="Leave Feedback"):
-            form_url = (
-                "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
+            form_url = "https://tally.so/r/w2ed0e"  # Replace this URL with the URL of your form
+            iframe_code = (
+                f'<iframe src="{form_url}" width="100%" height="400"></iframe>'
             )
-            iframe_code = f'<iframe src="{form_url}" width="100%" height="400"></iframe>'
             st.markdown(iframe_code, unsafe_allow_html=True)
 
         col1, col2, col3 = st.columns(3)
@@ -3446,145 +3734,210 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             )
         st.write("")
 
-
     # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
         st.markdown("# :material/psychology_alt: NER - People")
         st.caption("**Named Entity Recognistion** - People")
-        st.toast("**NER People** De-anonymized reviews. **New** Summarize with Groq.", icon=":material/lock:")
+        st.toast(
+            "**NER People** De-anonymized reviews. **New** Summarize with Groq.",
+            icon=":material/lock:",
+        )
         # Set the correct PIN
 
         # Free Test
-        free_text_per = filtered_data.dropna(subset='free_text_PER')
-        do_better_per = filtered_data.dropna(subset='do_better_PER')
+        free_text_per = filtered_data.dropna(subset="free_text_PER")
+        do_better_per = filtered_data.dropna(subset="do_better_PER")
 
-        free_text_list = free_text_per['free_text_PER'].unique().tolist()
+        free_text_list = free_text_per["free_text_PER"].unique().tolist()
         selected_names = st.multiselect("Select People", options=free_text_list)
 
-        filtered_free_text_per = free_text_per[free_text_per['free_text_PER'].isin(selected_names)]
-        filtered_do_better_per = do_better_per[do_better_per['do_better_PER'].isin(selected_names)]
-
+        filtered_free_text_per = free_text_per[
+            free_text_per["free_text_PER"].isin(selected_names)
+        ]
+        filtered_do_better_per = do_better_per[
+            do_better_per["do_better_PER"].isin(selected_names)
+        ]
 
         if len(selected_names) > 0:
 
             with st.container(height=550, border=True):
 
-                st.html("<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Free-Text Feedback</b> - NER People</div>")
+                st.html(
+                    "<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Free-Text Feedback</b> - NER People</div>"
+                )
                 for index, row in filtered_free_text_per.iterrows():
 
                     with st.container(border=True):
-                        date = row['time']
-                        free_text = row['free_text']
-                        names = row['free_text_PER']
-                        sentiment = row['sentiment_free_text']
+                        date = row["time"]
+                        free_text = row["free_text"]
+                        names = row["free_text_PER"]
+                        sentiment = row["sentiment_free_text"]
                         st.write(free_text)
-                        ui.badges(badge_list=[(f"{names}", "default"), (f"{date}", "outline"), (f"{sentiment}", "secondary")], key=f"free_text_name_{index}")
+                        ui.badges(
+                            badge_list=[
+                                (f"{names}", "default"),
+                                (f"{date}", "outline"),
+                                (f"{sentiment}", "secondary"),
+                            ],
+                            key=f"free_text_name_{index}",
+                        )
 
                 st.divider()
-                st.html("<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Improvement Suggestions</b> - NER People</div>")
+                st.html(
+                    "<div class='status' style='background-color: #f2a947; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 18px; display: inline-block; text-align: center; box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);'><b>Improvement Suggestions</b> - NER People</div>"
+                )
                 for index, row in filtered_do_better_per.iterrows():
 
                     with st.container(border=True):
-                        date = row['time']
-                        do_better = row['do_better']
-                        names2 = row['do_better_PER']
-                        sentiment2 = row['sentiment_do_better']
+                        date = row["time"]
+                        do_better = row["do_better"]
+                        names2 = row["do_better_PER"]
+                        sentiment2 = row["sentiment_do_better"]
                         st.write(do_better)
-                        ui.badges(badge_list=[(f"{names2}", "default"),(f"{date}", "outline"), (f"{sentiment2}", "secondary")], key=f"do_better_name_{index}")
+                        ui.badges(
+                            badge_list=[
+                                (f"{names2}", "default"),
+                                (f"{date}", "outline"),
+                                (f"{sentiment2}", "secondary"),
+                            ],
+                            key=f"do_better_name_{index}",
+                        )
                 st.divider()
             # Create a download button for selected entries outside of the container
-            selected_entries = "\n\n".join([f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}" for _, row in filtered_free_text_per.iterrows()])
-            selected_entries += "\n\n" + "\n\n".join([f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}" for _, row in filtered_do_better_per.iterrows()])
+            selected_entries = "\n\n".join(
+                [
+                    f"Free Text Feedback:\n{row['free_text']}\nNames: {row['free_text_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_free_text']}"
+                    for _, row in filtered_free_text_per.iterrows()
+                ]
+            )
+            selected_entries += "\n\n" + "\n\n".join(
+                [
+                    f"Improvement Suggestion:\n{row['do_better']}\nNames: {row['do_better_PER']}\nDate: {row['time']}\nSentiment: {row['sentiment_do_better']}"
+                    for _, row in filtered_do_better_per.iterrows()
+                ]
+            )
 
-            st.download_button(label="Download Selected Entries", data=selected_entries, file_name=f"Selected_NER_People_{selected_surgery}.txt", mime="text/plain", icon=":material/download:")
+            st.download_button(
+                label="Download Selected Entries",
+                data=selected_entries,
+                file_name=f"Selected_NER_People_{selected_surgery}.txt",
+                mime="text/plain",
+                icon=":material/download:",
+            )
 
             with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
-                    summary = ask_groq(f"""Please take the personal feedback provided below and perform the following tasks:
+                    summary = ask_groq(
+                        f"""Please take the personal feedback provided below and perform the following tasks:
 Replace any instances of 'PERSON' (a placeholder for a person's name) with the actual name(s) listed at the bottom of the feedback in a list.
 Summarize the feedback in your own words, highlighting any key points or trends that emerge from the text, for each person identified.
 Example Feedback Text: Dr PERSON is very friendly.
-['Jones'] - the above feedback refers to Dr Jones is very friendly. With this in mind summarize the feedback trands received for each person mentioned: {selected_entries}""")
+['Jones'] - the above feedback refers to Dr Jones is very friendly. With this in mind summarize the feedback trands received for each person mentioned: {selected_entries}"""
+                    )
                     st.markdown(summary)
 
         else:
             ui.badges(
-                    badge_list=[
-                        ("There’s nothing to display at the moment. Select names from the dropdown list.", "outline")
-                    ],
-                    class_name="flex gap-2",
-                    key="badges113empty",
-                )
-
+                badge_list=[
+                    (
+                        "There’s nothing to display at the moment. Select names from the dropdown list.",
+                        "outline",
+                    )
+                ],
+                class_name="flex gap-2",
+                key="badges113empty",
+            )
 
         # -- About ------------------------------------------------------------------------------------------------------- Campaings
     elif page == "Campaigns":
         st.markdown("# :material/campaign: Campaigns")
 
-        campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
+        campaign_df = filtered_data[
+            ["campaing_id", "campaign_rating", "campaign_freetext"]
+        ]
         # Prepare list of campaigns
-        campaign_list = list(campaign_df['campaing_id'].unique())
+        campaign_list = list(campaign_df["campaing_id"].unique())
         # remove NaN from the list
-        campaign_list = list(filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list))
-
+        campaign_list = list(
+            filter(lambda x: not (isinstance(x, float) and np.isnan(x)), campaign_list)
+        )
 
         st.container(height=8, border=False)
         if len(campaign_list) != 0:
 
-
-
-            selected_campaign = st.selectbox("Select a **Campaign**", options=campaign_list, index=1)
+            selected_campaign = st.selectbox(
+                "Select a **Campaign**", options=campaign_list, index=1
+            )
 
             # Filter campaign_df by selected_campaign
-            campaign_df = filtered_data[['campaing_id', 'campaign_rating', 'campaign_freetext']]
-            campaign_df = campaign_df.dropna(subset=['campaing_id'])
-            campaign_df = campaign_df[campaign_df['campaign_rating'] != 0]
+            campaign_df = filtered_data[
+                ["campaing_id", "campaign_rating", "campaign_freetext"]
+            ]
+            campaign_df = campaign_df.dropna(subset=["campaing_id"])
+            campaign_df = campaign_df[campaign_df["campaign_rating"] != 0]
 
             # Filter by selected_campaign
-            campaign_df = campaign_df[campaign_df['campaing_id'] == selected_campaign]
+            campaign_df = campaign_df[campaign_df["campaing_id"] == selected_campaign]
 
             # Handle free-text filtering
-            campaign_df_freetext = campaign_df.dropna(subset=['campaign_freetext'])
-            campaign_df_freetext = campaign_df_freetext.sort_values(by='campaign_rating', ascending=False)
+            campaign_df_freetext = campaign_df.dropna(subset=["campaign_freetext"])
+            campaign_df_freetext = campaign_df_freetext.sort_values(
+                by="campaign_rating", ascending=False
+            )
 
             # Calculate campaign rating mean
             if not campaign_df.empty:
-                campaign_rating_mean = str(round(campaign_df['campaign_rating'].mean() * 20, 1))
+                campaign_rating_mean = str(
+                    round(campaign_df["campaign_rating"].mean() * 20, 1)
+                )
             else:
                 campaign_rating_mean = "No data"
 
             # Filter and calculate PCN campaign data
-            pcn_campaign_df = pcn_data[['campaing_id', 'campaign_rating']]
-            pcn_campaign_df = pcn_campaign_df.dropna(subset=['campaing_id'])
-            pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaign_rating'] != 0]
+            pcn_campaign_df = pcn_data[["campaing_id", "campaign_rating"]]
+            pcn_campaign_df = pcn_campaign_df.dropna(subset=["campaing_id"])
+            pcn_campaign_df = pcn_campaign_df[pcn_campaign_df["campaign_rating"] != 0]
 
             # Filter by selected_campaign
-            pcn_campaign_df = pcn_campaign_df[pcn_campaign_df['campaing_id'] == selected_campaign]
+            pcn_campaign_df = pcn_campaign_df[
+                pcn_campaign_df["campaing_id"] == selected_campaign
+            ]
 
             if not pcn_campaign_df.empty:
-                pcn_campaign_rating_mean = str(round(pcn_campaign_df['campaign_rating'].mean() * 20, 1))
+                pcn_campaign_rating_mean = str(
+                    round(pcn_campaign_df["campaign_rating"].mean() * 20, 1)
+                )
             else:
                 pcn_campaign_rating_mean = "No data"
 
+            st.markdown(f"## {selected_campaign}")
 
-            st.markdown(f"# {selected_campaign}")
-
-
-            st.metric(f"Campaign Satisfaction: {selected_surgery}", value=campaign_rating_mean + "%", delta=f"{pcn_campaign_rating_mean}% - {selected_pcn}", delta_color="off")
+            st.metric(
+                f"Campaign Satisfaction: {selected_surgery}",
+                value=campaign_rating_mean + "%",
+                delta=f"{pcn_campaign_rating_mean}% - {selected_pcn}",
+                delta_color="off",
+            )
 
             # Plot seaborn histogram of campaign ratings
             try:
                 fig, ax = plt.subplots(figsize=(12, 3))
-                sns.histplot(campaign_df['campaign_rating'], kde=True, bins=5, ax=ax, color="#f5c244")
-                ax.set_title('Distribution of Campaign Ratings')
+                sns.histplot(
+                    campaign_df["campaign_rating"],
+                    kde=True,
+                    bins=5,
+                    ax=ax,
+                    color="#f5c244",
+                )
+                ax.set_title("Distribution of Campaign Ratings")
                 ax.spines["top"].set_visible(False)
                 ax.spines["right"].set_visible(False)
                 ax.spines["left"].set_visible(False)
                 ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
                 plt.tight_layout()
-                ax.set_xlabel(f'Campaign Rating - {selected_campaign}')
-                ax.set_ylabel('Frequency')
+                ax.set_xlabel(f"Campaign Rating - {selected_campaign}")
+                ax.set_ylabel("Frequency")
                 st.pyplot(fig)
             except:
                 st.warning("Could not display histogram.")
@@ -3592,7 +3945,9 @@ Example Feedback Text: Dr PERSON is very friendly.
             try:
 
                 text2 = " ".join(campaign_df["campaign_freetext"].dropna())
-                wordcloud = WordCloud(background_color="white", colormap="Oranges").generate(text2)
+                wordcloud = WordCloud(
+                    background_color="white", colormap="Oranges"
+                ).generate(text2)
                 fig2, ax2 = plt.subplots()
                 ax2.imshow(wordcloud, interpolation="bilinear")
                 ax2.axis("off")
@@ -3602,8 +3957,8 @@ Example Feedback Text: Dr PERSON is very friendly.
                 st.subheader("Campaign Free Text")
                 with st.container(height=400, border=True):
                     for _, row in campaign_df_freetext.iterrows():
-                        rating = row['campaign_rating']
-                        text = row['campaign_freetext']
+                        rating = row["campaign_rating"]
+                        text = row["campaign_freetext"]
                         st.write(int(rating), text)
             except:
                 ui.badges(
@@ -3614,12 +3969,16 @@ Example Feedback Text: Dr PERSON is very friendly.
                     key="badges113",
                 )
             # Aggregate all campaign free text for LLM summarization
-            aggregated_freetext = " ".join(campaign_df['campaign_freetext'].dropna())
+            aggregated_freetext = " ".join(campaign_df["campaign_freetext"].dropna())
 
-            with st.popover(f"Summarize **{selected_campaign}** feedback", icon=":material/robot_2:"):
+            with st.popover(
+                f"Summarize **{selected_campaign}** feedback", icon=":material/robot_2:"
+            ):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
-                    summary = ask_groq(f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}")
+                    summary = ask_groq(
+                        f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}"
+                    )
                     st.markdown(summary)
 
         else:

@@ -17,6 +17,7 @@ def mock_google_sheet_data():
     }
     return pd.DataFrame(data)
 
+
 # Create a fixture to mock the load_local_data function
 @pytest.fixture
 def mock_local_data():
@@ -30,18 +31,23 @@ def mock_local_data():
     }
     return pd.DataFrame(data)
 
+
 # Create a fixture to mock the environment variables
 @pytest.fixture
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("SECRET_PATH", "/path/to/secret")
     monkeypatch.setenv("CRONITOR_API_KEY", "mock_api_key")
-    
+
+
 # Test load_google_sheet
 def test_load_google_sheet(mock_google_sheet_data):
     with patch("data.SheetHelper") as mock_sheet_helper:
-        mock_sheet_helper.return_value.gsheet_to_df.return_value = mock_google_sheet_data
+        mock_sheet_helper.return_value.gsheet_to_df.return_value = (
+            mock_google_sheet_data
+        )
         result = load_google_sheet()
         assert result.equals(mock_google_sheet_data)
+
 
 # Test load_local_data
 def test_load_local_data(mock_local_data, tmp_path):
@@ -50,6 +56,7 @@ def test_load_local_data(mock_local_data, tmp_path):
     with patch("data.DATA_PATH", str(tmp_path)):
         result = load_local_data()
         assert result.equals(mock_local_data)
+
 
 # Test word_count
 def test_word_count(mock_google_sheet_data):
@@ -60,4 +67,3 @@ def test_word_count(mock_google_sheet_data):
     assert result["free_text_len"][1] == 6
     assert result["do_better_len"][0] == 3
     assert result["do_better_len"][1] == 2
-

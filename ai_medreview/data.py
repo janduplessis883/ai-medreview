@@ -9,21 +9,25 @@ import requests
 import seaborn as sns
 from colorama import Back, Fore, Style, init
 from nlpretext import Preprocessor
-from nlpretext.basic.preprocess import (lower_text, normalize_whitespace,
-                                        remove_eol_characters, remove_punct,
-                                        remove_stopwords,
-                                        replace_phone_numbers)
-from nlpretext.social.preprocess import (remove_emoji, remove_hashtag,
-                                         remove_mentions)
+from nlpretext.basic.preprocess import (
+    lower_text,
+    normalize_whitespace,
+    remove_eol_characters,
+    remove_punct,
+    remove_stopwords,
+    replace_phone_numbers,
+)
+from nlpretext.social.preprocess import remove_emoji, remove_hashtag, remove_mentions
 from tqdm import tqdm
-from transformers import (AutoModelForSequenceClassification, AutoTokenizer, pipeline)
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
 
 from ai_medreview.sheethelper import SheetHelper
 
 tqdm.pandas()
 
 import torch.multiprocessing as mp
-mp.set_start_method('spawn', force=True)
+
+mp.set_start_method("spawn", force=True)
 
 from ai_medreview.automation.git_merge import *
 from ai_medreview.params import *
@@ -132,6 +136,7 @@ def sentiment_analysis(data, column):
 
     return data
 
+
 def sentiment_arc_analysis(data, column, chunk_size=6):
 
     # Initialize lists to store labels and scores
@@ -139,7 +144,7 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
     sentiment_score = []
     sentiment_arc = []
 
-        # Iterate over DataFrame rows and classify text
+    # Iterate over DataFrame rows and classify text
     for index, row in tqdm(
         data.iterrows(),
         total=data.shape[0],
@@ -159,7 +164,7 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
             chunk = words[i * chunk_size : (i + 1) * chunk_size]
 
             # Join the chunk into a single string
-            chunk_text = ' '.join(chunk)
+            chunk_text = " ".join(chunk)
 
             # Calculate the sentiment polarity of the chunk
             if pd.isna(chunk_text) or chunk_text == "":
@@ -168,18 +173,16 @@ def sentiment_arc_analysis(data, column, chunk_size=6):
                 model_output = sentiment_task(chunk_text)
                 temp_sentiment = model_output[0]["label"]
                 temp_sentiment_score = model_output[0]["score"]
-                if temp_sentiment == 'negative':
+                if temp_sentiment == "negative":
                     chunk_sentiment = -abs(temp_sentiment_score)
-                elif temp_sentiment == 'neutral':
+                elif temp_sentiment == "neutral":
                     chunk_sentiment = 0
-                elif temp_sentiment == 'positive':
+                elif temp_sentiment == "positive":
                     chunk_sentiment = temp_sentiment_score
 
                 temp_sentiment_arc.append(chunk_sentiment)
 
         sentiment_arc.append(temp_sentiment_arc)
-
-
 
     # Add labels and scores as new columns
     data[f"sentiment_arc_{column}"] = sentiment_arc
@@ -246,9 +249,9 @@ def batch_generator(data, column_name, batch_size):
 @time_it
 def feedback_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
-        "cpu"
-    )
+    model = AutoModelForSequenceClassification.from_pretrained(
+        "facebook/bart-large-mnli"
+    ).to("cpu")
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
     # Create classifier pipeline
@@ -259,13 +262,11 @@ def feedback_classification(data, batch_size=16):
             tokenizer=tokenizer,
             device=-1,
             framework="pt",  # specify PyTorch
-            num_workers=0  # Disable multiprocessing
+            num_workers=0,  # Disable multiprocessing
         )  # -1 for CPU
     except Exception as e:
         print(f"Error in initializing the classifier pipeline: {e}")
         return data  # Exit if the pipeline cannot be created
-
-
 
     # Define the categories for classification
     categories = [
@@ -335,9 +336,9 @@ def feedback_classification(data, batch_size=16):
 @time_it
 def improvement_classification(data, batch_size=16):
     # Load model and tokenizer
-    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli").to(
-        "cpu"
-    )
+    model = AutoModelForSequenceClassification.from_pretrained(
+        "facebook/bart-large-mnli"
+    ).to("cpu")
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
     # Create classifier pipeline
@@ -493,23 +494,24 @@ def send_alert_webhook(number):
 
     # Check if the request was successful
     if response.status_code == 200:
-        logger.info(
-            f"Webhook sent to n8n with ** {number} ** new responses processed."
-        )
+        logger.info(f"Webhook sent to n8n with ** {number} ** new responses processed.")
     else:
         logger.info(f"Failed to send data: {response.status_code}, {response.text}")
 
+
 @time_it
 def create_monthyear(df):
-    df['time'] = pd.to_datetime(df['time'])
-    df['month_year'] = df['time'].dt.to_period('M')
+    df["time"] = pd.to_datetime(df["time"])
+    df["month_year"] = df["time"].dt.to_period("M")
     return df
+
 
 # --- Emotion Classification Pipeline ----------------------------------------------------------------------------------
 model_name = "SamLowe/roberta-base-go_emotions"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 classifier = pipeline("text-classification", model=model, tokenizer=tokenizer, top_k=1)
+
 
 @time_it
 def emotion_classification(df, column, classifier):
@@ -518,15 +520,17 @@ def emotion_classification(df, column, classifier):
     # Total number of rows
     total_rows = df.shape[0]
 
-    for index, row in tqdm(df.iterrows(), total=total_rows, desc="Analyzing Emotion", colour="#4088a9"):
+    for index, row in tqdm(
+        df.iterrows(), total=total_rows, desc="Analyzing Emotion", colour="#4088a9"
+    ):
         sentence = row[column]
-        if sentence == '' or pd.isna(sentence):
+        if sentence == "" or pd.isna(sentence):
             emotion.append(np.nan)
         else:
             sentence = str(sentence)
             model_output = classifier(sentence, truncation=True, max_length=512)[0]
             model_output = list(model_output)
-            model_output = model_output[0]['label']
+            model_output = model_output[0]["label"]
             emotion.append(model_output)
 
     df[f"emotion_{column}"] = emotion
@@ -551,7 +555,9 @@ def get_person_names_with_transformers(text):
             # Check if the entity is classified as a person
             if entity.get("entity_group") == "PER":  # Ensure key exists
                 # Add the detected name to the list of person names
-                person_names.append(entity.get("word", ""))  # Use get() to avoid key errors
+                person_names.append(
+                    entity.get("word", "")
+                )  # Use get() to avoid key errors
     except ValueError as e:
         # Log the error for debugging
         print(f"Error processing text: {text}")
@@ -582,8 +588,12 @@ if __name__ == "__main__":
         data = word_count(data)  # word count
         data = add_rating_score(data)
 
-        data['free_text_PER'] = data['free_text'].progress_apply(get_person_names_with_transformers)
-        data['do_better_PER'] = data['do_better'].progress_apply(get_person_names_with_transformers)
+        data["free_text_PER"] = data["free_text"].progress_apply(
+            get_person_names_with_transformers
+        )
+        data["do_better_PER"] = data["do_better"].progress_apply(
+            get_person_names_with_transformers
+        )
 
         data = clean_data(data)
 
@@ -615,7 +625,6 @@ if __name__ == "__main__":
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
-
 
         logger.info("Data pre-processing completed")
 

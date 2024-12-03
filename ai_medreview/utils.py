@@ -6,7 +6,6 @@ import streamlit as st
 from loguru import logger
 
 
-
 # = Decorators =================================================================
 
 
