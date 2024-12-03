@@ -3576,7 +3576,7 @@ Example Feedback Text: Dr PERSON is very friendly.
             # Plot seaborn histogram of campaign ratings
             try:
                 fig, ax = plt.subplots(figsize=(12, 3))
-                sns.histplot(campaign_df['campaign_rating'], kde=True, bins=5, ax=ax, color="#f2a947")
+                sns.histplot(campaign_df['campaign_rating'], kde=True, bins=5, ax=ax, color="#f5c244")
                 ax.set_title('Distribution of Campaign Ratings')
                 ax.spines["top"].set_visible(False)
                 ax.spines["right"].set_visible(False)
