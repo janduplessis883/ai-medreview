@@ -3695,8 +3695,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.caption(
             "![Privicy](https://img.icons8.com/material/24/privacy--v1.png) [Privacy Notice & DPIA](https://janduplessis.notion.site/AI-MedReview-Privacy-Notice-52e518a957d04446a5aa5397018ea92d?pvs=4)"
         )
-
-        st.write("")
+        st.metric("Test", "50", border=True)
+        st.write(":primary[Primary Button] this is normal text")
         st.write("")
         st.write("")
 
