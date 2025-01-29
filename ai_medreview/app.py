@@ -113,6 +113,7 @@ else:
     # Define a list of PCNs
     pcn_names = [
         "Brompton-Health-PCN",
+        "Independent-Practices",
         "Ribblesdale-PCN",
         "Integrated-Care-Partnership",
         "Teldoc",
