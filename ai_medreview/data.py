@@ -533,7 +533,7 @@ def emotion_classification(df, column, classifier):
 
     df[f"emotion_{column}"] = emotion
 
-    return data
+    return df
 
 
 def get_person_names_with_transformers(text):
