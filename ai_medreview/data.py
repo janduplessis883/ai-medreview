@@ -43,7 +43,6 @@ logger.add("log/debug.log", rotation="5000 KB")
 
 # Select Classification Model - facebook/bart-large-mnli or FacebookAI/roberta-large-mnli
 
-
 @time_it
 def load_google_sheet():
     sh = SheetHelper(
@@ -70,7 +69,6 @@ def load_google_sheet():
 
     data.sort_values(by="time", inplace=True)
     return data
-
 
 @time_it
 def word_count(df):
@@ -581,7 +579,6 @@ if __name__ == "__main__":
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
-    send_alert_webhook(data.shape[0])
 
     if data.shape[0] != 0:
 
