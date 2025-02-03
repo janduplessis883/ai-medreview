@@ -206,8 +206,41 @@ ner_pipeline = pipeline(
     aggregation_strategy="simple",
 )
 
+qa_pipe = pipeline("question-answering", model="deepset/roberta-base-squad2")
 # Function to anonymize names in text
+@time_it
+def question_answering(data, column):
+    logger.info("🔍 Question Answering - Functions started.")
 
+    output_list = []
+
+    for _, row in tqdm(data.iterrows(), '🅾️Answering', total=data.shape[0]):
+        text = row[column]
+
+        if column == "free_text":
+            input_dict = {
+            "question": "Please tell us why you feel this way?",
+            "context": text,
+            }
+        elif column == "do_better":
+            input_dict = {
+            "question": "Is there anything that would have made your experience better?",
+            "context": text,
+            }
+
+        # Check if free_text is a valid string and not empty or np.nan
+        if isinstance(text, str) and text.strip():  # Check if it's a non-empty string
+            # Process the free_text with your model and append the result
+            result = qa_pipe(input_dict)
+            output_list.append(result)
+        else:
+            # Append np.nan if free_text is empty, np.nan, or not a string
+            output_list.append(np.nan)
+
+
+    # Add labels and scores as new columns
+    data[f"qa_{column}"] = output_list
+    return data
 
 def anonymize_names_with_transformers(text):
 
@@ -622,6 +655,9 @@ if __name__ == "__main__":
 
         data = emotion_classification(data, "free_text", classifier=classifier)
         data = emotion_classification(data, "do_better", classifier=classifier)
+
+        data = question_answering(data, "free_text")
+        data = question_answering(data, "do_better")
 
         logger.info("Data pre-processing completed")
 
