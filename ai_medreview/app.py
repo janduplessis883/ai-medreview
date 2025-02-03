@@ -2810,7 +2810,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
     elif page == "Feedback Timeline":
         st.markdown("# :material/view_timeline: Feedback Timeline")
         st.caption(
-            "The Latest Patient Reviews :  Displays the latest 150 patient reviews, with a focus on providing context and relevance to our services."
+            "The Latest Patient Reviews :  Displays the latest 50 patient reviews, with a focus on providing context and relevance to our services."
         )
         daily_count = filtered_data.resample("D", on="time").size()
         daily_count_df = daily_count.reset_index()
@@ -2839,13 +2839,12 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         plt.tight_layout()
         st.pyplot(fig)
         st.markdown("---")
-        st.caption(f"Showing 150/**{filtered_data.shape[0]}** FFT Responses.")
+        st.caption(f"Showing 50/**{filtered_data.shape[0]}** FFT Responses.")
 
-        sample = filtered_data.tail(150)
+        sample = filtered_data.tail(50)
 
         with st.container(height=500, border=True):
             with st.spinner(text="Loading Feedback..."):
-                time.sleep(0.5)
                 icounter = 1
                 for _, row in sample.iterrows():
                     free_text = row["free_text"]
