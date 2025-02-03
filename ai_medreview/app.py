@@ -14,6 +14,7 @@ from matplotlib.patches import Patch
 from openai import OpenAI
 from wordcloud import WordCloud
 from groq import Groq
+import json
 
 
 # Initialize OpenAI API
@@ -2332,6 +2333,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["free_text"]
+                    qa = json.loads(row['free_text_qa'].replace("'", '"'))
+
                     sentiment = row["sentiment_free_text"]
                     if sentiment == "neutral":
                         text_color = "gray"
@@ -2340,10 +2343,14 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
+                    substring = text[qa['start']:qa['end']]
+                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+
                     if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
+                        st.markdown(f"- :{text_color}[{bolded_text}]")
 
                         selected_text = selected_text + " " + text
+
 
                 _ = st.popover(
                     f"Summarize **{rating}** Feedback", icon=":material/robot_2:"
