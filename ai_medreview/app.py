@@ -2657,7 +2657,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["do_better"]
-                    text = text.replace("[PERSON]", "PERSON")
+                    qa = json.loads(row['do_better_qa'].replace("'", '"'))
+
                     sentiment = row["sentiment_do_better"]
                     if sentiment == "neutral":
                         text_color = "gray"
@@ -2666,8 +2667,11 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
+                    substring = text[qa['start']:qa['end']]
+                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+
                     if str(text).lower() != "nan":
-                        st.markdown(f"- :{text_color}[{str(text)}] ")
+                        st.markdown(f"- :{text_color}[{bolded_text}]")
 
                         selected_text = selected_text + " " + text
 

@@ -214,7 +214,7 @@ def question_answering(data, column):
 
     output_list = []
 
-    for _, row in tqdm(data.iterrows(), '🅾️Answering', total=data.shape[0]):
+    for _, row in tqdm(data.iterrows(), '🅾️ Answering', total=data.shape[0]):
         text = row[column]
 
         if column == "free_text":
