@@ -239,7 +239,7 @@ def question_answering(data, column):
 
 
     # Add labels and scores as new columns
-    data[f"qa_{column}"] = output_list
+    data[f"{column}_qa"] = output_list
     return data
 
 def anonymize_names_with_transformers(text):
