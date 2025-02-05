@@ -189,7 +189,7 @@ else:
     if page not in ["**:blue-background[PCN Dashboard]**", "**About**"]:
         surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
         if len(surgery_list) > 0:
-            selected_surgery = st.sidebar.selectbox("Select a Surgery", surgery_list)
+            selected_surgery = st.sidebar.selectbox("Select a Surgery", surgery_list, index=0)
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
             if not surgery_data.empty:
