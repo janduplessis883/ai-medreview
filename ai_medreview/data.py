@@ -33,13 +33,15 @@ from ai_medreview.automation.git_merge import *
 from ai_medreview.params import *
 from ai_medreview.utils import *
 
+
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 init(autoreset=True)
 warnings.filterwarnings("ignore")
 
 from loguru import logger
 
-logger.add("log/debug.log", rotation="5000 KB")
+logger.add("/tmp/ai_medreview_debug.log", rotation="5000 KB")
 
 # Select Classification Model - facebook/bart-large-mnli or FacebookAI/roberta-large-mnli
 
