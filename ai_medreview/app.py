@@ -1490,15 +1490,185 @@ else:
         st.write("")
         surgery_tab_selector = ui.tabs(
             options=[
+                "ALERTS",
                 "Surgery Rating",
                 "Surgery Responses",
                 "Feedback Length",
-                "Total Word Count",
                 "Missing Data",
             ],
-            default_value="Surgery Rating",
+            default_value="ALERTS",
             key="tab4",
         )
+
+
+
+        if surgery_tab_selector == "ALERTS":
+
+            # Create a toggle switch for filtering data to the last 30 days
+            toggle = st.toggle(
+                label="Last 30 days only.", value=True, key="switch_dash_neg", disabled=True
+            )
+
+            # React to the toggle's state
+            if toggle:
+
+                if "time" not in filtered_data.columns:
+                    negative = filtered_data.reset_index().rename(columns={filtered_data.index.name or "index": "time"})
+                else:
+                    negative = filtered_data.copy()
+
+
+                # Convert "time" to datetime only if it isn’t already
+                if not pd.api.types.is_datetime64_any_dtype(negative["time"]):
+                    negative["time"] = pd.to_datetime(negative["time"])
+                neg = negative[
+                    (negative["sentiment_free_text"] == "negative")
+                    | (negative["sentiment_do_better"] == "negative")
+                ]
+
+                # Calculate the date 30 days ago from today
+                latest_date = datetime.now().date()
+                thirty_days_ago = latest_date - timedelta(days=30)
+
+                # Filter data to the last 30 days
+                neg = neg[neg["time"].dt.date > thirty_days_ago]
+                neg1 = neg[neg["sentiment_free_text"] == "negative"]
+                neg2 = neg[neg["sentiment_do_better"] == "negative"]
+
+            else:
+                negative = filtered_data.reset_index("time")
+                # Convert "time" to datetime only if it isn’t already
+                if not pd.api.types.is_datetime64_any_dtype(negative["time"]):
+                    negative["time"] = pd.to_datetime(negative["time"])
+                neg = negative[
+                    (negative["sentiment_free_text"] == "negative")
+                    | (negative["sentiment_do_better"] == "negative")
+                ]
+                neg1 = neg[neg["sentiment_free_text"] == "negative"]
+                neg2 = neg[neg["sentiment_do_better"] == "negative"]
+
+            # Create tabs for sentiment analysis views
+            sentiment_tab_selector = ui.tabs(
+                options=["Feedback Responses",
+                         "Improvement Suggestions"
+                         ],
+                default_value="Feedback Responses",
+                key="tab45",
+            )
+
+            if sentiment_tab_selector == "Feedback Responses":
+
+                if neg.shape[0] > 0:
+                    # Create and customize a histogram
+                    fig, ax = plt.subplots(figsize=(12, 2.5))
+                    sns.histplot(
+                        neg1["sentiment_score_free_text"], color="#ae4f4d", kde=True
+                    )
+                    ax.spines["top"].set_visible(False)
+                    ax.spines["right"].set_visible(False)
+                    ax.spines["left"].set_visible(False)
+                    plt.xlabel("Sentiment Score")
+                    ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+                    plt.tight_layout()
+                    st.pyplot(fig)  # Pass the figure object to Streamlit
+                    st.write("")
+                    st.caption(f"Showing **{neg1.shape[0]}** Feedback Responses.")
+
+                    # Display feedback responses in a scrollable container
+                    with st.container(height=500, border=True):
+                        icounter = 1
+                        for _, row in neg1.iterrows():
+                            free_text = row["free_text"]
+                            cat = row["feedback_labels"]
+                            time_ = row["time"]
+                            rating = row["rating"]
+                            score = row["sentiment_score_free_text"]
+                            sentiment = row["sentiment_free_text"]
+                            emotion = row["emotion_free_text"]
+
+                            with st.container(border=True):
+                                ui.badges(
+                                    badge_list=[
+                                        (f"{icounter}", "destructive"),
+                                        (f"{rating}", "default"),
+                                        (f"{time_}", "secondary"),
+                                    ],
+                                    class_name=f"badges_improve_head_{icounter}",
+                                )
+                                if pd.notna(free_text):  # Check for NaN more reliably
+                                    st.markdown("🤔 " + str(free_text))
+                                    ui.badges(
+                                        badge_list=[
+                                            (f"{emotion}", "outline"),
+                                            (f"{cat}", "outline"),
+                                            (f"{sentiment}", "secondary"),
+                                            (f"{score}", "secondary"),
+                                        ],
+                                        class_name=f"badges_improve_{icounter}",
+                                    )
+
+                            icounter += 1
+
+            elif sentiment_tab_selector == "Improvement Suggestions":
+                if neg.shape[0] > 0:
+                    fig, ax = plt.subplots(figsize=(12, 2.5))
+                    sns.histplot(
+                        neg2["sentiment_score_do_better"], color="#d7662a", kde=True
+                    )
+                    ax.spines["top"].set_visible(False)
+                    ax.spines["right"].set_visible(False)
+                    ax.spines["left"].set_visible(False)
+                    plt.xlabel("Sentiment Score")
+                    ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+                    plt.tight_layout()
+                    st.pyplot(plt)
+                    st.write("")
+                    st.caption(f"Showing **{neg2.shape[0]}** Improvement Suggestions.")
+                    with st.container(height=550, border=True):
+                        icounter = 1
+                        for _, row in neg2.iterrows():
+                            do_better = row["do_better"]
+                            cat = row["improvement_labels"]
+                            time_ = row["time"]
+                            rating = row["rating"]
+                            score = row["sentiment_score_do_better"]
+                            sentiment = row["sentiment_do_better"]
+                            emotion = row["emotion_do_better"]
+
+                            # with st.chat_message("user"):
+                            #     st.markdown(f"**{rating}** `{time_}`")
+
+                            #     if str(do_better) not in ["nan"]:
+                            #         st.markdown("💡 " + str(do_better))
+                            #     # st.markdown(f"`{sentiment} {score}` `{cat}`")
+                            #     ui.badges(badge_list=[(f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "outline")], class_name=f"badges_improve_{icounter}")
+
+                            with st.container(border=True):
+                                # st.markdown(f"**{rating}** `{time_}`")
+                                ui.badges(
+                                    badge_list=[
+                                        (f"{icounter}", "destructive"),
+                                        (f"{rating}", "default"),
+                                        (f"{time_}", "secondary"),
+                                    ],
+                                    class_name=f"badges_improve_head_{icounter}",
+                                )
+                                if str(do_better) not in ["nan"]:
+                                    st.markdown("🛠️ " + str(do_better))
+                                    # st.markdown(f"`{sentiment} {score}` `{cat}`")
+                                    ui.badges(
+                                        badge_list=[
+                                            (f"{emotion}", "outline"),
+                                            (f"{cat}", "outline"),
+                                            (f"{sentiment}", "secondary"),
+                                            (f"{score}", "secondary"),
+                                        ],
+                                        class_name=f"badges_improve_{icounter}",
+                                    )
+
+                            icounter += 1
+
+
 
         if surgery_tab_selector == "Surgery Rating":
 
@@ -3121,159 +3291,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
         st.markdown("---")
 
-        st.markdown(
-            f"### FFT Feedback with a :red-background[NEGATIVE] Sentiment Score."
-        )
 
-        toggle = ui.switch(
-            default_checked=True, label="Show last 30 days only.", key="switch_dash_neg"
-        )
-
-        # React to the toggle's state
-        if toggle:
-            # Convert 'time' column to datetime
-            negative = filtered_data.reset_index("time")
-            negative["time"] = pd.to_datetime(negative["time"])
-            neg = negative[
-                (negative["sentiment_free_text"] == "negative")
-                | (negative["sentiment_do_better"] == "negative")
-            ]
-            neg["time"] = pd.to_datetime(neg["time"])
-
-            # Calculate the date 30 days ago from today
-            latest_date = datetime.now().date()
-            thirty_days_ago = latest_date - timedelta(days=30)
-
-            # Filter the DataFrame based on the 'time' column
-            neg = neg[neg["time"].dt.date > thirty_days_ago]
-            neg1 = neg[neg["sentiment_free_text"] == "negative"]
-            neg2 = neg[neg["sentiment_do_better"] == "negative"]
-
-        else:
-            negative = filtered_data.reset_index("time")
-            negative["time"] = pd.to_datetime(negative["time"])
-            neg = negative[
-                (negative["sentiment_free_text"] == "negative")
-                | (negative["sentiment_do_better"] == "negative")
-            ]
-            neg1 = neg[neg["sentiment_free_text"] == "negative"]
-            neg2 = neg[neg["sentiment_do_better"] == "negative"]
-
-        sentiment_tab_selector = ui.tabs(
-            options=["Feedback Responses", "Improvement Suggestions"],
-            default_value="Feedback Responses",
-            key="tab45",
-        )
-        if sentiment_tab_selector == "Feedback Responses":
-
-            if neg.shape[0] > 0:
-                fig, ax = plt.subplots(figsize=(12, 2.5))
-                sns.histplot(
-                    neg1["sentiment_score_free_text"], color="#ae4f4d", kde=True
-                )
-                ax.spines["top"].set_visible(False)
-                ax.spines["right"].set_visible(False)
-                ax.spines["left"].set_visible(False)
-                plt.xlabel("Sentiment Score")
-                ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-                plt.tight_layout()
-                st.pyplot(plt)
-                st.write("")
-                st.caption(f"Showing **{neg1.shape[0]}** Feedback Responses.")
-                with st.container(height=500, border=True):
-                    icounter = 1
-                    for _, row in neg1.iterrows():
-                        free_text = row["free_text"]
-                        cat = row["feedback_labels"]
-                        time_ = row["time"]
-                        rating = row["rating"]
-                        score = row["sentiment_score_free_text"]
-                        sentiment = row["sentiment_free_text"]
-                        emotion = row["emotion_free_text"]
-
-                        with st.container(border=True):
-                            # st.markdown(f"**{rating}** `{time_}`")
-                            ui.badges(
-                                badge_list=[
-                                    (f"{icounter}", "destructive"),
-                                    (f"{rating}", "default"),
-                                    (f"{time_}", "secondary"),
-                                ],
-                                class_name=f"badges_improve_head_{icounter}",
-                            )
-                            if str(free_text) not in ["nan"]:
-                                st.markdown("🤔 " + str(free_text))
-                                # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                                ui.badges(
-                                    badge_list=[
-                                        (f"{emotion}", "outline"),
-                                        (f"{cat}", "outline"),
-                                        (f"{sentiment}", "secondary"),
-                                        (f"{score}", "secondary"),
-                                    ],
-                                    class_name=f"badges_improve_{icounter}",
-                                )
-
-                        icounter += 1
-
-        elif sentiment_tab_selector == "Improvement Suggestions":
-            if neg.shape[0] > 0:
-                fig, ax = plt.subplots(figsize=(12, 2.5))
-                sns.histplot(
-                    neg2["sentiment_score_do_better"], color="#d7662a", kde=True
-                )
-                ax.spines["top"].set_visible(False)
-                ax.spines["right"].set_visible(False)
-                ax.spines["left"].set_visible(False)
-                plt.xlabel("Sentiment Score")
-                ax.yaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
-                plt.tight_layout()
-                st.pyplot(plt)
-                st.write("")
-                st.caption(f"Showing **{neg2.shape[0]}** Improvement Suggestions.")
-                with st.container(height=550, border=True):
-                    icounter = 1
-                    for _, row in neg2.iterrows():
-                        do_better = row["do_better"]
-                        cat = row["improvement_labels"]
-                        time_ = row["time"]
-                        rating = row["rating"]
-                        score = row["sentiment_score_do_better"]
-                        sentiment = row["sentiment_do_better"]
-                        emotion = row["emotion_do_better"]
-
-                        # with st.chat_message("user"):
-                        #     st.markdown(f"**{rating}** `{time_}`")
-
-                        #     if str(do_better) not in ["nan"]:
-                        #         st.markdown("💡 " + str(do_better))
-                        #     # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                        #     ui.badges(badge_list=[(f"{cat}", "outline"), (f"{sentiment}", "secondary"), (f"{score}", "outline")], class_name=f"badges_improve_{icounter}")
-
-                        with st.container(border=True):
-                            # st.markdown(f"**{rating}** `{time_}`")
-                            ui.badges(
-                                badge_list=[
-                                    (f"{icounter}", "destructive"),
-                                    (f"{rating}", "default"),
-                                    (f"{time_}", "secondary"),
-                                ],
-                                class_name=f"badges_improve_head_{icounter}",
-                            )
-                            if str(do_better) not in ["nan"]:
-                                st.markdown("🛠️ " + str(do_better))
-                                # st.markdown(f"`{sentiment} {score}` `{cat}`")
-                                ui.badges(
-                                    badge_list=[
-                                        (f"{emotion}", "outline"),
-                                        (f"{cat}", "outline"),
-                                        (f"{sentiment}", "secondary"),
-                                        (f"{score}", "secondary"),
-                                    ],
-                                    class_name=f"badges_improve_{icounter}",
-                                )
-
-                        icounter += 1
     # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
     elif page == "Word Cloud":
         st.markdown("# :material/cloud: Word Cloud")
