@@ -1498,11 +1498,11 @@ else:
             default_value="ALERTS",
             key="tab4",
         )
-
+        st.toast(body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!", icon="🔥")
 
 
         if surgery_tab_selector == "ALERTS":
-
+            st.caption("New **ALERTS** tab to help you identify reviews that need your attention!")
             # Create a toggle switch for filtering data to the last 30 days
             toggle = st.toggle(
                 label="Last 30 days only.", value=True, key="switch_dash_neg", disabled=True
