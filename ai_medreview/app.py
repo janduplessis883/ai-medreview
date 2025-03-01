@@ -16,9 +16,8 @@ from wordcloud import WordCloud
 from groq import Groq
 import json
 
-
 # Initialize OpenAI API
-client = OpenAI()
+# client = OpenAI()
 
 # Loading my OWN FUNCTIONS
 from utils import *
@@ -3691,6 +3690,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.markdown(
             "Furthermore, our innovative **zero-shot classification** approach, powered by the Facebook `BART-large-mnli` architecture, allows us to categorize patient feedback with remarkable accuracy – even without specialized healthcare training data. By carefully curating our classification labels, we achieved a striking 0.91 accuracy, demonstrating the remarkable versatility of this model."
         )
+
         st.markdown(
             "This comprehensive suite of advanced analytics empowers healthcare providers like yourself to move beyond mere data presentation and unlock a clearer, more actionable understanding of patient experiences. Armed with these insights, you can drive continuous improvements, elevate service quality, and enhance patient outcomes."
         )
@@ -3758,6 +3758,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         debug_toggle = ui.switch(default_checked=False, label="Debug", key="debug")
         if debug_toggle:
             st.dataframe(data.tail(50))
+
+
 
 
     # -- About ------------------------------------------------------------------------------------------------------- NER People
@@ -3842,6 +3844,8 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     for _, row in filtered_do_better_per.iterrows()
                 ]
             )
+
+
 
             st.download_button(
                 label="Download Selected Entries",
