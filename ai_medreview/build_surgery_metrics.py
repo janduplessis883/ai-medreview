@@ -413,7 +413,7 @@ def make_ts_df_dict(df_dict, surgery_id=2):
     return surgery_df_dict
 
 
-def make_heatmap(dfs_dict, surgery_id=2):
+def make_ts_dataframe(dfs_dict, surgery_id=2):
     """
     Create a heatmap of surgery metrics by processing and combining multiple time series.
 
@@ -629,7 +629,7 @@ def load_data():
     return df_dict
 
 
-def plot_heatmap(combined_df, surgery_id=2, figsize=(12, 8), cmap='YlOrBr', annot=True, title=None):
+def plot_heatmap(combined_df, surgery_id=2, figsize=(12, 8), cmap='YlOrRd', annot=True, title=None):
     """
     Plot a heatmap visualization of the surgery metrics.
 
@@ -713,8 +713,9 @@ def plot_heatmap(combined_df, surgery_id=2, figsize=(12, 8), cmap='YlOrBr', anno
 
     # Improve layout
     plt.tight_layout()
+    plt.show()
 
-    return fig
+
 
 
 def save_heatmap(combined_df, output_path, surgery_id=2, **kwargs):
