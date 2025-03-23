@@ -16,7 +16,8 @@ secondaryBackgroundColor = "#f4f4f5"
 textColor = "#222529"
 
 # Font for your app, choose between "sans serif", "serif", and "monospace"
-font = "sans serif"
+font = "serif"
+
 
 [deprecation]
 showPyplotGlobalUse = false
