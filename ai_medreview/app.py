@@ -3024,7 +3024,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         sample = filtered_data.tail(50)
 
         with st.container(height=500, border=True):
-            with st.spinner(text="Loading Feedback..."):
+            with st.spinner(text="Loading Feedback...", show_time=True):
                 icounter = 1
                 for _, row in sample.iterrows():
                     free_text = row["free_text"]
@@ -3633,7 +3633,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 
         if st.button("Generate AI MedReview Report"):
             try:
-                with st.spinner("Generating Report..."):
+                with st.spinner("Generating Report...", show_time=True):
                     # Call the function with the parameters from Streamlit widgets
                     simple_pdf(
                         filtered_data,
