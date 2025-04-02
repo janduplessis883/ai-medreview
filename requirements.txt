@@ -4,24 +4,16 @@ matplotlib
 seaborn
 numpy
 pandas
-
 google-auth
-
-
 distributed
 dateparser
 fastparquet
-
 nlpaug
-
-
 torch
 # Dependancies for sheethelper
 gspread
 transformers==4.37.0
 openai
-
-
 sentencepiece
 black
 streamlit-shadcn-ui
