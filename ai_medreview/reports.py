@@ -17,7 +17,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "llama-3.1-8b-instant"):
+def ask_groq(prompt: str, model: str = "meta-llama/llama-4-scout-17b-16e-instruct"):
     chat_completion = client.chat.completions.create(
         messages=[
             {

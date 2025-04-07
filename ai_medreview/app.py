@@ -3368,7 +3368,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         def call_chatgpt_api(text):
             # Example OpenAI Python library request
             completion = client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="meta-llama/llama-4-scout-17b-16e-instruct",
                 messages=[
                     {
                         "role": "system",
