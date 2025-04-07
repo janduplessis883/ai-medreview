@@ -29,7 +29,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # Simple function to get a response from Groq
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "llama-3.3-70b-versatile"):
+def ask_groq(prompt: str, model: str = "meta-llama/llama-4-scout-17b-16e-instruct"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
