@@ -13,7 +13,7 @@ backgroundColor = "#ffffff"
 secondaryBackgroundColor = "#f4f4f5"
 
 # Text color for your app
-textColor = "#222529"
+textColor = "#334155"
 
 # Font for your app, choose between "sans serif", "serif", and "monospace"
 font = "sans serif"
