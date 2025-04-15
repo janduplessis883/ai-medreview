@@ -27,3 +27,4 @@ reportlab
 fpdf
 tqdm
 groq
+resend
