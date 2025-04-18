@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #cbd5e1;
+  background-color: #f3f5f7;
   color: #1e293b;
   padding: 20px;
 }
@@ -20,7 +20,7 @@ h3 {
 }
 
 .highlight {
-  background-color: #e0f2fe;
+  background-color: #f3f5f7;
   padding: 10px;
   border-left: 4px solid #075985;
   margin: 15px 0;
