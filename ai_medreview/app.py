@@ -3897,7 +3897,7 @@ Example Feedback Text: Dr PERSON is very friendly.
         if len(campaign_list) != 0:
 
             selected_campaign = st.selectbox(
-                "Select a **Campaign**", options=campaign_list, index=1
+                "Select a **Campaign**", options=campaign_list, index=(len(campaign_list)-1)
             )
 
             # Filter campaign_df by selected_campaign
