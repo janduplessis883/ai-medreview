@@ -124,7 +124,7 @@ def format_email_content(surgery_name, negative_reviews_df):
             body += f"Review Text (Feedback): {row.get('free_text', 'N/A')}\n"
             body += f"Review Text (Improvement Suggestion): {row.get('do_better', 'N/A')}\n"
             body += "-"*30 + "\n\n"
-            body += "Regards,\nAI MedReview AI Agent\n\n"
+        body += "Regards,\nAI MedReview Agent\n\n"
 
     return subject, body
 
@@ -141,7 +141,7 @@ def send_alert_email(to_emails, subject, body):
         "from": FROM_EMAIL, # Use the fixed FROM_EMAIL
         "to": [to_emails], # 'to' parameter expects a list of strings
         "subject": subject,
-        "text": body, # Use 'text' for plain text body
+        "html": body, # Use 'text' for plain text body
     }
 
     try:
