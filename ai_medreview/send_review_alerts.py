@@ -178,6 +178,7 @@ def format_email_content(surgery_name, negative_reviews_df):
 
     html_body += """
     <p style="color: #555;">Regards,<br>AI-MedReview Agent</p>
+    <p style="font-size: 8pt; color: #888;">This ia an automated email sent from an AI-MedReview Agent using GitHub Actions, if you don't want to receive this anymore email jan.duplessis@nhs.net</p>
   </div>
 <br><br></body>
 </html>
