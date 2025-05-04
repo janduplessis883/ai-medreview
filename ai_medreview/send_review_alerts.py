@@ -5,6 +5,7 @@ import resend # Added import
 
 resend.api_key = os.environ["RESEND_API_KEY"] # Added API key setup
 
+
 # Assuming the Resend MCP tool is available and configured
 # You might need to install the necessary library if using a direct API call or smtplib
 # For MCP tool usage, the tool handles the underlying library.
