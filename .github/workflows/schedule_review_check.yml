@@ -1,4 +1,4 @@
-name: Schedule Daily Review Check
+name: FFT Daily Alert via Resend
 
 on:
   push:
@@ -30,10 +30,4 @@ jobs:
         # Define environment variables for your script, especially for secrets
         # You MUST add these as secrets in your GitHub repository settings
         # For example, go to Settings > Secrets and variables > Actions > New repository secret
-        # RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        # FROM_EMAIL: ${{ secrets.FROM_EMAIL }} # e.g., hello@attribut.me
-        # TO_EMAILS: ${{ secrets.TO_EMAILS }} # e.g., recipient@example.com,another@example.com
-        # Add other secrets your script might need (e.g., for fetching the CSV if not in repo)
-        # Example if CSV is fetched from a secure location:
-        # CSV_FETCH_URL: ${{ secrets.CSV_FETCH_URL }}
-        # CSV_API_KEY: ${{ secrets.CSV_API_KEY }}
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
