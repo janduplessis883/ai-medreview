@@ -152,9 +152,12 @@ def format_email_content(surgery_name, negative_reviews_df):
     u {{
         color: #555;
     }}
+    hr {{
+        color: #e8e8e8;
+    }}
   </style>
 </head>
-<body>
+<body><BR>
   <div class="email-container">
     <h1 style="color: #333;">{subject}</h1>
     <p style="color: #555;">
@@ -166,18 +169,17 @@ def format_email_content(surgery_name, negative_reviews_df):
         html_body += f"""
     <div class="review-item">
         <p><u>Review Time: {row.get(TIME_COLUMN, 'N/A')}</u></p>
-        <p><strong>Feedback Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})</p>
-        <p><strong>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</p>
+        <p><strong><u>Feedback Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})<u></p>
         <p><strong>Feedback</strong>: {row.get('free_text', 'N/A')}</p>
+        <p><strong>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</p>
         <p><strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}</p>
-        <hr>
-    </div>
+    </div><hr>
 """
 
     html_body += """
     <p style="color: #555;">Regards,<br>AI-MedReview Agent</p>
   </div>
-</body>
+<br><br></body>
 </html>
 """
 
