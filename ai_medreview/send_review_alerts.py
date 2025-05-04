@@ -97,49 +97,107 @@ def find_negative_reviews(df):
 # --- Function to format email content for a surgery ---
 def format_email_content(surgery_name, negative_reviews_df):
     """
-    Formats the email subject and body for a specific surgery based on the negative reviews found.
+    Formats the email subject, plain text body, and HTML body for a specific surgery
+    based on the negative reviews found.
     """
-    if negative_reviews_df.empty:
-        pass
-    else:
-        num_reviews = len(negative_reviews_df)
-        subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"<h3>The following new negative review(s) were found for <u>{surgery_name}</u> in the last 24 hours:</h3><BR>"
+    num_reviews = len(negative_reviews_df)
+    subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
 
-        for index, row in negative_reviews_df.iterrows():
-            # Include relevant sentiment information
-            free_text_sentiment = row.get(SENTIMENT_COLUMNS[0], 'N/A')
-            free_text_score = row.get(SCORE_COLUMNS[0], 'N/A')
-            do_better_sentiment = row.get(SENTIMENT_COLUMNS[1], 'N/A')
-            do_better_score = row.get(SCORE_COLUMNS[1], 'N/A')
-            review_time = row.get(TIME_COLUMN, 'N/A')
+    # Plain text body
+    text_body = f"The following new negative review(s) were found for {surgery_name} in the last 24 hours:\n\n"
+    for index, row in negative_reviews_df.iterrows():
+        text_body += f"Review Time: {row.get(TIME_COLUMN, 'N/A')}\n"
+        text_body += f"General Feedback Sentiment: {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})\n"
+        text_body += f"Improvement Suggestions Sentiment: {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})\n"
+        text_body += f"Feedback: {row.get('free_text', 'N/A')}\n"
+        text_body += f"Improvement Suggestion: {row.get('do_better', 'N/A')}\n"
+        text_body += "-"*30 + "\n"
+    text_body += "Regards,\nAI-MedReview Agent"
 
-            body += f"<u>Review Time: {review_time}</u><BR>"
-            body += f"<strong>Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong><BR>"
-            body += f"<strong>Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})</strong><BR>"
-            # Assuming there's a column for the actual review text, e.g., 'review_text'
-            # You might need to adjust this based on your actual data columns
-            body += f"<strong>Feedback</strong>: {row.get('free_text', 'N/A')}<BR>"
-            body += f"<strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}<BR>"
-            body += "<BR><hr><BR>"
-        body += "Regards,<BR>AI-MedReview Agent"
 
-    return subject, body
+    # HTML body
+    html_body = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {{
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f4;
+      font-family: Arial, sans-serif;
+    }}
+    .email-container {{
+      max-width: 600px;
+      margin: auto;
+      background-color: #f5f5f4;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 24px;
+    }}
+    .review-item {{
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }}
+    .review-item:last-child {{
+        border-bottom: none;
+        padding-bottom: 0;
+    }}
+    strong {{
+        color: #333;
+    }}
+    u {{
+        color: #555;
+    }}
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <h1 style="color: #333;">{subject}</h1>
+    <p style="color: #555;">
+      The following new negative review(s) were found for <u>{surgery_name}</u> in the last 24 hours:
+    </p>
+"""
+
+    for index, row in negative_reviews_df.iterrows():
+        html_body += f"""
+    <div class="review-item">
+        <p><u>Review Time: {row.get(TIME_COLUMN, 'N/A')}</u></p>
+        <p><strong>Feedback Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})</p>
+        <p><strong>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</p>
+        <p><strong>Feedback</strong>: {row.get('free_text', 'N/A')}</p>
+        <p><strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}</p>
+    </div>
+"""
+
+    html_body += """
+    <p style="color: #555;">Regards,<br>AI-MedReview Agent</p>
+  </div>
+</body>
+</html>
+"""
+
+    return subject, text_body, html_body
 
 # --- Function to send email using Resend Library ---
-def send_alert_email(to_emails, subject, body):
+def send_alert_email(to_emails, subject, text_body, html_body):
     """
-    Sends an email using the Resend Python library.
+    Sends an email using the Resend Python library with both text and HTML bodies.
     """
     print(f"Attempting to send email to: {to_emails}")
     print(f"Subject: {subject}")
-    print(f"Body:\n{body}")
+    print(f"Text Body:\n{text_body}")
+    print(f"HTML Body (partial):\n{html_body[:500]}...") # Print only a part of HTML body
 
     params: resend.Emails.SendParams = {
         "from": FROM_EMAIL, # Use the fixed FROM_EMAIL
         "to": [to_emails], # 'to' parameter expects a list of strings
         "subject": subject,
-        "html": body, # Use 'text' for plain text body
+        "text": text_body,
+        "html": html_body,
     }
 
     try:
@@ -182,8 +240,8 @@ if __name__ == "__main__":
 
                     if to_email:
                         print(f"Processing negative reviews for surgery: {surgery_name}")
-                        subject, body = format_email_content(surgery_name, surgery_df)
-                        send_alert_email(to_email, subject, body)
+                        subject, text_body, html_body = format_email_content(surgery_name, surgery_df)
+                        send_alert_email(to_email, subject, text_body, html_body)
                     else:
                         print(f"Warning: Email address not found for surgery: {surgery_name} (looked for secret '{email_secret_name}')")
             else:
