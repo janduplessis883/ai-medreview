@@ -132,7 +132,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     .email-container {{
       max-width: 600px;
       margin: auto;
-      background-color: #f5f5f4;
+      background-color: #ffffff;
       border: 1px solid #ccc;
       border-radius: 12px;
       padding: 24px;
@@ -158,7 +158,7 @@ def format_email_content(surgery_name, negative_reviews_df):
   <div class="email-container">
     <h1 style="color: #333;">{subject}</h1>
     <p style="color: #555;">
-      The following new negative review(s) were found for <u>{surgery_name}</u> in the last 24 hours:
+      The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:
     </p>
 """
 
@@ -170,6 +170,7 @@ def format_email_content(surgery_name, negative_reviews_df):
         <p><strong>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</p>
         <p><strong>Feedback</strong>: {row.get('free_text', 'N/A')}</p>
         <p><strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}</p>
+        <hr>
     </div>
 """
 
