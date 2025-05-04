@@ -20,7 +20,7 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
-TIMEFRAME_HOURS = 300 # Timeframe in hours to check for recent reviews
+TIMEFRAME_HOURS = 500 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
@@ -104,7 +104,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     else:
         num_reviews = len(negative_reviews_df)
         subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"The following new negative review(s) were found for <h3>{surgery_name}</h3> in the last 24 hours:<BR><BR>"
+        body = f"<h3>The following new negative review(s) were found for <u>{surgery_name}</u> in the last 24 hours:</h3><BR>"
 
         for index, row in negative_reviews_df.iterrows():
             # Include relevant sentiment information
@@ -121,8 +121,8 @@ def format_email_content(surgery_name, negative_reviews_df):
             # You might need to adjust this based on your actual data columns
             body += f"<strong>Feedback</strong>: {row.get('free_text', 'N/A')}<BR>"
             body += f"<strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}<BR>"
-            body += "<hr><BR>"
-        body += "Regards,\nAI-MedReview Agent"
+            body += "<BR><hr><BR>"
+        body += "Regards,<BR>AI-MedReview Agent"
 
     return subject, body
 
