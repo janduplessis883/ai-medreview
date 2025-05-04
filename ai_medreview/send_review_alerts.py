@@ -20,7 +20,7 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
-TIMEFRAME_HOURS = 100 # Timeframe in hours to check for recent reviews
+TIMEFRAME_HOURS = 50 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
@@ -177,8 +177,8 @@ def format_email_content(surgery_name, negative_reviews_df):
 """
 
     html_body += """
-    <p style="color: #555;">Regards,<br>AI-MedReview Agent</p>
-    <p style="font-size: 8pt; color: #888;">This ia an automated email sent from an AI-MedReview Agent using GitHub Actions, if you don't want to receive this anymore email jan.duplessis@nhs.net</p>
+    <p style="color: #555;">Regards,<br>AI-MedReview Agent</p><BR>
+    <p style="font-size: 8pt; color: #888;">This ia an automated email sent from an AI-MedReview Agent using GitHub Actions, if you don't want to receive this anymore email Jan du Plessis.</p>
   </div>
 <br><br></body>
 </html>
