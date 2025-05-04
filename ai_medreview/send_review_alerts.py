@@ -3,9 +3,7 @@ import os
 import json
 import resend # Added import
 from loguru import logger # Added loguru import
-
-# Configure loguru to write logs to a file in the 'logs' directory
-logger.add("logs/app.log", rotation="1 MB", retention="30 days", level="INFO")
+import time # Added import for sleep
 
 resend.api_key = os.environ["RESEND_API_KEY"] # Added API key setup
 
@@ -25,13 +23,32 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
+TIMEFRAME_HOURS = 3000 # Timeframe in hours to check for recent reviews
+
+# Email configuration
+# These should ideally be stored as GitHub Secrets for security.
+# --- Configuration ---
+# Path to your CSV data file.
+# In GitHub Actions, you might need to adjust this path relative to the repository root.
+# Or, if the file is fetched from an external source, add the fetching logic here.
+CSV_FILE_PATH = 'ai_medreview/data/data.csv' # <-- **UPDATE THIS PATH**
+
+# Define the criteria for identifying negative reviews.
+SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
+SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
+NEGATIVE_SENTIMENT_THRESHOLD = 0.6
+TIME_COLUMN = 'time' # Column containing the timestamp/date
 TIMEFRAME_HOURS = 24 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
 # RESEND_API_KEY = os.environ.get('RESEND_API_KEY') # <-- Get from GitHub Secrets
-FROM_EMAIL = 'AI MedReview - FFT Alert <hello@attribut.me>' # <-- Fixed sender email as per user instructions
+FROM_EMAIL = 'AI-MedReview Agent <hello@attribut.me>' # <-- Fixed sender email as per user instructions
 # TO_EMAILS_SECRET_PREFIX = 'email-' # Prefix for surgery email secrets (e.g., email-surgery-name)
+
+# Test mode configuration
+TEST_MODE = False # Set to True to send all emails to the test recipient
+TEST_RECIPIENT_EMAIL = 'drjanduplessis@icloud.com' # Email address for test mode
 
 # --- Function to identify negative reviews ---
 def find_negative_reviews(df):
@@ -100,7 +117,7 @@ def find_negative_reviews(df):
     return negative_filtered_df
 
 # --- Function to format email content for a surgery ---
-def format_email_content(surgery_name, negative_reviews_df):
+def format_email_content(surgery_name, negative_reviews_df, timeframe_hours):
     """
     Formats the email subject, plain text body, and HTML body for a specific surgery
     based on the negative reviews found.
@@ -109,7 +126,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     subject = f"AI MedReview: {num_reviews} New Negative Review(s) for {surgery_name}"
 
     # Plain text body
-    text_body = f"The following new negative review(s) were found for {surgery_name} in the last 24 hours:\n\n"
+    text_body = f"The following new negative review(s) were found for {surgery_name} in the last {timeframe_hours} hours:\n\n"
     for index, row in negative_reviews_df.iterrows():
         text_body += f"Review Time: {row.get(TIME_COLUMN, 'N/A')}\n"
         text_body += f"General Feedback Sentiment: {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})\n"
@@ -152,10 +169,10 @@ def format_email_content(surgery_name, negative_reviews_df):
         padding-bottom: 0;
     }}
     strong {{
-        color: #333;
+        color: #0f172a;
     }}
     u {{
-        color: #555;
+        color: #0f172a;
     }}
     hr {{
         color: #e8e8e8;
@@ -164,26 +181,26 @@ def format_email_content(surgery_name, negative_reviews_df):
 </head>
 <body><BR><BR>
   <div class="email-container">
-    <h1 style="color: #333;">{subject}</h1>
+    <h2 style="color: #333;">{subject}</h2>
     <p style="color: #555;">
-      The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:
+      The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last {timeframe_hours} hours:
     </p><BR>
 """
 
     for index, row in negative_reviews_df.iterrows():
         html_body += f"""
     <div class="review-item">
-        <p><u>Review Time: {row.get(TIME_COLUMN, 'N/A')}</u></p>
+        <h3>Review Time: {row.get(TIME_COLUMN, 'N/A')}</h3>
         <p><strong><u>Feedback Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[0], 'N/A')} (Score: {row.get(SCORE_COLUMNS[0], 'N/A')})</u></p>
         <p><strong>Feedback</strong>: {row.get('free_text', 'N/A')}</p>
-        <p><strong><u>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</u></p>
+        <p><strong><u>Improvement Suggestion Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</u></p>
         <p><strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}</p>
     </div>
 """
 
     html_body += """
-    <p style="color: #555;">Regards,<br>AI-MedReview Agent</p><BR>
-    <p style="font-size: 8pt; color: #888;">This ia an automated email sent from an AI-MedReview Agent using GitHub Actions, if you don't want to receive this anymore email Jan du Plessis.</p>
+    <p style="color: #0f172a;">Regards,<br><br>AI-MedReview Agent</p><BR>
+    <p style="font-size: 7pt; color: #64748b;">This ia an automated email sent from an AI-MedReview Agent using GitHub Actions, to unsubscribe email Jan du Plessis.</p>
   </div>
 <br><br></body>
 </html>
@@ -213,6 +230,7 @@ def send_alert_email(to_emails, subject, text_body, html_body):
         email = resend.Emails.send(params)
         logger.info("Email sent successfully.")
         # logger.debug(f"Resend API response: {email}") # Use debug for API response
+        time.sleep(0.5) # Add a 0.5-second delay after each API call
     except Exception as e:
         logger.error(f"Error sending email: {e}")
         # Depending on requirements, you might want to raise the exception
@@ -230,29 +248,34 @@ if __name__ == "__main__":
         # Find negative reviews
         negative_reviews = find_negative_reviews(df)
         logger.info(f"Found {len(negative_reviews)} negative reviews in the last {TIMEFRAME_HOURS} hours.")
-
+        logger.info(f"negative_reviews df shape: {negative_reviews.shape}.")
         if not negative_reviews.empty:
             # Group by 'surgery' and send emails
             if 'surgery' in negative_reviews.columns:
                 grouped_reviews = negative_reviews.groupby('surgery')
 
                 for surgery_name, surgery_df in grouped_reviews:
-                    # Construct the secret name for the email address
-                    # Assuming surgery names are clean and can be used directly in secret names
-                    # You might need to sanitize surgery_name if it contains special characters
-                    email_secret_name = f"EMAIL_{surgery_name.replace('-', '_').replace(' ', '_').upper()}"
-
-                    # Retrieve the email address from environment variables (simulating GitHub Secrets)
-                    # In a real GitHub Action, you would access secrets directly.
-                    # For this script, we'll simulate getting it from os.environ
-                    to_email = os.environ.get(email_secret_name)
-
-                    if to_email:
-                        logger.info(f"Processing negative reviews for surgery: {surgery_name}")
-                        subject, text_body, html_body = format_email_content(surgery_name, surgery_df)
-                        send_alert_email(to_email, subject, text_body, html_body)
+                    if TEST_MODE:
+                        logger.info(f"TEST_MODE is ON. Sending email for {surgery_name} to test recipient: {TEST_RECIPIENT_EMAIL}")
+                        subject, text_body, html_body = format_email_content(surgery_name, surgery_df, TIMEFRAME_HOURS)
+                        send_alert_email(TEST_RECIPIENT_EMAIL, subject, text_body, html_body)
                     else:
-                        logger.warning(f"Email address not found for surgery: {surgery_name} (looked for secret '{email_secret_name}')")
+                        # Construct the secret name for the email address
+                        # Assuming surgery names are clean and can be used directly in secret names
+                        # You might need to sanitize surgery_name if it contains special characters
+                        email_secret_name = f"EMAIL_{surgery_name.replace('-', '_').replace(' ', '_').upper()}"
+
+                        # Retrieve the email address from environment variables (simulating GitHub Secrets)
+                        # In a real GitHub Action, you would access secrets directly.
+                        # For this script, we'll simulate getting it from os.environ
+                        to_email = os.environ.get(email_secret_name)
+
+                        if to_email:
+                            logger.info(f"Processing negative reviews for surgery: {surgery_name}")
+                            subject, text_body, html_body = format_email_content(surgery_name, surgery_df, TIMEFRAME_HOURS)
+                            send_alert_email(to_email, subject, text_body, html_body)
+                        else:
+                            logger.warning(f"Email address not found for surgery: {surgery_name} (looked for secret '{email_secret_name}')")
             else:
                 logger.error("'surgery' column not found in the filtered negative reviews DataFrame.")
                 # If 'surgery' column is missing, we can't group and send specific emails.

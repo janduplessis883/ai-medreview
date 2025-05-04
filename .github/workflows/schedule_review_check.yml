@@ -1,4 +1,4 @@
-name: FFT Daily Alert via Resend
+name: Resend Alerts
 
 on:
   push:
@@ -21,7 +21,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Ensure requirements.txt includes pandas and any email sending library (e.g., resend)
         pip install -r automation_requirements.txt
 
     - name: Run review check script

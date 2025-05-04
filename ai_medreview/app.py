@@ -223,8 +223,8 @@ else:
     # -- PCN Dashboard --------------------------------------------------------------------------------------- PCN Dashboard
     if page == "**:blue-background[PCN Dashboard]**":
         st.toast(
-            f"Listen to the **AI-MedReview podcast** for insightful discussions—find it on the **About** page!",
-            icon=":material/mic:",
+            f"**AI MedReview Agent** - will email all negative reviews to your inbox.",
+            icon=":material/adb:",
         )
         ui.badges(
             badge_list=[
