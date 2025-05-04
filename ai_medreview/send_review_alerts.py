@@ -100,13 +100,11 @@ def format_email_content(surgery_name, negative_reviews_df):
     Formats the email subject and body for a specific surgery based on the negative reviews found.
     """
     if negative_reviews_df.empty:
-        # This case should ideally not be reached if we group by surgery after filtering
-        subject = f"No New Negative Reviews for {surgery_name}"
-        body = f"Good news! No new negative reviews were found for {surgery_name} in the last 24 hours."
+        pass
     else:
         num_reviews = len(negative_reviews_df)
         subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:<BR><BR>"
+        body = f"<h3>The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:</h3><BR><BR>"
 
         for index, row in negative_reviews_df.iterrows():
             # Include relevant sentiment information
@@ -117,12 +115,12 @@ def format_email_content(surgery_name, negative_reviews_df):
             review_time = row.get(TIME_COLUMN, 'N/A')
 
             body += f"<u>Review Time: {review_time}</u><BR>"
-            body += f"<strong>General Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong><BR>"
+            body += f"<strong>Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong><BR>"
             body += f"<strong>Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})</strong><BR>"
             # Assuming there's a column for the actual review text, e.g., 'review_text'
             # You might need to adjust this based on your actual data columns
-            body += f"Review Text (Feedback): {row.get('free_text', 'N/A')}<BR>"
-            body += f"Review Text (Improvement Suggestion): {row.get('do_better', 'N/A')}<BR>"
+            body += f"<strong>Feedback</strong>: {row.get('free_text', 'N/A')}<BR>"
+            body += f"<strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}<BR>"
             body += "<hr><BR><BR>"
         body += "Regards,\nAI-MedReview Agent\n\n"
 
