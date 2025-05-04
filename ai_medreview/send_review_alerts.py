@@ -104,7 +104,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     else:
         num_reviews = len(negative_reviews_df)
         subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"<h3>The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:</h3><BR><BR>"
+        body = f"The following new negative review(s) were found for <h3>{surgery_name}</h3> in the last 24 hours:<BR><BR>"
 
         for index, row in negative_reviews_df.iterrows():
             # Include relevant sentiment information
@@ -121,8 +121,8 @@ def format_email_content(surgery_name, negative_reviews_df):
             # You might need to adjust this based on your actual data columns
             body += f"<strong>Feedback</strong>: {row.get('free_text', 'N/A')}<BR>"
             body += f"<strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}<BR>"
-            body += "<hr><BR><BR>"
-        body += "Regards,\nAI-MedReview Agent\n\n"
+            body += "<hr><BR>"
+        body += "Regards,\nAI-MedReview Agent"
 
     return subject, body
 
