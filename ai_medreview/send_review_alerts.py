@@ -20,7 +20,7 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
-TIMEFRAME_HOURS = 100 # Timeframe in hours to check for recent reviews
+TIMEFRAME_HOURS = 300 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
@@ -106,7 +106,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     else:
         num_reviews = len(negative_reviews_df)
         subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"The following new negative review(s) were found for {surgery_name} in the last 24 hours:\n\n"
+        body = f"The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:\n\n"
 
         for index, row in negative_reviews_df.iterrows():
             # Include relevant sentiment information
@@ -116,14 +116,15 @@ def format_email_content(surgery_name, negative_reviews_df):
             do_better_score = row.get(SCORE_COLUMNS[1], 'N/A')
             review_time = row.get(TIME_COLUMN, 'N/A')
 
-            body += f"Review Time: {review_time}\n"
-            body += f"General Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})\n"
-            body += f"Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})\n"
+            body += f"<u>Review Time: {review_time}</u>\n"
+            body += f"<strong>General Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong>\n"
+            body += f"<strong>Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})</strong>\n"
             # Assuming there's a column for the actual review text, e.g., 'review_text'
             # You might need to adjust this based on your actual data columns
-            body += f"Review Text (Free Text): {row.get('free_text', 'N/A')}\n"
-            body += f"Review Text (Do Better): {row.get('do_better', 'N/A')}\n"
-            body += "-"*30 + "\n"
+            body += f"Review Text (Feedback): {row.get('free_text', 'N/A')}\n"
+            body += f"Review Text (Improvement Suggestion): {row.get('do_better', 'N/A')}\n"
+            body += "-"*30 + "\n\n"
+            body += "Regards,\nAI MedReview AI Agent\n\n"
 
     return subject, body
 
