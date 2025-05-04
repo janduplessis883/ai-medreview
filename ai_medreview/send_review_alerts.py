@@ -2,6 +2,10 @@ import pandas as pd
 import os
 import json
 import resend # Added import
+from loguru import logger # Added loguru import
+
+# Configure loguru to write logs to a file in the 'logs' directory
+logger.add("logs/app.log", rotation="1 MB", retention="30 days", level="INFO", mkdir=True)
 
 resend.api_key = os.environ["RESEND_API_KEY"] # Added API key setup
 
@@ -37,7 +41,7 @@ def find_negative_reviews(df):
     """
     if not all(col in df.columns for col in SENTIMENT_COLUMNS + SCORE_COLUMNS + [TIME_COLUMN]):
         missing_cols = [col for col in SENTIMENT_COLUMNS + SCORE_COLUMNS + [TIME_COLUMN] if col not in df.columns]
-        print(f"Error: Missing required columns: {', '.join(missing_cols)}")
+        logger.error(f"Missing required columns: {', '.join(missing_cols)}")
         return pd.DataFrame()
 
     # Convert 'time' column to datetime objects
@@ -49,15 +53,15 @@ def find_negative_reviews(df):
         initial_rows = len(df)
         df.dropna(subset=[TIME_COLUMN], inplace=True)
         if len(df) < initial_rows:
-            print(f"Dropped {initial_rows - len(df)} rows due to invalid timestamps in '{TIME_COLUMN}'.")
+            logger.warning(f"Dropped {initial_rows - len(df)} rows due to invalid timestamps in '{TIME_COLUMN}'.")
 
         # Check if the DataFrame is empty after dropping NaNs
         if df.empty:
-            print("DataFrame is empty after dropping rows with invalid timestamps.")
+            logger.warning("DataFrame is empty after dropping rows with invalid timestamps.")
             return pd.DataFrame()
 
     except Exception as e:
-        print(f"Error processing '{TIME_COLUMN}' column for datetime conversion: {e}")
+        logger.error(f"Error processing '{TIME_COLUMN}' column for datetime conversion: {e}")
         return pd.DataFrame()
 
     # Calculate the time threshold based on the current time and timeframe
@@ -77,7 +81,7 @@ def find_negative_reviews(df):
             (recent_reviews_df[SCORE_COLUMNS[1]] >= NEGATIVE_SENTIMENT_THRESHOLD)
         )
     ].copy() # Use .copy() to avoid SettingWithCopyWarning
-    print(negative_filtered_df)
+    # Removed print(negative_filtered_df) - summary is printed below
     return negative_filtered_df
 
     # Filter for negative sentiment with score >= threshold in either column
@@ -102,7 +106,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     based on the negative reviews found.
     """
     num_reviews = len(negative_reviews_df)
-    subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
+    subject = f"AI MedReview: {num_reviews} New Negative Review(s) for {surgery_name}"
 
     # Plain text body
     text_body = f"The following new negative review(s) were found for {surgery_name} in the last 24 hours:\n\n"
@@ -192,10 +196,10 @@ def send_alert_email(to_emails, subject, text_body, html_body):
     """
     Sends an email using the Resend Python library with both text and HTML bodies.
     """
-    print(f"Attempting to send email to: {to_emails}")
-    print(f"Subject: {subject}")
-    print(f"Text Body:\n{text_body}")
-    print(f"HTML Body (partial):\n{html_body[:500]}...") # Print only a part of HTML body
+    logger.info(f"Attempting to send email to: {to_emails}")
+    logger.info(f"Subject: {subject}")
+    # logger.debug(f"Text Body:\n{text_body}") # Use debug for potentially large bodies
+    # logger.debug(f"HTML Body (partial):\n{html_body[:500]}...") # Use debug for potentially large bodies
 
     params: resend.Emails.SendParams = {
         "from": FROM_EMAIL, # Use the fixed FROM_EMAIL
@@ -207,13 +211,13 @@ def send_alert_email(to_emails, subject, text_body, html_body):
 
     try:
         email = resend.Emails.send(params)
-        print("Email sent successfully:")
-        print(email)
+        logger.info("Email sent successfully.")
+        # logger.debug(f"Resend API response: {email}") # Use debug for API response
     except Exception as e:
-        print(f"Error sending email: {e}")
+        logger.error(f"Error sending email: {e}")
         # Depending on requirements, you might want to raise the exception
         # or handle it differently (e.g., logging, retries).
-        # For now, just printing the error.
+        # For now, just logging the error.
 
 
 # --- Main execution logic ---
@@ -221,11 +225,11 @@ if __name__ == "__main__":
     try:
         # Read the CSV file
         df = pd.read_csv(CSV_FILE_PATH)
-        print(f"Successfully read data from {CSV_FILE_PATH}. Shape: {df.shape}")
+        logger.info(f"Successfully read data from {CSV_FILE_PATH}. Shape: {df.shape}")
 
         # Find negative reviews
         negative_reviews = find_negative_reviews(df)
-        print(f"Found {len(negative_reviews)} negative reviews in the last 24 hours.")
+        logger.info(f"Found {len(negative_reviews)} negative reviews in the last {TIMEFRAME_HOURS} hours.")
 
         if not negative_reviews.empty:
             # Group by 'surgery' and send emails
@@ -244,20 +248,20 @@ if __name__ == "__main__":
                     to_email = os.environ.get(email_secret_name)
 
                     if to_email:
-                        print(f"Processing negative reviews for surgery: {surgery_name}")
+                        logger.info(f"Processing negative reviews for surgery: {surgery_name}")
                         subject, text_body, html_body = format_email_content(surgery_name, surgery_df)
                         send_alert_email(to_email, subject, text_body, html_body)
                     else:
-                        print(f"Warning: Email address not found for surgery: {surgery_name} (looked for secret '{email_secret_name}')")
+                        logger.warning(f"Email address not found for surgery: {surgery_name} (looked for secret '{email_secret_name}')")
             else:
-                print("Error: 'surgery' column not found in the filtered negative reviews DataFrame.")
+                logger.error("'surgery' column not found in the filtered negative reviews DataFrame.")
                 # If 'surgery' column is missing, we can't group and send specific emails.
                 # You might want to send a general alert or handle this case differently.
-                # For now, we'll just print a warning.
+                # For now, we'll just log an error.
 
     except FileNotFoundError:
-        print(f"Error: CSV file not found at {CSV_FILE_PATH}")
+        logger.error(f"CSV file not found at {CSV_FILE_PATH}")
         exit(1) # Exit with error code
     except Exception as e:
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         exit(1) # Exit with error code
