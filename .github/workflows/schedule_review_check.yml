@@ -1,0 +1,39 @@
+name: Schedule Daily Review Check
+
+on:
+  push:
+  workflow_dispatch:
+    # Allows you to manually trigger the workflow from the GitHub Actions tab
+
+jobs:
+  check_reviews:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Use a suitable Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Ensure requirements.txt includes pandas and any email sending library (e.g., resend)
+        pip install -r automation_requirements.txt
+
+    - name: Run review check script
+      run: python send_review_alerts.py
+      env:
+        # Define environment variables for your script, especially for secrets
+        # You MUST add these as secrets in your GitHub repository settings
+        # For example, go to Settings > Secrets and variables > Actions > New repository secret
+        # RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        # FROM_EMAIL: ${{ secrets.FROM_EMAIL }} # e.g., hello@attribut.me
+        # TO_EMAILS: ${{ secrets.TO_EMAILS }} # e.g., recipient@example.com,another@example.com
+        # Add other secrets your script might need (e.g., for fetching the CSV if not in repo)
+        # Example if CSV is fetched from a secure location:
+        # CSV_FETCH_URL: ${{ secrets.CSV_FETCH_URL }}
+        # CSV_API_KEY: ${{ secrets.CSV_API_KEY }}
