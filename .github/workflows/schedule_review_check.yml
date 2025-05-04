@@ -25,7 +25,7 @@ jobs:
         pip install -r automation_requirements.txt
 
     - name: Run review check script
-      run: python send_review_alerts.py
+      run: python ai_medreview/send_review_alerts.py
       env:
         # Define environment variables for your script, especially for secrets
         # You MUST add these as secrets in your GitHub repository settings
