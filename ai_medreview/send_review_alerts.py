@@ -20,7 +20,7 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
-TIMEFRAME_HOURS = 50 # Timeframe in hours to check for recent reviews
+TIMEFRAME_HOURS = 24 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
