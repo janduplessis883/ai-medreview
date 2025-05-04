@@ -20,7 +20,7 @@ SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
 NEGATIVE_SENTIMENT_THRESHOLD = 0.6
 TIME_COLUMN = 'time' # Column containing the timestamp/date
-TIMEFRAME_HOURS = 500 # Timeframe in hours to check for recent reviews
+TIMEFRAME_HOURS = 100 # Timeframe in hours to check for recent reviews
 
 # Email configuration
 # These should ideally be stored as GitHub Secrets for security.
@@ -162,7 +162,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     <h1 style="color: #333;">{subject}</h1>
     <p style="color: #555;">
       The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:
-    </p>
+    </p><BR>
 """
 
     for index, row in negative_reviews_df.iterrows():
@@ -173,7 +173,7 @@ def format_email_content(surgery_name, negative_reviews_df):
         <p><strong>Feedback</strong>: {row.get('free_text', 'N/A')}</p>
         <p><strong><u>Improvement Suggestions Sentiment:</strong> {row.get(SENTIMENT_COLUMNS[1], 'N/A')} (Score: {row.get(SCORE_COLUMNS[1], 'N/A')})</u></p>
         <p><strong>Improvement Suggestion</strong>: {row.get('do_better', 'N/A')}</p>
-    </div>-----------------------------------------------------------
+    </div>
 """
 
     html_body += """
