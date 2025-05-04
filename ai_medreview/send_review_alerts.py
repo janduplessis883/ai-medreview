@@ -106,7 +106,7 @@ def format_email_content(surgery_name, negative_reviews_df):
     else:
         num_reviews = len(negative_reviews_df)
         subject = f"Action Required: {num_reviews} New Negative Review(s) for {surgery_name}"
-        body = f"The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:\n\n"
+        body = f"The following new negative review(s) were found for <strong>{surgery_name}</strong> in the last 24 hours:<BR><BR>"
 
         for index, row in negative_reviews_df.iterrows():
             # Include relevant sentiment information
@@ -116,15 +116,15 @@ def format_email_content(surgery_name, negative_reviews_df):
             do_better_score = row.get(SCORE_COLUMNS[1], 'N/A')
             review_time = row.get(TIME_COLUMN, 'N/A')
 
-            body += f"<u>Review Time: {review_time}</u>\n"
-            body += f"<strong>General Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong>\n"
-            body += f"<strong>Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})</strong>\n"
+            body += f"<u>Review Time: {review_time}</u><BR>"
+            body += f"<strong>General Feedback Sentiment: {free_text_sentiment} (Score: {free_text_score})</strong><BR>"
+            body += f"<strong>Improvement Suggestions Sentiment: {do_better_sentiment} (Score: {do_better_score})</strong><BR>"
             # Assuming there's a column for the actual review text, e.g., 'review_text'
             # You might need to adjust this based on your actual data columns
-            body += f"Review Text (Feedback): {row.get('free_text', 'N/A')}\n"
-            body += f"Review Text (Improvement Suggestion): {row.get('do_better', 'N/A')}\n"
-            body += "-"*30 + "\n\n"
-        body += "Regards,\nAI MedReview Agent\n\n"
+            body += f"Review Text (Feedback): {row.get('free_text', 'N/A')}<BR>"
+            body += f"Review Text (Improvement Suggestion): {row.get('do_better', 'N/A')}<BR>"
+            body += "<hr><BR><BR>"
+        body += "Regards,\nAI-MedReview Agent\n\n"
 
     return subject, body
 
