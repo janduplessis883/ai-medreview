@@ -1,2 +1,3 @@
 pandas
 resend
+loguru
