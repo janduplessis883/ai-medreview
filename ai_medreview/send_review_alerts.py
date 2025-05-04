@@ -5,7 +5,7 @@ import resend # Added import
 from loguru import logger # Added loguru import
 
 # Configure loguru to write logs to a file in the 'logs' directory
-logger.add("logs/app.log", rotation="1 MB", retention="30 days", level="INFO", mkdir=True)
+logger.add("logs/app.log", rotation="1 MB", retention="30 days", level="INFO")
 
 resend.api_key = os.environ["RESEND_API_KEY"] # Added API key setup
 
