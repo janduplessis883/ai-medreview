@@ -21,7 +21,7 @@ CSV_FILE_PATH = 'ai_medreview/data/data.csv' # <-- **UPDATE THIS PATH**
 # Define the criteria for identifying negative reviews.
 SENTIMENT_COLUMNS = ['sentiment_free_text', 'sentiment_do_better']
 SCORE_COLUMNS = ['sentiment_score_free_text', 'sentiment_score_do_better']
-NEGATIVE_SENTIMENT_THRESHOLD = 0.6
+NEGATIVE_SENTIMENT_THRESHOLD = 0.7
 TIME_COLUMN = 'time' # Column containing the timestamp/date
 TIMEFRAME_HOURS = 3000 # Timeframe in hours to check for recent reviews
 
