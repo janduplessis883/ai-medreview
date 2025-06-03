@@ -64,13 +64,32 @@ if __name__ == "__main__":
     surgery.to_csv(output_csv, index=False)
     print(f"Processed data saved to {output_csv}")
 
+    import os
+    import sys
+
+    # Read SMTP and recipient info from environment variables
+    required_env = [
+        "SMTP_SERVER", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SENDER", "RECIPIENT"
+    ]
+    missing = [var for var in required_env if var not in os.environ]
+    if missing:
+        print(f"❌ Missing required environment variables: {', '.join(missing)}")
+        sys.exit(1)
+
+    smtp_server = os.environ["SMTP_SERVER"]
+    smtp_port = int(os.environ["SMTP_PORT"])
+    smtp_user = os.environ["SMTP_USER"]
+    smtp_password = os.environ["SMTP_PASSWORD"]
+    sender = os.environ["SENDER"]
+    recipient = os.environ["RECIPIENT"]
+
     send_email_with_attachment(
-        smtp_server="smtp.hostinger.com",
-        smtp_port=587,
-        smtp_user="hello@attribut.me",
-        smtp_password="vuRmuxwyqge5vakwiz@",
-        sender="hello@attribut.me",
-        recipient=recipient_email_address,
+        smtp_server=smtp_server,
+        smtp_port=smtp_port,
+        smtp_user=smtp_user,
+        smtp_password=smtp_password,
+        sender=sender,
+        recipient=recipient,
         subject=f"AI MedReview FFT Extraction for Month: {month} - {surgery_string}",
         body=f"Dear AI MedReview {surgery_string},\n\nPlease find this automated email with your FFT Extraction for month: {month} attached as a csv.\n\nRegards,\nAI MedReview",
         attachment_path="ai_medreview/data/processed_surgery.csv",
