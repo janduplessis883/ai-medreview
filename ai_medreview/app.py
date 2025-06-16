@@ -1489,13 +1489,13 @@ else:
         st.write("")
         surgery_tab_selector = ui.tabs(
             options=[
-                "ALERTS",
                 "Surgery Rating",
                 "Surgery Responses",
+                "ALERTS",
                 "Feedback Length",
                 "Missing Data",
             ],
-            default_value="ALERTS",
+            default_value="Surgery Rating",
             key="tab4",
         )
         st.toast(body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!", icon="🔥")
