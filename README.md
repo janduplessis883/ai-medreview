@@ -22,4 +22,4 @@ Explore the AI MedReview dashboard today and experience the transformative power
 Looking to enhance patient feedback in your PCN or ICB with cutting-edge AI? 🚀 Our Friends & Family Test AI Tool is here to help! Get in touch to see how it can transform your practice: jan.duplessis@nhs.net. Let’s take healthcare insights to the next level! 💡
 #HealthcareInnovation #AI #primarycare
 
-![Image](images/today.png)
+![Image](images/aimed.gif)
