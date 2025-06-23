@@ -324,6 +324,7 @@ def feedback_classification(data, batch_size=16):
         "Vaccinations",
         "Prescriptions and Medication Management",
         "Mental Health Support",
+        "Unclassifiable",
     ]  # Include all your categories here
 
     # Initialize the list to store labels
@@ -406,6 +407,7 @@ def improvement_classification(data, batch_size=16):
         "Vaccinations",
         "Prescriptions and Medication Management",
         "Mental Health Support",
+        "Unclassifiable",
     ]  # Your improvement labels
 
     # Initialize the list to store improvement labels
