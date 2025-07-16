@@ -1,6 +1,8 @@
 import time
 from datetime import date, datetime, timedelta
 
+
+
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -457,7 +459,7 @@ elif page == "PCN Dashboard":
 
         st.title(f"{st.session_state.pcn}")
         st.markdown(
-            """Aggregating and analyzing the **collective patient feedback data** received by member practices.  
+            """Aggregating and analyzing the **collective patient feedback data** received by member practices.
     """
         )
         st.write("")
@@ -1774,9 +1776,9 @@ elif page == "Word Cloud":
         if toggle:
             st.markdown(
                 """1. The **Feedback Word Cloud**:
-    From response to FFT Q1: Please tell us why you feel this way? 
+    From response to FFT Q1: Please tell us why you feel this way?
     A **word cloud** is a visual representation of text data where the size of each word indicates its frequency or importance. In a word cloud, commonly occurring words are usually displayed in larger fonts or bolder colors, while less frequent words appear smaller. This makes it easy to perceive the most prominent terms within a large body of text at a glance.
-    In the context of patient feedback, a word cloud can be especially useful to quickly identify the key themes or subjects that are most talked about by patients. For example, if many patients mention terms like "waiting times" or "friendly staff," these words will stand out in the word cloud, indicating areas that are notably good or need improvement.  
+    In the context of patient feedback, a word cloud can be especially useful to quickly identify the key themes or subjects that are most talked about by patients. For example, if many patients mention terms like "waiting times" or "friendly staff," these words will stand out in the word cloud, indicating areas that are notably good or need improvement.
 2. The **Improvement Suggestions Word Cloud** is a creative and intuitive representation of the feedback collected from patients through the Friends and Family Test (FFT). When patients are asked, "Is there anything that would have made your experience better?" their responses provide invaluable insights into how healthcare services can be enhanced."""
             )
         st.subheader("Feedback Word Cloud")
@@ -2151,14 +2153,14 @@ elif page == "GPT-4 Summary":
         st.markdown(
             """**What This Page Offers:**
 
-**Automated Summaries**: Leveraging OpenAI's cutting-edge ChatGPT-4, we transform the Friends & Family Test feedback and improvement suggestions into concise, actionable insights.  
-**Time-Specific Insights**: Select the period that matters to you. Whether it's a week, a month, or a custom range, our tool distills feedback relevant to your chosen timeframe.  
-**Efficient Meeting Preparations**: Prepare for meetings with ease. Our summaries provide a clear overview of patient feedback, enabling you to log actions and decisions swiftly and accurately.  
+**Automated Summaries**: Leveraging OpenAI's cutting-edge ChatGPT-4, we transform the Friends & Family Test feedback and improvement suggestions into concise, actionable insights.
+**Time-Specific Insights**: Select the period that matters to you. Whether it's a week, a month, or a custom range, our tool distills feedback relevant to your chosen timeframe.
+**Efficient Meeting Preparations**: Prepare for meetings with ease. Our summaries provide a clear overview of patient feedback, enabling you to log actions and decisions swiftly and accurately.
 
 **How It Works**:
 
-1. **Select Your Time Period**: Choose the dates that you want to analyze.  
-2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.  
+1. **Select Your Time Period**: Choose the dates that you want to analyze.
+2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.
 3. **Receive Your Summary**: Get a well-structured, comprehensive summary that highlights the core sentiments and suggestions from your patients."""
         )
     st.markdown("**Follow the steps below to summarise free-text with GPT4.**")
