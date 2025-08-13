@@ -26,14 +26,14 @@ st.logo(
 
 tab1, tab2, tab3, tab4 = st.tabs(["Find Your Surgery", "Brompton Health PCN", "About AI-MedReview", "Contact Us"])
 
-if tab1:
-    st.header("Fined Your Surgery")
+with tab1:
+    st.header("Find Your Surgery")
     st.sidebar.button("Find Your Surgery", key="find_surgery_button")
-elif tab2:
+with tab2:
     st.header("Brompton Health PCN")
     st.sidebar.button("Brompton Health PCN", key="brompton_health_button")
-elif tab3:
+with tab3:
     st.header("About AI-MedReview")
 
-elif tab4:
+with tab4:
     st.header("Contact Us")
