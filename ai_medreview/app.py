@@ -3412,7 +3412,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         filtered_data.dropna(subset=["prompt"], inplace=True)
 
         # Step 3: Join all rows to form one large corpus of words
-        text = " ".join(filtered_data["prompt"])
+        text = ". ".join(filtered_data["prompt"])
         words = text.split()
         word_count = len(words)
         text = " ".join(words)
