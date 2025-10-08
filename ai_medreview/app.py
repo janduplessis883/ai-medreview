@@ -163,7 +163,6 @@ else:
             (data["time"].dt.date >= date_range[0])
             & (data["time"].dt.date <= date_range[1])
         ]
-
     # Page selection
     page = st.sidebar.radio(
         "Select a Page",
