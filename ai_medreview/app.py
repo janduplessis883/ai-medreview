@@ -15,6 +15,7 @@ from openai import OpenAI
 from wordcloud import WordCloud
 from groq import Groq
 import json
+import re
 
 # Initialize OpenAI API
 # client = OpenAI()
@@ -29,7 +30,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # Simple function to get a response from Groq
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "meta-llama/llama-4-scout-17b-16e-instruct"):
+def ask_groq(prompt: str, model: str = "qwen/qwen3-32b"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -2534,8 +2535,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         summary = ask_groq(
                             f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}"
                         )
-                        st.markdown(f"### {rating}:\n {summary}")
-
+                        with st.container(border=True):
+                            # extract reasoning separately if you still want to make it optional
+                            match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                            reasoning = match.group(1).strip() if match else None
+                            visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                            if reasoning:
+                                with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                    st.markdown(f"{reasoning}")
+                            st.markdown(f"### {rating}:\n {visible_text}")
     # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
     elif page == "Improvement Suggestions":
         st.markdown("# :material/home_improvement_and_tools: Improvement Suggestions")
@@ -2858,7 +2866,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         summary = ask_groq(
                             f"Summarize the following feedback all classified as {rating}, highlighting Positive and Negative trends, feedback text to summarizie: {selected_text}"
                         )
-                        st.markdown(f"### {rating}:\n {summary}")
+                        with st.container(border=True):
+                            # extract reasoning separately if you still want to make it optional
+                            match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                            reasoning = match.group(1).strip() if match else None
+                            visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                            if reasoning:
+                                with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                    st.markdown(f"{reasoning}")
+                            st.markdown(f"### {rating}:\n {visible_text}")
 
     # -- Emotion Detection ------------------------------------------------------------------------------- Emotion Detection
     elif page == "Emotion Detection":
@@ -3368,7 +3384,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         def call_chatgpt_api(text):
             # Example OpenAI Python library request
             completion = client.chat.completions.create(
-                model="meta-llama/llama-4-scout-17b-16e-instruct",
+                model="qwen/qwen3-32b",
                 messages=[
                     {
                         "role": "system",
@@ -3481,8 +3497,16 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         st.markdown(
                             f"Date range: {selected_date_range[0]} - {selected_date_range[1]}"
                         )
-                        st.markdown("---")
-                        st.write(summary)
+
+
+                        # extract reasoning separately if you still want to make it optional
+                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        reasoning = match.group(1).strip() if match else None
+                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        if reasoning:
+                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                st.markdown(f"{reasoning}")
+                        st.markdown(f"{visible_text}")
 
             # Display the logo and entered name (if any)
             st.image("images/openailogo.png")
