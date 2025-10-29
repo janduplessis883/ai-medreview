@@ -96,7 +96,7 @@ if not st.session_state["authenticated"]:
         # )
         check_passcode()
         with st.container(height=200, border=False):
-
+            st.write()
 
         c1, c2, c3 = st.columns([1, 1, 1])
         with c1:
