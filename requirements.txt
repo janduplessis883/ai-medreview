@@ -28,3 +28,4 @@ fpdf
 tqdm
 groq
 resend
+# transformers==4.37.0
