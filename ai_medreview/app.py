@@ -89,7 +89,7 @@ if not st.session_state["authenticated"]:
 
     with c2:
         # st.image("images/private.png")
-        st.image("images/private.png")
+        st.image("images/feedback.gif")
         # st.markdown(
         #     f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
         # )
