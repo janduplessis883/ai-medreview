@@ -1,8 +1,8 @@
 [theme]
 font="Inter:https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-baseFontSize=13
+baseFontSize=14
 theme.baseFontWeight="400"
-theme.headingFontWeights="h5"
+theme.headingFontWeights="h4"
 theme.codeFontSize=16
 # Base colors can be 'light' or 'dark'
 base = "light"
