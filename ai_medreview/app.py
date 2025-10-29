@@ -88,6 +88,7 @@ if not st.session_state["authenticated"]:
     c1, c2, c3 = st.columns([1, 3, 1])
 
     with c2:
+        st.html("<br><br><br><br>")
         # st.image("images/private.png")
         st.image("images/feedback.gif")
         # st.markdown(
