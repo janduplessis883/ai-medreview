@@ -30,7 +30,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # Simple function to get a response from Groq
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "qwen/qwen3-32b"):
+def ask_groq(prompt: str, model: str = "openai/gpt-oss-120b"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -3384,7 +3384,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         def call_chatgpt_api(text):
             # Example OpenAI Python library request
             completion = client.chat.completions.create(
-                model="qwen/qwen3-32b",
+                model="openai/gpt-oss-120b",
                 messages=[
                     {
                         "role": "system",
