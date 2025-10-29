@@ -3888,7 +3888,15 @@ Summarize the feedback in your own words, highlighting any key points or trends 
 Example Feedback Text: Dr PERSON is very friendly.
 ['Jones'] - the above feedback refers to Dr Jones is very friendly. With this in mind summarize the feedback trands received for each person mentioned: {selected_entries}"""
                     )
-                    st.markdown(summary)
+                    with st.container(border=True):
+                        # extract reasoning separately if you still want to make it optional
+                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        reasoning = match.group(1).strip() if match else None
+                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        if reasoning:
+                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                st.markdown(f"{reasoning}")
+                        st.markdown(f"### NER Summary\n {visible_text}")
 
         else:
             ui.badges(
@@ -4032,7 +4040,15 @@ Example Feedback Text: Dr PERSON is very friendly.
                     summary = ask_groq(
                         f"Summarize the following campaign feedback for {selected_campaign}, highlighting Positive and Negative trends: {aggregated_freetext}"
                     )
-                    st.markdown(summary)
+                    with st.container(border=True):
+                        # extract reasoning separately if you still want to make it optional
+                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        reasoning = match.group(1).strip() if match else None
+                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        if reasoning:
+                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                st.markdown(f"{reasoning}")
+                        st.markdown(f"### Campaign Feedback Summary\n {visible_text}")
 
         else:
             ui.badges(

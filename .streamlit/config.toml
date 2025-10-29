@@ -1,5 +1,9 @@
 [theme]
-
+font="Inter:https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+baseFontSize=13
+theme.baseFontWeight="400"
+theme.headingFontWeights="h5"
+theme.codeFontSize=16
 # Base colors can be 'light' or 'dark'
 base = "light"
 
@@ -16,7 +20,7 @@ secondaryBackgroundColor = "#f4f4f5"
 textColor = "#334155"
 
 # Font for your app, choose between "sans serif", "serif", and "monospace"
-font = "sans serif"
+linkColor="#344756"
 
 
 [deprecation]
