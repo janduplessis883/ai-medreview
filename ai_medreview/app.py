@@ -46,7 +46,7 @@ def ask_groq(prompt: str, model: str = "qwen/qwen3-32b"):
 
 st.set_page_config(page_title="AI MedReview")
 st.logo(
-    "images/logo3.png",
+    "images/logo4.png",
     link="https://github.com/janduplessis883/ai-medreview",
     size="large",
 )
@@ -95,17 +95,17 @@ if not st.session_state["authenticated"]:
         #     f"# ![Protected](https://img.icons8.com/pastel-glyph/64/fingerprint.png) AI MedReview"
         # )
         check_passcode()
-        with st.container(height=300, border=False):
-            st.write()
+        with st.container(height=200, border=False):
+
 
         c1, c2, c3 = st.columns([1, 1, 1])
         with c1:
             st.write()
         with c2:
             st.html(
-                """<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23f5c244?link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Fai-medreview">"""
+                """<img alt="Static Badge" src="https://img.shields.io/badge/GitHub-janduplessis883-%23587285">"""
             )
-            # st.html("""<a href="https://groq.com" target="_blank" rel="noopener noreferrer"><BR""")
+
         with c3:
             st.write()
 
