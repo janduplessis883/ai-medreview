@@ -17,7 +17,7 @@ client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 
 @st.cache_resource
-def ask_groq(prompt: str, model: str = "openai/gpt-oss-120b"):
+def ask_groq(prompt: str, model: str = "meta-llama/llama-4-scout-17b-16e-instruct"):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -483,7 +483,7 @@ def simple_pdf(
     pdf.set_text_color(39, 69, 98)
     pdf.cell(0, 10, "Feedback Insights by Groq LLM", 0, 1)
 
-    pdf.set_font("Arial", "", 9)
+    pdf.set_font("Arial", "", 11)
     pdf.set_text_color(39, 69, 98)
     pdf.multi_cell(
         0,
@@ -517,7 +517,7 @@ def simple_pdf(
     pdf.set_text_color(39, 69, 98)
     pdf.cell(0, 10, "Improvement Suggestions Insights by Groq LLM", 0, 1)
 
-    pdf.set_font("Arial", "", 9)
+    pdf.set_font("Arial", "", 11)
     pdf.set_text_color(39, 69, 98)
     pdf.multi_cell(
         0,

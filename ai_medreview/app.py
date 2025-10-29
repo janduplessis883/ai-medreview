@@ -3879,7 +3879,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 icon=":material/download:",
             )
 
-            with st.popover("Summarize Personal feedback", icon=":material/robot_2:"):
+            with st.popover("Summarize Personal feedback", icon=":material/robot_2:", width=300):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
                     summary = ask_groq(
