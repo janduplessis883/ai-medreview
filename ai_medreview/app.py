@@ -133,6 +133,9 @@ else:
         df = pd.read_csv("ai_medreview/data/data.csv")
         df["time"] = pd.to_datetime(df["time"], dayfirst=False)
         df.sort_values(by="time")
+        df['weekofyear'] = df['time'].dt.isocalendar().week
+        df['monthofyear'] = df['time'].dt.month
+        df['year'] = df['time'].dt.year
         return df
 
     data = load_data()
@@ -3165,6 +3168,58 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         filtered_data["time"] = pd.to_datetime(filtered_data["time"])
         filtered_data.set_index("time", inplace=True)
 
+
+        pos_sentiment24 = filtered_data[(filtered_data["sentiment_free_text"] == "positive") & (filtered_data["year"] == 2024)]
+        pos_sentiment25 = filtered_data[(filtered_data["sentiment_free_text"] == "positive") & (filtered_data["year"] == 2025)]
+        neg_sentiment24 = filtered_data[(filtered_data["sentiment_free_text"] == "negative") & (filtered_data["year"] == 2024)]
+        neg_sentiment25 = filtered_data[(filtered_data["sentiment_free_text"] == "negative") & (filtered_data["year"] == 2025)]
+
+        st.subheader("Sentiment Scores by Month of Year")
+        st.subheader("2024")
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=pos_sentiment24, x="monthofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.despine(top=True, left=True, right=True)
+        plt.title("Positive Sentiment Scores by Month of Year (2024)", fontsize=16)
+        st.pyplot(plt)
+
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=neg_sentiment24, x="monthofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.despine(top=True, left=True, right=True)
+        plt.title("Negative Sentiment Scores by Month of Year (2024)", fontsize=16)
+        st.pyplot(plt)
+
+        st.subheader("2025")
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=pos_sentiment25, x="monthofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.despine(top=True, left=True, right=True)
+        plt.title("Positive Sentiment Scores by Month of Year (2025)", fontsize=16)
+        st.pyplot(plt)
+
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=neg_sentiment25, x="monthofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.despine(top=True, left=True, right=True)
+        plt.title("Negative Sentiment Scores by Week of Year (2025)", fontsize=16)
+        st.pyplot(plt)
+
+        st.divider()
+        st.subheader("Sentiment Scores by Week of Year")
+        st.subheader("2024")
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=pos_sentiment24, x="weekofyear", y="sentiment_score_free_text", color="#7b94a6")
+        st.pyplot(plt)
+
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=neg_sentiment24, x="weekofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        st.pyplot(plt)
+        st.subheader("2025")
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=pos_sentiment25, x="weekofyear", y="sentiment_score_free_text", color="#7b94a6")
+        st.pyplot(plt)
+
+        plt.figure(figsize=(18, 5))
+        sns.boxplot(data=neg_sentiment25, x="weekofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        st.pyplot(plt)
+        st.divider()
         # Assuming filtered_data is your DataFrame and 'sentiment_score' is the column with the scores
         # Also assuming that 'time' column has been converted to datetime and set as the index
 
@@ -3183,7 +3238,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         monthly_sentiment_means_adjusted = (
             filtered_data.groupby("sentiment_free_text")
             .resample("MS")["sentiment_score_free_text"]
-            .mean()
+            .median()
             .unstack(level=0)
         )
 
@@ -3251,7 +3306,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         monthly_sentiment_means_adjusted = (
             filtered_data.groupby("sentiment_do_better")
             .resample("MS")["sentiment_score_do_better"]
-            .mean()
+            .median()
             .unstack(level=0)
         )
 
