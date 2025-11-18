@@ -175,6 +175,7 @@ else:
             "Surgery Dashboards",
             "Feedback Classification",
             "Improvement Suggestions",
+            "Automated FFT",
             "Feedback Timeline",
             "Emotion Detection",
             "Sentiment Analysis",
@@ -4114,3 +4115,36 @@ Example Feedback Text: Dr PERSON is very friendly.
                 class_name="flex gap-2",
                 key="badges1134",
             )
+
+       # -- Automated FFT ------------------------------------------------------------------------------------------------------- Campaings
+    elif page == "Automated FFT":
+        st.markdown("# :material/automation: Automated FFT")
+
+        filtered_data['sentiment_score_freetext_corrected'] = filtered_data['sentiment_score_free_text'].where(
+    filtered_data['sentiment_free_text'] == 'positive',
+    -filtered_data['sentiment_score_free_text'].abs()
+)
+        grouped = (
+                    filtered_data
+                    .groupby(['year', 'monthofyear', 'feedback_labels'])
+                    .agg(sentiment_mean=('sentiment_score_freetext_corrected', 'mean'))
+                    .reset_index()
+                    )
+
+        grouped['year_month'] = grouped['year'].astype(str) + '-' + grouped['monthofyear'].astype(str).str.zfill(2)
+        heatmap_df = grouped.pivot(
+                        index='feedback_labels',
+                        columns='year_month',
+                        values='sentiment_mean'
+                    )
+
+        fig, ax = plt.subplots(figsize=(14, 12))
+        sns.heatmap(heatmap_df, annot=True, fmt=".2f", ax=ax, cmap='coolwarm')
+
+        ax.set_xlabel("Year-Month")
+        ax.set_ylabel("Feedback Labels")
+        ax.set_title("Sentiment Mean by Feedback Label Over Time")
+
+        st.pyplot(fig)
+        st.divider()
+        st.dataframe(grouped)
