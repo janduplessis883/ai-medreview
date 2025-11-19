@@ -7,18 +7,14 @@ pandas
 google-auth
 distributed
 dateparser
-fastparquet
 nlpaug
 torch
-# Dependancies for sheethelper
 gspread
 transformers==4.37.0
 openai
 sentencepiece
-black
 streamlit-shadcn-ui
 loguru
-schedule
 wordcloud
 requests
 nlpretext
@@ -28,4 +24,3 @@ fpdf
 tqdm
 groq
 resend
-# transformers==4.37.0
