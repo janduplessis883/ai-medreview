@@ -24,6 +24,9 @@ import re
 from utils import *
 from reports import *
 
+
+
+
 # Initialize the Groq client
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
@@ -52,10 +55,13 @@ st.logo(
 )
 
 
+
 # Function to check passcode
 def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
+
     with st.form("passcode_form", border=False):
+        data_version = st.toggle("Data Version 2.0", value=False, key="data_version_toggle", help="Data v2 uses a classification list optimized by BERTopic and MoritzLaurer/deberta-v3-large-zeroshot-v2.0 as the zero-shot model.")
         entered_passcode = st.text_input(
             "Enter **AI MedReview** passcode:",
             type="password",
@@ -83,6 +89,16 @@ def check_passcode():
 # Check if the user is authenticated
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
+
+# Function to clear cache and reload the page
+def clear_cache_and_reload():
+    st.cache_data.clear()
+    st.cache_resource.clear()
+    st.rerun()
+
+# UI button to trigger cache clearing and page reload
+if st.sidebar.button("Clear Cache and Reload"):
+    clear_cache_and_reload()
 
 if not st.session_state["authenticated"]:
     c1, c2, c3 = st.columns([1, 3, 1])
@@ -127,12 +143,16 @@ else:
         "Select a Primary Care Network", pcn_names, key="pcn_selector"
     )
 
-    # Function to load data
-    @st.cache_data(ttl=3600)
+
+    @st.cache_data(ttl=3600, show_spinner="Loading reviews...")
     def load_data():
-        df = pd.read_csv("ai_medreview/data/data.csv")
-        df["time"] = pd.to_datetime(df["time"], dayfirst=False)
-        df.sort_values(by="time")
+        file = "ai_medreview/data/data.csv"
+        df = pd.read_csv(file)
+        if df.empty:
+            st.warning(f"⚠️ No data found in {file}")
+            return pd.DataFrame()
+        df["time"] = pd.to_datetime(df["time"], errors="coerce")
+        df = df.sort_values(by="time").reset_index(drop=True)
         df['weekofyear'] = df['time'].dt.isocalendar().week
         df['monthofyear'] = df['time'].dt.month
         df['year'] = df['time'].dt.year
