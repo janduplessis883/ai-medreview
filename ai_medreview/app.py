@@ -4139,7 +4139,8 @@ Example Feedback Text: Dr PERSON is very friendly.
        # -- Automated FFT ------------------------------------------------------------------------------------------------------- Campaings
     elif page == "Automated FFT":
         st.markdown("# :material/automation: Automated FFT")
-
+        st.caption("To interpret a heatmap displaying GP surgery feedback, focus on the intersection of the topic (y-axis) and the **average monthly sentiment analysis score** (x-axis). Each colored cell represents the intensity of sentiment for a specific topic in a given month. The color scale is key: **blue** indicates a negative average sentiment score for that topic in that month, suggesting **areas needing improvement**, while red signifies a **positive average sentiment**, highlighting successful aspects of the surgery's operation. Areas with the deepest red have the highest positive sentiment, meaning patients consistently rated those topics highly. Conversely, the deepest blue areas represent topics with the most pronounced negative feedback. By scanning the map, you can identify patterns over time (horizontally) and compare sentiment across different service areas (vertically) to quickly pinpoint **persistent problem** areas or **long-term successes**.")
+        st.divider()
         filtered_data['sentiment_score_freetext_corrected'] = filtered_data['sentiment_score_free_text'].where(
     filtered_data['sentiment_free_text'] == 'positive',
     -filtered_data['sentiment_score_free_text'].abs()
