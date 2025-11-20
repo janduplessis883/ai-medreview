@@ -28,7 +28,7 @@ gsheet:
 	@streamlit run ai_medreview/gsheet_connect.py
 
 data:
-	@python ai_medreview/data.py
+	@python ai_medreview/data_v2.py
 
 repeat:
 	@python ai_medreview/scheduler.py
@@ -45,4 +45,3 @@ git_push:
 
 lint:
 	@black ai_medreview/
-
