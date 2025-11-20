@@ -146,7 +146,7 @@ else:
 
     @st.cache_data(ttl=3600, show_spinner="Loading reviews...")
     def load_data():
-        file = "ai_medreview/data/data.csv"
+        file = "ai_medreview/data/data_v2.csv"
         df = pd.read_csv(file)
         if df.empty:
             st.warning(f"⚠️ No data found in {file}")
