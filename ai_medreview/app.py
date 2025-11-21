@@ -2252,9 +2252,18 @@ else:
             st.html(
                 "<div class='status' style='background-color: #aa485b; color: white; padding-top: 2px; padding-bottom: 2px; padding-left: 7px; padding-right: 7px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 12px; display: inline-block; text-align: center; box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);'><b>NEW Pareto Analysis</b></div>"
             )
-            neg = filtered_data[filtered_data["sentiment_free_text"] == "negative"]
-            negative_df = neg["feedback_labels"].value_counts().reset_index()
-            negative_df.columns = ["Feedback Label", "Count"]
+            neg1 = filtered_data[filtered_data["sentiment_free_text"] == "negative"]
+            neg2 = filtered_data[filtered_data["sentiment_do_better"] == "negative"]
+            negative_df1 = neg1["feedback_labels"].value_counts().reset_index()
+            negative_df2 = neg2["improvement_labels"].value_counts().reset_index()
+            negative_df1.columns = ["Label", "Count"]
+            negative_df2.columns = ["Label", "Count"]
+
+            negative_df = pd.concat([negative_df1, negative_df2], axis=0)
+            negative_df = (
+                negative_df.groupby("Label")["Count"].sum().reset_index())
+            st.dataframe(negative_df)
+            negative_df = negative_df.sort_values(by="Count", ascending=False).reset_index()
             negative_df["Cumulative Count"] = negative_df["Count"].cumsum()
             negative_df["Cumulative Percentage"] = (
                 100 * negative_df["Cumulative Count"] / negative_df["Count"].sum()
@@ -2265,14 +2274,14 @@ else:
 
             # Bar plot for the count of feedback labels
             sns.barplot(
-                x="Feedback Label", y="Count", data=negative_df, color="#4aa2e5", ax=ax1
+                x="Label", y="Count", data=negative_df, color="#4aa2e5", ax=ax1
             )
             plt.xticks(rotation=45, ha="right")
 
             # Create a secondary axis for the cumulative percentage
             ax2 = ax1.twinx()
             sns.lineplot(
-                x="Feedback Label",
+                x="Label",
                 y="Cumulative Percentage",
                 data=negative_df,
                 sort=False,
@@ -2303,7 +2312,7 @@ else:
 
             # Title and labels
             ax1.set_xlabel("Feedback Category")
-            plt.title("Negative Feedback Pareto Chart")
+            plt.title("All Negative Feedback Pareto Chart")
 
             # Adjust layout for better appearance
             plt.tight_layout()
