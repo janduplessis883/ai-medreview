@@ -61,7 +61,7 @@ def check_passcode():
     passcode = st.secrets["passcode"]["pin"]
 
     with st.form("passcode_form", border=False):
-        data_version = st.toggle("Data Version 2.0", value=False, key="data_version_toggle", help="Data v2 uses a classification list optimized by BERTopic and MoritzLaurer/deberta-v3-large-zeroshot-v2.0 as the zero-shot model.")
+
         entered_passcode = st.text_input(
             "Enter **AI MedReview** passcode:",
             type="password",
