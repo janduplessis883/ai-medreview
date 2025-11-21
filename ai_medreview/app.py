@@ -2262,7 +2262,7 @@ else:
             negative_df = pd.concat([negative_df1, negative_df2], axis=0)
             negative_df = (
                 negative_df.groupby("Label")["Count"].sum().reset_index())
-            st.dataframe(negative_df)
+
             negative_df = negative_df.sort_values(by="Count", ascending=False).reset_index()
             negative_df["Cumulative Count"] = negative_df["Count"].cumsum()
             negative_df["Cumulative Percentage"] = (
