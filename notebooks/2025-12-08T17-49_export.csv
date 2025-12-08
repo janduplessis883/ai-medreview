@@ -1,0 +1,425 @@
+﻿,year,monthofyear,labels,sentiment_mean,year_month
+0,2024,1,Appointment Availability and Waiting Times,-0.34239446371793747,2024-01
+1,2024,1,Appointment Booking and Online Systems,-0.7227548360824585,2024-01
+2,2024,1,Blood Tests and Results Delays,-0.7303404808044434,2024-01
+3,2024,1,Difficulty Getting Through on Phone,-0.7074128091335297,2024-01
+4,2024,1,Excellent Clinical Care and Thorough Explanation,0.5900975108146668,2024-01
+5,2024,1,Follow-up and Continuity of Care,-0.8453563849131266,2024-01
+6,2024,1,Irrelevant / Unclassifiable / Noise,0.14506959373300726,2024-01
+7,2024,1,Overall Excellent Service and Practice,0.8162274483976693,2024-01
+8,2024,1,Prescriptions and Repeat Medication Issues,-0.7378323525190353,2024-01
+9,2024,1,Reception Staff Friendly and Helpful,0.9475744863351186,2024-01
+10,2024,1,Rushed Consultation or Not Listened To,-0.5250825434923172,2024-01
+11,2024,1,"Staff Kindness, Empathy and Compassion",0.7118229215795343,2024-01
+12,2024,1,Staff Professionalism and Knowledge,0.7279055317242941,2024-01
+13,2024,1,Telehealth / Phone Consultations,-0.5564849376678467,2024-01
+14,2024,1,Treatment Quality and Effectiveness,0.08109335104624431,2024-01
+15,2024,1,Waiting Time in Surgery / Waiting Room,-0.73106849193573,2024-01
+16,2024,2,Appointment Availability and Waiting Times,-0.3728311257284196,2024-02
+17,2024,2,Appointment Booking and Online Systems,-0.2481759122439793,2024-02
+18,2024,2,Blood Tests and Results Delays,-0.9031557440757751,2024-02
+19,2024,2,Difficulty Getting Through on Phone,-0.6619790236155192,2024-02
+20,2024,2,Excellent Clinical Care and Thorough Explanation,0.6773920728350585,2024-02
+21,2024,2,Follow-up and Continuity of Care,-0.2874321985244751,2024-02
+22,2024,2,Irrelevant / Unclassifiable / Noise,-0.529663612781945,2024-02
+23,2024,2,Overall Excellent Service and Practice,0.8555445005445916,2024-02
+24,2024,2,Prescriptions and Repeat Medication Issues,-0.6759743277843182,2024-02
+25,2024,2,Reception Staff Friendly and Helpful,0.7977676458447893,2024-02
+26,2024,2,Reception Staff Rude or Unhelpful,-0.740742895639304,2024-02
+27,2024,2,Rushed Consultation or Not Listened To,-0.7236245844675147,2024-02
+28,2024,2,"Staff Kindness, Empathy and Compassion",0.7471637004300168,2024-02
+29,2024,2,Staff Professionalism and Knowledge,0.1432926479888999,2024-02
+30,2024,2,Telehealth / Phone Consultations,-0.3714800513820884,2024-02
+31,2024,2,Treatment Quality and Effectiveness,0.2802833020687103,2024-02
+32,2024,2,Vaccinations and Immunisations,-0.28225941790474784,2024-02
+33,2024,2,Waiting Time in Surgery / Waiting Room,-0.6933393577734629,2024-02
+34,2024,3,Appointment Availability and Waiting Times,-0.38242668116634543,2024-03
+35,2024,3,Appointment Booking and Online Systems,-0.4528779449562232,2024-03
+36,2024,3,Blood Tests and Results Delays,-0.368576779961586,2024-03
+37,2024,3,Difficulty Getting Through on Phone,-0.7509926458199819,2024-03
+38,2024,3,Excellent Clinical Care and Thorough Explanation,0.8224222925694092,2024-03
+39,2024,3,Follow-up and Continuity of Care,-0.14848373234272003,2024-03
+40,2024,3,Irrelevant / Unclassifiable / Noise,-0.3719291160504023,2024-03
+41,2024,3,Overall Excellent Service and Practice,0.8984141489803391,2024-03
+42,2024,3,Prescriptions and Repeat Medication Issues,-0.24552803238232931,2024-03
+43,2024,3,Reception Staff Friendly and Helpful,0.7611425614782742,2024-03
+44,2024,3,Reception Staff Rude or Unhelpful,-0.4411911998803799,2024-03
+45,2024,3,Rushed Consultation or Not Listened To,-0.7559901177883148,2024-03
+46,2024,3,"Staff Kindness, Empathy and Compassion",0.7207514873395363,2024-03
+47,2024,3,Staff Professionalism and Knowledge,0.3002692861482501,2024-03
+48,2024,3,Telehealth / Phone Consultations,-0.25970671678844254,2024-03
+49,2024,3,Treatment Quality and Effectiveness,0.3108416610956192,2024-03
+50,2024,3,Vaccinations and Immunisations,0.054296225309372004,2024-03
+51,2024,3,Waiting Time in Surgery / Waiting Room,-0.9040607810020448,2024-03
+52,2024,4,Appointment Availability and Waiting Times,-0.361442431807518,2024-04
+53,2024,4,Appointment Booking and Online Systems,-0.4235828375816345,2024-04
+54,2024,4,Blood Tests and Results Delays,-0.7944794495900472,2024-04
+55,2024,4,Difficulty Getting Through on Phone,-0.7792071302731832,2024-04
+56,2024,4,Excellent Clinical Care and Thorough Explanation,0.6333244059045436,2024-04
+57,2024,4,Follow-up and Continuity of Care,-0.20544722808731927,2024-04
+58,2024,4,Irrelevant / Unclassifiable / Noise,-0.49585450154084426,2024-04
+59,2024,4,Overall Excellent Service and Practice,0.884900177755053,2024-04
+60,2024,4,Prescriptions and Repeat Medication Issues,-0.6226619567189898,2024-04
+61,2024,4,Reception Staff Friendly and Helpful,0.7881267651334986,2024-04
+62,2024,4,Reception Staff Rude or Unhelpful,-0.6936028340588445,2024-04
+63,2024,4,Rushed Consultation or Not Listened To,-0.6705208520094553,2024-04
+64,2024,4,"Staff Kindness, Empathy and Compassion",0.7700878415788923,2024-04
+65,2024,4,Staff Professionalism and Knowledge,0.21273272353060105,2024-04
+66,2024,4,Telehealth / Phone Consultations,-0.31287183463573454,2024-04
+67,2024,4,Treatment Quality and Effectiveness,0.2196745017789445,2024-04
+68,2024,4,Vaccinations and Immunisations,-0.21796704083681107,2024-04
+69,2024,4,Waiting Time in Surgery / Waiting Room,-0.6703453063964844,2024-04
+70,2024,5,Appointment Availability and Waiting Times,-0.25781308561563493,2024-05
+71,2024,5,Appointment Booking and Online Systems,-0.4724295939717974,2024-05
+72,2024,5,Blood Tests and Results Delays,-0.7471596896648407,2024-05
+73,2024,5,Difficulty Getting Through on Phone,-0.3637343496084213,2024-05
+74,2024,5,Excellent Clinical Care and Thorough Explanation,0.7138600607039565,2024-05
+75,2024,5,Follow-up and Continuity of Care,-0.28674235385517743,2024-05
+76,2024,5,Irrelevant / Unclassifiable / Noise,-0.49534090894919175,2024-05
+77,2024,5,Overall Excellent Service and Practice,0.8175861644640303,2024-05
+78,2024,5,Prescriptions and Repeat Medication Issues,-0.28473065116188745,2024-05
+79,2024,5,Reception Staff Friendly and Helpful,0.7444631184140841,2024-05
+80,2024,5,Reception Staff Rude or Unhelpful,-0.5693442550572482,2024-05
+81,2024,5,Rushed Consultation or Not Listened To,-0.46980312652885914,2024-05
+82,2024,5,"Staff Kindness, Empathy and Compassion",0.5425795308417745,2024-05
+83,2024,5,Staff Professionalism and Knowledge,0.18931670532082068,2024-05
+84,2024,5,Telehealth / Phone Consultations,-0.29398172864547145,2024-05
+85,2024,5,Treatment Quality and Effectiveness,0.3427706804810738,2024-05
+86,2024,5,Vaccinations and Immunisations,-0.6427373687426249,2024-05
+87,2024,5,Waiting Time in Surgery / Waiting Room,-0.5814950466156006,2024-05
+88,2024,6,Appointment Availability and Waiting Times,-0.35121005376180015,2024-06
+89,2024,6,Appointment Booking and Online Systems,-0.31992261052131654,2024-06
+90,2024,6,Blood Tests and Results Delays,-0.7849172353744507,2024-06
+91,2024,6,Difficulty Getting Through on Phone,-0.3429200393812997,2024-06
+92,2024,6,Excellent Clinical Care and Thorough Explanation,0.6848374680541027,2024-06
+93,2024,6,Follow-up and Continuity of Care,-0.282323263940357,2024-06
+94,2024,6,Irrelevant / Unclassifiable / Noise,-0.3446800609429677,2024-06
+95,2024,6,Overall Excellent Service and Practice,0.862181337482958,2024-06
+96,2024,6,Prescriptions and Repeat Medication Issues,-0.2883292394024985,2024-06
+97,2024,6,Reception Staff Friendly and Helpful,0.7744251454577726,2024-06
+98,2024,6,Reception Staff Rude or Unhelpful,-0.5001330211758613,2024-06
+99,2024,6,Rushed Consultation or Not Listened To,-0.6418281664019045,2024-06
+100,2024,6,"Staff Kindness, Empathy and Compassion",0.6147851620582824,2024-06
+101,2024,6,Staff Professionalism and Knowledge,0.1462476086435896,2024-06
+102,2024,6,Telehealth / Phone Consultations,-0.2835569507800616,2024-06
+103,2024,6,Treatment Quality and Effectiveness,0.15003190204208972,2024-06
+104,2024,6,Vaccinations and Immunisations,-0.28277333577473956,2024-06
+105,2024,6,Waiting Time in Surgery / Waiting Room,0.20254300534725192,2024-06
+106,2024,7,Appointment Availability and Waiting Times,-0.26265866309404373,2024-07
+107,2024,7,Appointment Booking and Online Systems,-0.3972023487091064,2024-07
+108,2024,7,Blood Tests and Results Delays,-0.7932301521301269,2024-07
+109,2024,7,Difficulty Getting Through on Phone,-0.6340730835994085,2024-07
+110,2024,7,Excellent Clinical Care and Thorough Explanation,0.5451975426612756,2024-07
+111,2024,7,Follow-up and Continuity of Care,-0.32436153117348165,2024-07
+112,2024,7,Irrelevant / Unclassifiable / Noise,-0.15643705506073802,2024-07
+113,2024,7,Overall Excellent Service and Practice,0.8746587143112452,2024-07
+114,2024,7,Prescriptions and Repeat Medication Issues,-0.2260526329278946,2024-07
+115,2024,7,Reception Staff Friendly and Helpful,0.86143542769589,2024-07
+116,2024,7,Reception Staff Rude or Unhelpful,-0.6877290043565962,2024-07
+117,2024,7,Rushed Consultation or Not Listened To,-0.6608820642743792,2024-07
+118,2024,7,"Staff Kindness, Empathy and Compassion",0.5904386219653216,2024-07
+119,2024,7,Staff Professionalism and Knowledge,0.2279362682207131,2024-07
+120,2024,7,Telehealth / Phone Consultations,-0.36429531313478947,2024-07
+121,2024,7,Treatment Quality and Effectiveness,0.2256567089094056,2024-07
+122,2024,7,Vaccinations and Immunisations,-0.2351668278376262,2024-07
+123,2024,7,Waiting Time in Surgery / Waiting Room,-0.6065763483444849,2024-07
+124,2024,8,Appointment Availability and Waiting Times,-0.3910350418753094,2024-08
+125,2024,8,Appointment Booking and Online Systems,-0.11209137881955793,2024-08
+126,2024,8,Blood Tests and Results Delays,-0.09801403681437175,2024-08
+127,2024,8,Difficulty Getting Through on Phone,-0.8223390976587931,2024-08
+128,2024,8,Excellent Clinical Care and Thorough Explanation,0.6118065196054953,2024-08
+129,2024,8,Follow-up and Continuity of Care,-0.22664621743288907,2024-08
+130,2024,8,Irrelevant / Unclassifiable / Noise,-0.32697285766954776,2024-08
+131,2024,8,Overall Excellent Service and Practice,0.874163652223254,2024-08
+132,2024,8,Prescriptions and Repeat Medication Issues,-0.48463282272929237,2024-08
+133,2024,8,Reception Staff Friendly and Helpful,0.8112927854779255,2024-08
+134,2024,8,Reception Staff Rude or Unhelpful,-0.7269111794454081,2024-08
+135,2024,8,Rushed Consultation or Not Listened To,-0.5338002849708904,2024-08
+136,2024,8,"Staff Kindness, Empathy and Compassion",0.7419487323079791,2024-08
+137,2024,8,Staff Professionalism and Knowledge,0.3189644114329265,2024-08
+138,2024,8,Telehealth / Phone Consultations,-0.36934225190253483,2024-08
+139,2024,8,Treatment Quality and Effectiveness,0.2500364650040865,2024-08
+140,2024,8,Vaccinations and Immunisations,-0.45627235174179076,2024-08
+141,2024,8,Waiting Time in Surgery / Waiting Room,0.9649760127067566,2024-08
+142,2024,9,Appointment Availability and Waiting Times,-0.3885355144739151,2024-09
+143,2024,9,Appointment Booking and Online Systems,-0.21031852472912183,2024-09
+144,2024,9,Blood Tests and Results Delays,-0.8133271336555481,2024-09
+145,2024,9,Difficulty Getting Through on Phone,-0.7344947258631388,2024-09
+146,2024,9,Excellent Clinical Care and Thorough Explanation,0.7254077155613204,2024-09
+147,2024,9,Follow-up and Continuity of Care,-0.3279987824590583,2024-09
+148,2024,9,Irrelevant / Unclassifiable / Noise,-0.37995340747217976,2024-09
+149,2024,9,Overall Excellent Service and Practice,0.8506128803020766,2024-09
+150,2024,9,Prescriptions and Repeat Medication Issues,-0.4130471547444661,2024-09
+151,2024,9,Reception Staff Friendly and Helpful,0.8377983952696259,2024-09
+152,2024,9,Reception Staff Rude or Unhelpful,-0.7788126627604167,2024-09
+153,2024,9,Rushed Consultation or Not Listened To,-0.4833293904860814,2024-09
+154,2024,9,"Staff Kindness, Empathy and Compassion",0.6295182228088378,2024-09
+155,2024,9,Staff Professionalism and Knowledge,0.4517668053507805,2024-09
+156,2024,9,Telehealth / Phone Consultations,-0.2717423683671809,2024-09
+157,2024,9,Treatment Quality and Effectiveness,0.42732943257977885,2024-09
+158,2024,9,Vaccinations and Immunisations,-0.23537352532148362,2024-09
+159,2024,9,Waiting Time in Surgery / Waiting Room,-0.13529545068740845,2024-09
+160,2024,10,Appointment Availability and Waiting Times,-0.3266053392606623,2024-10
+161,2024,10,Appointment Booking and Online Systems,-0.28624383608500165,2024-10
+162,2024,10,Blood Tests and Results Delays,-0.6710125803947449,2024-10
+163,2024,10,Difficulty Getting Through on Phone,-0.6350684762001038,2024-10
+164,2024,10,Excellent Clinical Care and Thorough Explanation,0.5500659662775877,2024-10
+165,2024,10,Follow-up and Continuity of Care,-0.18722705741723378,2024-10
+166,2024,10,Irrelevant / Unclassifiable / Noise,-0.5195393691460292,2024-10
+167,2024,10,Overall Excellent Service and Practice,0.8007379109039903,2024-10
+168,2024,10,Prescriptions and Repeat Medication Issues,-0.6632305350568559,2024-10
+169,2024,10,Reception Staff Friendly and Helpful,0.8638043620369651,2024-10
+170,2024,10,Reception Staff Rude or Unhelpful,-0.682661484926939,2024-10
+171,2024,10,Rushed Consultation or Not Listened To,-0.6423240587115288,2024-10
+172,2024,10,"Staff Kindness, Empathy and Compassion",0.6053598086501277,2024-10
+173,2024,10,Staff Professionalism and Knowledge,0.3014579113324483,2024-10
+174,2024,10,Telehealth / Phone Consultations,-0.21210023341044573,2024-10
+175,2024,10,Treatment Quality and Effectiveness,-0.013865714010439418,2024-10
+176,2024,10,Vaccinations and Immunisations,0.12663437311465925,2024-10
+177,2024,10,Waiting Time in Surgery / Waiting Room,-0.6832893192768097,2024-10
+178,2024,11,Appointment Availability and Waiting Times,-0.43902134168438794,2024-11
+179,2024,11,Appointment Booking and Online Systems,-0.22104020855006049,2024-11
+180,2024,11,Blood Tests and Results Delays,-0.5906339883804321,2024-11
+181,2024,11,Difficulty Getting Through on Phone,-0.7455789566040039,2024-11
+182,2024,11,Excellent Clinical Care and Thorough Explanation,0.7236881145211154,2024-11
+183,2024,11,Follow-up and Continuity of Care,-0.3945691922018605,2024-11
+184,2024,11,Irrelevant / Unclassifiable / Noise,-0.430682415381456,2024-11
+185,2024,11,Overall Excellent Service and Practice,0.8693288963869077,2024-11
+186,2024,11,Prescriptions and Repeat Medication Issues,-0.44602319929334855,2024-11
+187,2024,11,Reception Staff Friendly and Helpful,0.8894300997257233,2024-11
+188,2024,11,Reception Staff Rude or Unhelpful,-0.678885268047452,2024-11
+189,2024,11,Rushed Consultation or Not Listened To,-0.5849855073860714,2024-11
+190,2024,11,"Staff Kindness, Empathy and Compassion",0.6190050918122997,2024-11
+191,2024,11,Staff Professionalism and Knowledge,0.260675700401005,2024-11
+192,2024,11,Telehealth / Phone Consultations,-0.28314244226803853,2024-11
+193,2024,11,Treatment Quality and Effectiveness,0.33885098523215246,2024-11
+194,2024,11,Vaccinations and Immunisations,-0.018432799312803474,2024-11
+195,2024,11,Waiting Time in Surgery / Waiting Room,-0.1536384622255961,2024-11
+196,2024,12,Appointment Availability and Waiting Times,-0.25239179455316985,2024-12
+197,2024,12,Appointment Booking and Online Systems,-0.2570178256585048,2024-12
+198,2024,12,Blood Tests and Results Delays,-0.8105706572532654,2024-12
+199,2024,12,Difficulty Getting Through on Phone,0.010856539011001587,2024-12
+200,2024,12,Excellent Clinical Care and Thorough Explanation,0.5971092496599469,2024-12
+201,2024,12,Follow-up and Continuity of Care,-0.4287976874754979,2024-12
+202,2024,12,Irrelevant / Unclassifiable / Noise,-0.358686500787735,2024-12
+203,2024,12,Overall Excellent Service and Practice,0.8435679532979664,2024-12
+204,2024,12,Prescriptions and Repeat Medication Issues,-0.17765803386767706,2024-12
+205,2024,12,Reception Staff Friendly and Helpful,0.7420322972315329,2024-12
+206,2024,12,Reception Staff Rude or Unhelpful,-0.8245596164151242,2024-12
+207,2024,12,Rushed Consultation or Not Listened To,-0.5167526781558991,2024-12
+208,2024,12,"Staff Kindness, Empathy and Compassion",0.7950036505858104,2024-12
+209,2024,12,Staff Professionalism and Knowledge,0.09078217114227405,2024-12
+210,2024,12,Telehealth / Phone Consultations,-0.45895457840882814,2024-12
+211,2024,12,Treatment Quality and Effectiveness,0.2830508428235208,2024-12
+212,2024,12,Vaccinations and Immunisations,0.20673033595085144,2024-12
+213,2024,12,Waiting Time in Surgery / Waiting Room,0.04258885979652405,2024-12
+214,2025,1,Appointment Availability and Waiting Times,-0.1589584634747616,2025-01
+215,2025,1,Appointment Booking and Online Systems,-0.4277403859988503,2025-01
+216,2025,1,Blood Tests and Results Delays,-0.6837040781974792,2025-01
+217,2025,1,Difficulty Getting Through on Phone,-0.013689950108528137,2025-01
+218,2025,1,Excellent Clinical Care and Thorough Explanation,0.6030357189868626,2025-01
+219,2025,1,Follow-up and Continuity of Care,-0.4538887453575929,2025-01
+220,2025,1,Irrelevant / Unclassifiable / Noise,-0.38569844401243963,2025-01
+221,2025,1,Overall Excellent Service and Practice,0.8005926092465718,2025-01
+222,2025,1,Prescriptions and Repeat Medication Issues,-0.2815722035510199,2025-01
+223,2025,1,Reception Staff Friendly and Helpful,0.8484697886455206,2025-01
+224,2025,1,Reception Staff Rude or Unhelpful,-0.5414862741123546,2025-01
+225,2025,1,Rushed Consultation or Not Listened To,-0.6548590941561593,2025-01
+226,2025,1,"Staff Kindness, Empathy and Compassion",0.5744338125893564,2025-01
+227,2025,1,Staff Professionalism and Knowledge,0.4568881243467331,2025-01
+228,2025,1,Telehealth / Phone Consultations,-0.25092328912936723,2025-01
+229,2025,1,Treatment Quality and Effectiveness,0.23645749404316857,2025-01
+230,2025,1,Vaccinations and Immunisations,-0.7468131482601166,2025-01
+231,2025,1,Waiting Time in Surgery / Waiting Room,0.12728635470072427,2025-01
+232,2025,2,Appointment Availability and Waiting Times,-0.42593909587178913,2025-02
+233,2025,2,Appointment Booking and Online Systems,-0.15285801142454147,2025-02
+234,2025,2,Blood Tests and Results Delays,-0.6584614515304565,2025-02
+235,2025,2,Difficulty Getting Through on Phone,-0.8529041608174642,2025-02
+236,2025,2,Excellent Clinical Care and Thorough Explanation,0.7429860067186933,2025-02
+237,2025,2,Follow-up and Continuity of Care,-0.23704259711153366,2025-02
+238,2025,2,Irrelevant / Unclassifiable / Noise,-0.39678556010836646,2025-02
+239,2025,2,Overall Excellent Service and Practice,0.8697932954877615,2025-02
+240,2025,2,Prescriptions and Repeat Medication Issues,-0.28967107155106286,2025-02
+241,2025,2,Reception Staff Friendly and Helpful,0.7663885411762056,2025-02
+242,2025,2,Reception Staff Rude or Unhelpful,-0.8366002669701209,2025-02
+243,2025,2,Rushed Consultation or Not Listened To,-0.5497636293110094,2025-02
+244,2025,2,"Staff Kindness, Empathy and Compassion",0.4332232534885406,2025-02
+245,2025,2,Staff Professionalism and Knowledge,0.1251669372831072,2025-02
+246,2025,2,Telehealth / Phone Consultations,-0.32445246093678026,2025-02
+247,2025,2,Treatment Quality and Effectiveness,0.6477139937250238,2025-02
+248,2025,2,Vaccinations and Immunisations,0.052055649459362044,2025-02
+249,2025,2,Waiting Time in Surgery / Waiting Room,-0.6583772823214531,2025-02
+250,2025,3,Appointment Availability and Waiting Times,-0.5342896733735059,2025-03
+251,2025,3,Appointment Booking and Online Systems,0.02350435512406485,2025-03
+252,2025,3,Difficulty Getting Through on Phone,-0.639667828877767,2025-03
+253,2025,3,Excellent Clinical Care and Thorough Explanation,0.6094582990272758,2025-03
+254,2025,3,Follow-up and Continuity of Care,-0.44002600990492724,2025-03
+255,2025,3,Irrelevant / Unclassifiable / Noise,-0.4984816110134125,2025-03
+256,2025,3,Overall Excellent Service and Practice,0.7871366308090535,2025-03
+257,2025,3,Prescriptions and Repeat Medication Issues,-0.43791306813557945,2025-03
+258,2025,3,Reception Staff Friendly and Helpful,0.7918830352524916,2025-03
+259,2025,3,Reception Staff Rude or Unhelpful,-0.6504378744534084,2025-03
+260,2025,3,Rushed Consultation or Not Listened To,-0.6325767420489212,2025-03
+261,2025,3,"Staff Kindness, Empathy and Compassion",0.5747558734518416,2025-03
+262,2025,3,Staff Professionalism and Knowledge,0.3025222564737002,2025-03
+263,2025,3,Telehealth / Phone Consultations,-0.3627681994616096,2025-03
+264,2025,3,Treatment Quality and Effectiveness,0.34317429264386495,2025-03
+265,2025,3,Vaccinations and Immunisations,0.13549656527382986,2025-03
+266,2025,3,Waiting Time in Surgery / Waiting Room,-0.6548593491315842,2025-03
+267,2025,4,Appointment Availability and Waiting Times,-0.12617351114749908,2025-04
+268,2025,4,Appointment Booking and Online Systems,-0.19269041220347086,2025-04
+269,2025,4,Blood Tests and Results Delays,-0.09309068322181702,2025-04
+270,2025,4,Excellent Clinical Care and Thorough Explanation,0.6296939566021874,2025-04
+271,2025,4,Follow-up and Continuity of Care,-0.33179232105612755,2025-04
+272,2025,4,Irrelevant / Unclassifiable / Noise,-0.36742539818470293,2025-04
+273,2025,4,Overall Excellent Service and Practice,0.7647601653670155,2025-04
+274,2025,4,Prescriptions and Repeat Medication Issues,-0.19937177747488022,2025-04
+275,2025,4,Reception Staff Friendly and Helpful,0.7870907788830144,2025-04
+276,2025,4,Reception Staff Rude or Unhelpful,-0.7333030965593126,2025-04
+277,2025,4,Rushed Consultation or Not Listened To,-0.4959469878155252,2025-04
+278,2025,4,"Staff Kindness, Empathy and Compassion",0.7789773128249429,2025-04
+279,2025,4,Staff Professionalism and Knowledge,0.29928032670702254,2025-04
+280,2025,4,Telehealth / Phone Consultations,-0.32336193944017094,2025-04
+281,2025,4,Treatment Quality and Effectiveness,0.39779844010869664,2025-04
+282,2025,4,Vaccinations and Immunisations,-0.2805994600057602,2025-04
+283,2025,4,Waiting Time in Surgery / Waiting Room,-0.5573030511538187,2025-04
+284,2025,5,Appointment Availability and Waiting Times,-0.26875550945599874,2025-05
+285,2025,5,Appointment Booking and Online Systems,-0.14707428336143494,2025-05
+286,2025,5,Blood Tests and Results Delays,-0.6777670383453369,2025-05
+287,2025,5,Difficulty Getting Through on Phone,-0.31933549642562864,2025-05
+288,2025,5,Excellent Clinical Care and Thorough Explanation,0.6842020909701075,2025-05
+289,2025,5,Follow-up and Continuity of Care,-0.3914278044893935,2025-05
+290,2025,5,Irrelevant / Unclassifiable / Noise,-0.40880052516093623,2025-05
+291,2025,5,Overall Excellent Service and Practice,0.7653942515452703,2025-05
+292,2025,5,Prescriptions and Repeat Medication Issues,-0.3010175717728479,2025-05
+293,2025,5,Reception Staff Friendly and Helpful,0.8064692388806078,2025-05
+294,2025,5,Reception Staff Rude or Unhelpful,-0.7765514298721596,2025-05
+295,2025,5,Rushed Consultation or Not Listened To,-0.5048899402221044,2025-05
+296,2025,5,"Staff Kindness, Empathy and Compassion",0.47831358157453086,2025-05
+297,2025,5,Staff Professionalism and Knowledge,0.2676683229704698,2025-05
+298,2025,5,Telehealth / Phone Consultations,-0.38697873599945554,2025-05
+299,2025,5,Treatment Quality and Effectiveness,0.14185801545778912,2025-05
+300,2025,5,Vaccinations and Immunisations,-0.11704590320587158,2025-05
+301,2025,5,Waiting Time in Surgery / Waiting Room,-0.7903711398442587,2025-05
+302,2025,6,Appointment Availability and Waiting Times,-0.297922811905543,2025-06
+303,2025,6,Appointment Booking and Online Systems,-0.04007455520331859,2025-06
+304,2025,6,Blood Tests and Results Delays,-0.4977710545063019,2025-06
+305,2025,6,Excellent Clinical Care and Thorough Explanation,0.6009520961957819,2025-06
+306,2025,6,Follow-up and Continuity of Care,-0.14122037360301384,2025-06
+307,2025,6,Irrelevant / Unclassifiable / Noise,-0.5628206030182217,2025-06
+308,2025,6,Overall Excellent Service and Practice,0.8252445626623777,2025-06
+309,2025,6,Prescriptions and Repeat Medication Issues,-0.4618026167154312,2025-06
+310,2025,6,Reception Staff Friendly and Helpful,0.8011637486909565,2025-06
+311,2025,6,Reception Staff Rude or Unhelpful,-0.799643570726568,2025-06
+312,2025,6,Rushed Consultation or Not Listened To,-0.6453105956315994,2025-06
+313,2025,6,"Staff Kindness, Empathy and Compassion",0.48216131871396845,2025-06
+314,2025,6,Staff Professionalism and Knowledge,0.3065440205560214,2025-06
+315,2025,6,Telehealth / Phone Consultations,-0.3669279341896375,2025-06
+316,2025,6,Treatment Quality and Effectiveness,0.33529897972389505,2025-06
+317,2025,6,Vaccinations and Immunisations,0.959939420223236,2025-06
+318,2025,6,Waiting Time in Surgery / Waiting Room,-0.774574875831604,2025-06
+319,2025,7,Appointment Availability and Waiting Times,-0.37700355511445266,2025-07
+320,2025,7,Appointment Booking and Online Systems,0.052457843508039205,2025-07
+321,2025,7,Blood Tests and Results Delays,-0.7715415358543396,2025-07
+322,2025,7,Difficulty Getting Through on Phone,-0.7545219659805298,2025-07
+323,2025,7,Excellent Clinical Care and Thorough Explanation,0.7161167097521258,2025-07
+324,2025,7,Follow-up and Continuity of Care,-0.31081560341750875,2025-07
+325,2025,7,Irrelevant / Unclassifiable / Noise,-0.3888622323671977,2025-07
+326,2025,7,Overall Excellent Service and Practice,0.8028903033235948,2025-07
+327,2025,7,Prescriptions and Repeat Medication Issues,-0.4507817327976227,2025-07
+328,2025,7,Reception Staff Friendly and Helpful,0.8176022387003596,2025-07
+329,2025,7,Reception Staff Rude or Unhelpful,-0.6788133400328019,2025-07
+330,2025,7,Rushed Consultation or Not Listened To,-0.4942442725102107,2025-07
+331,2025,7,"Staff Kindness, Empathy and Compassion",0.7255744612684437,2025-07
+332,2025,7,Staff Professionalism and Knowledge,0.3102381025319514,2025-07
+333,2025,7,Telehealth / Phone Consultations,-0.19676076011224228,2025-07
+334,2025,7,Treatment Quality and Effectiveness,0.2879018598311656,2025-07
+335,2025,7,Vaccinations and Immunisations,-0.10908165574073792,2025-07
+336,2025,7,Waiting Time in Surgery / Waiting Room,-0.7089058955510458,2025-07
+337,2025,8,Appointment Availability and Waiting Times,-0.20280861003058298,2025-08
+338,2025,8,Appointment Booking and Online Systems,-0.08142706225900088,2025-08
+339,2025,8,Blood Tests and Results Delays,-0.8463868796825409,2025-08
+340,2025,8,Difficulty Getting Through on Phone,-0.34898827970027924,2025-08
+341,2025,8,Excellent Clinical Care and Thorough Explanation,0.6655539204907972,2025-08
+342,2025,8,Follow-up and Continuity of Care,-0.3267838070789973,2025-08
+343,2025,8,Irrelevant / Unclassifiable / Noise,-0.25735306441783906,2025-08
+344,2025,8,Overall Excellent Service and Practice,0.8832639235037344,2025-08
+345,2025,8,Prescriptions and Repeat Medication Issues,-0.560984503139149,2025-08
+346,2025,8,Reception Staff Friendly and Helpful,0.7971356526801461,2025-08
+347,2025,8,Reception Staff Rude or Unhelpful,-0.7786826824440676,2025-08
+348,2025,8,Rushed Consultation or Not Listened To,-0.6729674063347004,2025-08
+349,2025,8,"Staff Kindness, Empathy and Compassion",0.6356707417964935,2025-08
+350,2025,8,Staff Professionalism and Knowledge,0.24299849118247177,2025-08
+351,2025,8,Telehealth / Phone Consultations,-0.24451783097396462,2025-08
+352,2025,8,Treatment Quality and Effectiveness,0.4238992871776704,2025-08
+353,2025,8,Vaccinations and Immunisations,0.19337895140051842,2025-08
+354,2025,8,Waiting Time in Surgery / Waiting Room,-0.656476902961731,2025-08
+355,2025,9,Appointment Availability and Waiting Times,-0.22803854671391574,2025-09
+356,2025,9,Appointment Booking and Online Systems,-0.22114651140413785,2025-09
+357,2025,9,Blood Tests and Results Delays,-0.6073473215103149,2025-09
+358,2025,9,Difficulty Getting Through on Phone,-0.7131225615739822,2025-09
+359,2025,9,Excellent Clinical Care and Thorough Explanation,0.5239154394302104,2025-09
+360,2025,9,Follow-up and Continuity of Care,-0.2989757259686788,2025-09
+361,2025,9,Irrelevant / Unclassifiable / Noise,-0.21649952381849288,2025-09
+362,2025,9,Overall Excellent Service and Practice,0.87956117624524,2025-09
+363,2025,9,Prescriptions and Repeat Medication Issues,-0.290029850271013,2025-09
+364,2025,9,Reception Staff Friendly and Helpful,0.8245420611821688,2025-09
+365,2025,9,Reception Staff Rude or Unhelpful,-0.7614951663547092,2025-09
+366,2025,9,Rushed Consultation or Not Listened To,-0.5289683673116896,2025-09
+367,2025,9,"Staff Kindness, Empathy and Compassion",0.5312618751858555,2025-09
+368,2025,9,Staff Professionalism and Knowledge,0.43273248980122225,2025-09
+369,2025,9,Telehealth / Phone Consultations,-0.2410191075474608,2025-09
+370,2025,9,Treatment Quality and Effectiveness,0.251335266864661,2025-09
+371,2025,9,Vaccinations and Immunisations,-0.5554283559322357,2025-09
+372,2025,9,Waiting Time in Surgery / Waiting Room,-0.6020761430263519,2025-09
+373,2025,10,Appointment Availability and Waiting Times,-0.3850396860923086,2025-10
+374,2025,10,Appointment Booking and Online Systems,-0.12159199606288563,2025-10
+375,2025,10,Difficulty Getting Through on Phone,-0.8062522411346436,2025-10
+376,2025,10,Excellent Clinical Care and Thorough Explanation,0.49585297854640814,2025-10
+377,2025,10,Follow-up and Continuity of Care,-0.4813331365585327,2025-10
+378,2025,10,Irrelevant / Unclassifiable / Noise,-0.37263060289044536,2025-10
+379,2025,10,Overall Excellent Service and Practice,0.8161048736327734,2025-10
+380,2025,10,Prescriptions and Repeat Medication Issues,-0.5692706232269605,2025-10
+381,2025,10,Reception Staff Friendly and Helpful,0.7678083330392838,2025-10
+382,2025,10,Reception Staff Rude or Unhelpful,-0.6311133091266339,2025-10
+383,2025,10,Rushed Consultation or Not Listened To,-0.5507315384844939,2025-10
+384,2025,10,"Staff Kindness, Empathy and Compassion",0.6277204970518748,2025-10
+385,2025,10,Staff Professionalism and Knowledge,0.26692894820509283,2025-10
+386,2025,10,Telehealth / Phone Consultations,-0.10303605839891254,2025-10
+387,2025,10,Treatment Quality and Effectiveness,0.4428078409503488,2025-10
+388,2025,10,Vaccinations and Immunisations,0.3212881192564964,2025-10
+389,2025,10,Waiting Time in Surgery / Waiting Room,0.0225665420293808,2025-10
+390,2025,11,Appointment Availability and Waiting Times,-0.29055645154870074,2025-11
+391,2025,11,Appointment Booking and Online Systems,0.1337636585893302,2025-11
+392,2025,11,Blood Tests and Results Delays,-0.5889745950698853,2025-11
+393,2025,11,Difficulty Getting Through on Phone,-0.4648527354001999,2025-11
+394,2025,11,Excellent Clinical Care and Thorough Explanation,0.5382028161548078,2025-11
+395,2025,11,Follow-up and Continuity of Care,-0.002252883854366495,2025-11
+396,2025,11,Irrelevant / Unclassifiable / Noise,-0.44477002251715886,2025-11
+397,2025,11,Overall Excellent Service and Practice,0.8543899065256119,2025-11
+398,2025,11,Prescriptions and Repeat Medication Issues,-0.47796143935276914,2025-11
+399,2025,11,Reception Staff Friendly and Helpful,0.8227361781729592,2025-11
+400,2025,11,Reception Staff Rude or Unhelpful,-0.6755986660718918,2025-11
+401,2025,11,Rushed Consultation or Not Listened To,-0.7554171122610569,2025-11
+402,2025,11,"Staff Kindness, Empathy and Compassion",0.6234785488673619,2025-11
+403,2025,11,Staff Professionalism and Knowledge,0.42819051565350713,2025-11
+404,2025,11,Telehealth / Phone Consultations,-0.26607094274626836,2025-11
+405,2025,11,Treatment Quality and Effectiveness,0.48510228749364614,2025-11
+406,2025,11,Vaccinations and Immunisations,-0.05995061000188193,2025-11
+407,2025,11,Waiting Time in Surgery / Waiting Room,-0.7331320345401764,2025-11
+408,2025,12,Appointment Availability and Waiting Times,-0.5147797124726432,2025-12
+409,2025,12,Appointment Booking and Online Systems,-0.37661226093769073,2025-12
+410,2025,12,Difficulty Getting Through on Phone,-0.7039625644683838,2025-12
+411,2025,12,Excellent Clinical Care and Thorough Explanation,0.4418543736139933,2025-12
+412,2025,12,Follow-up and Continuity of Care,-0.17464250988430446,2025-12
+413,2025,12,Overall Excellent Service and Practice,0.7881282046437263,2025-12
+414,2025,12,Prescriptions and Repeat Medication Issues,-0.7182890375455221,2025-12
+415,2025,12,Reception Staff Friendly and Helpful,0.7719818154970804,2025-12
+416,2025,12,Reception Staff Rude or Unhelpful,-0.6852640807628632,2025-12
+417,2025,12,Rushed Consultation or Not Listened To,-0.45700427889823914,2025-12
+418,2025,12,"Staff Kindness, Empathy and Compassion",0.6988311856985092,2025-12
+419,2025,12,Staff Professionalism and Knowledge,-0.21500065922737122,2025-12
+420,2025,12,Telehealth / Phone Consultations,-0.405720055103302,2025-12
+421,2025,12,Treatment Quality and Effectiveness,-0.6905655264854431,2025-12
+422,2025,12,Vaccinations and Immunisations,-0.894919753074646,2025-12
+423,2025,12,Waiting Time in Surgery / Waiting Room,-0.6050786972045898,2025-12

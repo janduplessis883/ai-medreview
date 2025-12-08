@@ -30,6 +30,10 @@ gsheet:
 data:
 	@python ai_medreview/data_v2.py
 
+
+data_old:
+	@python ai_medreview/data.py
+
 repeat:
 	@python ai_medreview/scheduler.py
 
