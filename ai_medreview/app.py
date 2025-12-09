@@ -4229,4 +4229,53 @@ Example Feedback Text: Dr PERSON is very friendly.
 
         st.pyplot(fig)
         st.divider()
-        st.dataframe(grouped)
+
+        g = grouped.iloc[:, 1:]  # drop empty first column
+        g['year_month'] = pd.to_datetime(g['year_month'])
+
+        gdf = g.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+
+        # Optional: round to 2 decimals for nicer display
+        gdf = gdf.round(3)
+
+
+        column = st.selectbox("Select Column to Visualise", options=gdf.columns.tolist())
+
+        def plot_column(gdf, column):
+            # Make sure the dataframe is sorted by time
+            df = gdf.copy()
+            df = df.sort_values('year_month')
+
+            # Create figure
+            fig, ax = plt.subplots(figsize=(12, 6))
+
+            sns.lineplot(data=gdf, x='year_month', y=column,
+                        linewidth=4, color='#102f47', label=column, ax=ax)
+
+            # Horizontal zero line (green dashed)
+            ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
+
+            # Force Y-axis from -1 to +1
+            ax.set_ylim(-1, 1)
+
+            # Styling
+            ax.set_title(f'{column} over Time', fontsize=16, pad=20)
+            ax.set_xlabel('Year-Month', fontsize=12)
+            ax.set_ylabel(column, fontsize=12)
+            ax.tick_params(axis='x', rotation=45)  # rotation
+            ax.grid(True, alpha=0.3, linestyle='--')
+            ax.legend(loc='best')
+
+            # <<< DESPINE HERE >>>
+            sns.despine(left=True, bottom=False, right=True, top=True)  # removes left, top, right
+
+            plt.tight_layout()
+
+            # Show in Streamlit
+            st.pyplot(fig)
+            plt.close(fig)  # always close the figure to free memory
+
+        # Call it
+        plot_column(gdf, column)
+        st.divider()
+        st.dataframe(gdf)
