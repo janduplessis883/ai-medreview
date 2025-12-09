@@ -4250,7 +4250,7 @@ Example Feedback Text: Dr PERSON is very friendly.
             fig, ax = plt.subplots(figsize=(12, 6))
 
             sns.lineplot(data=gdf, x='year_month', y=column,
-                        linewidth=4, color='#102f47', label=column, ax=ax)
+                        linewidth=3, color='#102f47', label=column, ax=ax)
 
             # Horizontal zero line (green dashed)
             ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
