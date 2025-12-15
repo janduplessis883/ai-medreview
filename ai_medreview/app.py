@@ -531,6 +531,56 @@ else:
             ax.set_title("Sentiment Mean by Feedback Label Over Time - Whole PCN")
 
             st.pyplot(fig)
+
+            st.divider()
+
+            g = grouped.iloc[:, 1:]  # drop empty first column
+            g['year_month'] = pd.to_datetime(g['year_month'])
+
+            gdf = g.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+
+            # Optional: round to 2 decimals for nicer display
+            gdf = gdf.round(3)
+
+
+            column = st.selectbox("Select Column to Visualise", options=gdf.columns.tolist())
+
+            def plot_column(gdf, column):
+                # Make sure the dataframe is sorted by time
+                df = gdf.copy()
+                df = df.sort_values('year_month')
+
+                # Create figure
+                fig, ax = plt.subplots(figsize=(12, 6))
+
+                sns.lineplot(data=gdf, x='year_month', y=column,
+                            linewidth=3, color='#102f47', label=column, ax=ax)
+
+                # Horizontal zero line (green dashed)
+                ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
+
+                # Force Y-axis from -1 to +1
+                ax.set_ylim(-1, 1)
+
+                # Styling
+                ax.set_title(f'{column} over Time', fontsize=16, pad=20)
+                ax.set_xlabel('Year-Month', fontsize=12)
+                ax.set_ylabel(column, fontsize=12)
+                ax.tick_params(axis='x', rotation=45)  # rotation
+                ax.grid(True, alpha=0.3, linestyle='--')
+                ax.legend(loc='best')
+
+                # <<< DESPINE HERE >>>
+                sns.despine(left=True, bottom=False, right=True, top=True)  # removes left, top, right
+
+                plt.tight_layout()
+
+                # Show in Streamlit
+                st.pyplot(fig)
+                plt.close(fig)  # always close the figure to free memory
+
+            # Call it
+            plot_column(gdf, column)
             st.divider()
             st.dataframe(grouped)
 
@@ -4193,6 +4243,29 @@ Example Feedback Text: Dr PERSON is very friendly.
         st.caption("To interpret a heatmap displaying GP surgery feedback, focus on the intersection of the topic (y-axis) and the **average monthly sentiment analysis score** (x-axis). Each colored cell represents the intensity of sentiment for a specific topic in a given month. The color scale is key: **blue** indicates a negative average sentiment score for that topic in that month, suggesting **areas needing improvement**, while red signifies a **positive average sentiment**, highlighting successful aspects of the surgery's operation. Areas with the deepest red have the highest positive sentiment, meaning patients consistently rated those topics highly. Conversely, the deepest blue areas represent topics with the most pronounced negative feedback. By scanning the map, you can identify patterns over time (horizontally) and compare sentiment across different service areas (vertically) to quickly pinpoint **persistent problem** areas or **long-term successes**.")
         st.divider()
 
+        pcn_data['sentiment_score_freetext_corrected'] = pcn_data['sentiment_score_free_text'].where(
+                pcn_data['sentiment_free_text'] == 'positive',
+                -pcn_data['sentiment_score_free_text'].abs()
+            )
+        pcn_data['sentiment_score_do_better_corrected'] = pcn_data['sentiment_score_do_better'].where(
+                pcn_data['sentiment_do_better'] == 'positive',
+                -pcn_data['sentiment_score_do_better'].abs()
+            )
+        feedbackp = pcn_data[['time', 'feedback_labels', 'sentiment_score_freetext_corrected', 'year', 'monthofyear']]
+        dobetterp = pcn_data[['time', 'improvement_labels', 'sentiment_score_do_better_corrected', 'year', 'monthofyear']]
+        feedbackp = feedbackp.rename(columns={'feedback_labels': 'labels', 'sentiment_score_freetext_corrected': 'sentiment_score_corrected'})
+        dobetterp = dobetterp.rename(columns={'improvement_labels': 'labels', 'sentiment_score_do_better_corrected': 'sentiment_score_corrected'})
+        combinedp = pd.concat([feedbackp, dobetterp], ignore_index=True).dropna(subset=['labels'])
+
+        groupedp = (
+                    combinedp
+                    .groupby(['year', 'monthofyear', 'labels'])
+                    .agg(sentiment_mean=('sentiment_score_corrected', 'mean'))
+                    .reset_index()
+                    )
+
+        groupedp['year_month'] = groupedp['year'].astype(str) + '-' + groupedp['monthofyear'].astype(str).str.zfill(2)
+        # ------------------------------above pcn data --------------------------------------------
         filtered_data['sentiment_score_freetext_corrected'] = filtered_data['sentiment_score_free_text'].where(
                 filtered_data['sentiment_free_text'] == 'positive',
                 -filtered_data['sentiment_score_free_text'].abs()
@@ -4241,10 +4314,18 @@ Example Feedback Text: Dr PERSON is very friendly.
         # Optional: round to 2 decimals for nicer display
         gdf = gdf.round(3)
 
+        gp = groupedp.iloc[:, 1:]  # drop empty first column
+        gp['year_month'] = pd.to_datetime(gp['year_month'])
+
+        gdfp = gp.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+
+        # Optional: round to 2 decimals for nicer display
+        gdfp = gdfp.round(3)
+
 
         column = st.selectbox("Select Column to Visualise", options=gdf.columns.tolist())
 
-        def plot_column(gdf, column):
+        def plot_column(gdf, gdfp, column):
             # Make sure the dataframe is sorted by time
             df = gdf.copy()
             df = df.sort_values('year_month')
@@ -4253,7 +4334,9 @@ Example Feedback Text: Dr PERSON is very friendly.
             fig, ax = plt.subplots(figsize=(12, 6))
 
             sns.lineplot(data=gdf, x='year_month', y=column,
-                        linewidth=3, color='#102f47', label=column, ax=ax)
+                        linewidth=3, color='#102f47', label=f"Surgery - {column}", ax=ax)
+            sns.lineplot(data=gdfp, x='year_month', y=column,
+                        linewidth=1.5, color='#ec8b33', label=f"PCN - {column}", ax=ax)
 
             # Horizontal zero line (green dashed)
             ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
@@ -4279,6 +4362,6 @@ Example Feedback Text: Dr PERSON is very friendly.
             plt.close(fig)  # always close the figure to free memory
 
         # Call it
-        plot_column(gdf, column)
+        plot_column(gdf, gdfp, column)
         st.divider()
         st.dataframe(gdf)
