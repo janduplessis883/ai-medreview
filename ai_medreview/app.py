@@ -4336,7 +4336,7 @@ Example Feedback Text: Dr PERSON is very friendly.
             sns.lineplot(data=gdf, x='year_month', y=column,
                         linewidth=3, color='#102f47', label=f"Surgery - {column}", ax=ax)
             sns.lineplot(data=gdfp, x='year_month', y=column,
-                        linewidth=1.5, color='#ec8b33', label=f"PCN - {column}", ax=ax)
+                        linewidth=1.5, color='#ae4f4d', label=f"PCN - {column}", ax=ax)
 
             # Horizontal zero line (green dashed)
             ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
