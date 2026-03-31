@@ -1,5 +1,6 @@
 import re
 import unicodedata
+from datetime import datetime
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -228,9 +229,217 @@ def strip_emojis(text):
     return encoded_text.decode("ascii")  # Decode back to string
 
 
+def pdf_safe_text(text):
+    if text is None:
+        return ""
+
+    normalized_text = str(text).translate(
+        str.maketrans(
+            {
+                "\u2018": "'",
+                "\u2019": "'",
+                "\u201c": '"',
+                "\u201d": '"',
+                "\u2013": "-",
+                "\u2014": "-",
+                "\u2026": "...",
+                "\xa0": " ",
+            }
+        )
+    )
+    return strip_emojis(normalized_text)
+
+
 def col_to_list(df, colname):
-    df.dropna(subset=colname, inplace=True)
-    return df[colname].to_list()
+    return df.dropna(subset=[colname])[colname].to_list()
+
+
+def safe_percentage(numerator, denominator):
+    if not denominator:
+        return 0.0
+    return round((numerator / denominator) * 100, 1)
+
+
+class AIReportPDF(FPDF):
+    NAVY = (21, 46, 74)
+    BLUE = (79, 124, 172)
+    GOLD = (202, 168, 89)
+    ORANGE = (224, 129, 55)
+    RED = (197, 58, 50)
+    INK = (35, 37, 41)
+    SLATE = (100, 116, 139)
+    LIGHT = (244, 247, 250)
+    BORDER = (221, 226, 232)
+    SOFT_BORDER = (232, 236, 241)
+
+    def __init__(self):
+        super().__init__()
+        self.alias_nb_pages()
+        self.set_auto_page_break(auto=True, margin=16)
+        self.report_title = "AI MedReview Report"
+        self.generated_at = datetime.now().strftime("%d %b %Y")
+        self._suppress_header = False
+
+    @property
+    def content_width(self):
+        return self.w - self.l_margin - self.r_margin
+
+    def header(self):
+        if self._suppress_header:
+            return
+
+        self.set_fill_color(*self.NAVY)
+        self.rect(0, 0, self.w, 16, "F")
+        self.set_xy(self.l_margin, 5)
+        self.set_font("Arial", "B", 10)
+        self.set_text_color(255, 255, 255)
+        self.cell(0, 4, pdf_safe_text(self.report_title), 0, 1, "L")
+        self.set_y(24)
+
+    def footer(self):
+        if self._suppress_header:
+            return
+
+        self.set_y(-12)
+        self.set_draw_color(*self.BORDER)
+        self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
+        self.set_y(-10)
+        self.set_font("Arial", "", 8)
+        self.set_text_color(*self.SLATE)
+        self.cell(0, 4, pdf_safe_text(f"Generated {self.generated_at}"), 0, 0, "L")
+        self.cell(0, 4, pdf_safe_text(f"Page {self.page_no()}/{{nb}}"), 0, 0, "R")
+
+    def add_cover_page(self, surgery, pcn, month, year, metrics):
+        self._suppress_header = True
+        self.add_page()
+
+        self.set_fill_color(*self.NAVY)
+        self.rect(0, 0, self.w, 65, "F")
+        self.set_fill_color(*self.ORANGE)
+        self.rect(0, 65, self.w, 4, "F")
+
+        self.set_xy(self.l_margin, 16)
+        self.set_font("Arial", "B", 11)
+        self.set_text_color(255, 255, 255)
+        self.cell(0, 6, pdf_safe_text("AI MedReview"), 0, 1)
+
+        self.set_x(self.l_margin)
+        self.set_font("Arial", "B", 24)
+        self.multi_cell(0, 10, pdf_safe_text(surgery.replace("-", " ")))
+
+        self.set_x(self.l_margin)
+        self.set_font("Arial", "", 14)
+        self.cell(0, 8, pdf_safe_text(f"FFT Monthly Report - {month} {year}"), 0, 1)
+
+        self.ln(14)
+        self.draw_info_box(
+            "Report Overview",
+            [
+                f"Primary Care Network: {pcn.replace('-', ' ')}",
+                f"Reporting period: {month} {year}",
+                f"Generated on: {self.generated_at}",
+            ],
+        )
+        self.ln(6)
+        self.draw_metric_cards(metrics)
+        self._suppress_header = False
+
+    def add_section_heading(self, title, subtitle=None):
+        self.set_font("Arial", "B", 16)
+        self.set_text_color(*self.NAVY)
+        self.cell(0, 8, pdf_safe_text(title), 0, 1)
+        self.set_draw_color(*self.ORANGE)
+        self.set_line_width(0.8)
+        self.line(self.l_margin, self.get_y(), self.l_margin + 34, self.get_y())
+        self.ln(4)
+        if subtitle:
+            self.set_font("Arial", "", 10)
+            self.set_text_color(*self.SLATE)
+            self.multi_cell(0, 5, pdf_safe_text(subtitle))
+            self.ln(2)
+
+    def draw_info_box(self, title, lines):
+        self.set_font("Arial", "B", 11)
+        self.set_text_color(*self.NAVY)
+        self.set_fill_color(*self.LIGHT)
+        self.set_draw_color(*self.SOFT_BORDER)
+        self.set_line_width(0.15)
+        self.cell(0, 8, pdf_safe_text(title), 1, 1, "L", True)
+        self.set_font("Arial", "", 10)
+        self.set_text_color(*self.INK)
+        for line in lines:
+            self.cell(0, 6, pdf_safe_text(line), "LR", 1, "L", True)
+        self.cell(0, 2, "", "LRB", 1, "L", True)
+
+    def draw_metric_cards(self, metrics):
+        gap = 4
+        card_width = (self.content_width - gap * (len(metrics) - 1)) / len(metrics)
+        card_height = 24
+        start_x = self.l_margin
+        start_y = self.get_y()
+
+        for index, metric in enumerate(metrics):
+            x = start_x + index * (card_width + gap)
+            y = start_y
+            fill = metric.get("fill", self.LIGHT)
+            text_color = metric.get("text_color", self.NAVY)
+
+            self.set_fill_color(*fill)
+            self.set_draw_color(*self.SOFT_BORDER)
+            self.set_line_width(0.15)
+            self.rect(x, y, card_width, card_height, "DF")
+            self.set_xy(x + 3, y + 3)
+            self.set_font("Arial", "B", 9)
+            self.set_text_color(*text_color)
+            self.cell(card_width - 6, 4, pdf_safe_text(metric["label"]), 0, 1)
+            self.set_xy(x + 3, y + 10)
+            self.set_font("Arial", "B", 16)
+            self.cell(card_width - 6, 6, pdf_safe_text(metric["value"]), 0, 1)
+            self.set_xy(x + 3, y + 18)
+            self.set_font("Arial", "", 8)
+            self.cell(card_width - 6, 3, pdf_safe_text(metric["caption"]), 0, 1)
+
+        self.set_xy(self.l_margin, start_y + card_height + 6)
+
+    def add_chart(self, title, image_path, *, subtitle=None, image_height=78):
+        self.set_font("Arial", "B", 12)
+        self.set_text_color(*self.INK)
+        self.cell(0, 6, pdf_safe_text(title), 0, 1)
+        if subtitle:
+            self.set_font("Arial", "", 9)
+            self.set_text_color(*self.SLATE)
+            self.multi_cell(0, 4.5, pdf_safe_text(subtitle))
+        self.ln(2)
+        image_width = self.content_width
+        self.image(image_path, x=self.l_margin, y=self.get_y(), w=image_width, h=image_height)
+        self.ln(image_height + 6)
+
+    def add_insight_box(self, title, body):
+        self.set_font("Arial", "B", 11)
+        self.set_text_color(*self.BLUE)
+        self.set_fill_color(236, 243, 249)
+        self.set_draw_color(224, 232, 240)
+        self.set_line_width(0.15)
+        self.cell(0, 8, pdf_safe_text(title), 1, 1, "L", True)
+        self.set_font("Arial", "", 10)
+        self.set_text_color(*self.INK)
+        self.multi_cell(0, 5, pdf_safe_text(body), 1, "L", True)
+        self.ln(4)
+
+    def add_response_entries(self, title, responses):
+        self.set_font("Arial", "B", 11)
+        self.set_text_color(*self.INK)
+        self.cell(0, 6, pdf_safe_text(title), 0, 1)
+        self.set_font("Arial", "", 9)
+        self.set_text_color(*self.INK)
+
+        for index, text in enumerate(responses, start=1):
+            self.set_fill_color(*self.LIGHT)
+            self.set_draw_color(*self.SOFT_BORDER)
+            self.set_line_width(0.15)
+            self.cell(10, 7, str(index), 1, 0, "C", True)
+            self.multi_cell(self.content_width - 10, 7, pdf_safe_text(text), 1, "L", False)
+
 
 
 def send_webhook(url, surgery, month, year):
@@ -305,22 +514,9 @@ def simple_pdf(
     p_count = rating_value_counts["Poor"]
     vp_count = rating_value_counts["Very poor"]
     dk_count = rating_value_counts["Don't know"]
-    recomended = round(
-        (
-            (vg_count + g_count)
-            / (vg_count + g_count + nn_count + p_count + vp_count + dk_count)
-        )
-        * 100,
-        1,
-    )
-    not_recomended = round(
-        (
-            (p_count + vp_count)
-            / (vg_count + g_count + nn_count + p_count + vp_count + dk_count)
-        )
-        * 100,
-        1,
-    )
+    total_rated_count = vg_count + g_count + nn_count + p_count + vp_count + dk_count
+    recomended = safe_percentage(vg_count + g_count, total_rated_count)
+    not_recomended = safe_percentage(p_count + vp_count, total_rated_count)
 
     pcn_rating_value_counts = (
         pcn_df["rating"].value_counts().reindex(categories, fill_value=0)
@@ -331,36 +527,16 @@ def simple_pdf(
     pcn_p_count = pcn_rating_value_counts["Poor"]
     pcn_vp_count = pcn_rating_value_counts["Very poor"]
     pcn_dk_count = pcn_rating_value_counts["Don't know"]
-    pcn_recomended = round(
-        (
-            (pcn_vg_count + pcn_g_count)
-            / (
-                pcn_vg_count
-                + pcn_g_count
-                + pcn_nn_count
-                + pcn_p_count
-                + pcn_vp_count
-                + pcn_dk_count
-            )
-        )
-        * 100,
-        1,
+    pcn_total_rated_count = (
+        pcn_vg_count
+        + pcn_g_count
+        + pcn_nn_count
+        + pcn_p_count
+        + pcn_vp_count
+        + pcn_dk_count
     )
-    pcn_not_recomended = round(
-        (
-            (pcn_p_count + pcn_vp_count)
-            / (
-                pcn_vg_count
-                + pcn_g_count
-                + pcn_nn_count
-                + pcn_p_count
-                + pcn_vp_count
-                + pcn_dk_count
-            )
-        )
-        * 100,
-        1,
-    )
+    pcn_recomended = safe_percentage(pcn_vg_count + pcn_g_count, pcn_total_rated_count)
+    pcn_not_recomended = safe_percentage(pcn_p_count + pcn_vp_count, pcn_total_rated_count)
 
     recommendation_plot(
         recomended,
@@ -369,186 +545,173 @@ def simple_pdf(
         pcn_not_recomended,
         "reports/recommendation.png",
     )
-    # Create the PDF
-    pdf = FPDF()
-    # Set document metadata
-    pdf.set_title(
-        f"AI MedReview: FFT Monthly Report - {selected_surgery} {selected_month} {selected_year}"
-    )
-    pdf.set_author("Jan du Plessis")
-    pdf.set_subject("Monthly Medical Review Report")
-    pdf.set_keywords("AIMedReview, Medical, Report, Monthly, FFT")
-    pdf.set_creator("AI MedReview System")
-
-    pdf.add_page()
-
-    # Header "AI MedReview" with Arial in bold
-    pdf.set_font("Arial", "B", 10)
-    pdf.set_text_color(39, 69, 98)
-    pdf.cell(
-        0, 5, "AI MedReview: FFT Analysis", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.set_font("Arial", "", 10)
-    info_string2 = f"{selected_pcn.replace('-', ' ')}"
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 5, info_string2, 0, 1)
-
-    # Additional info in Arial, not bold
-    pdf.set_font("Arial", "B", 20)
-    info_string = f"{selected_surgery.replace('-', ' ')}"
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 10, info_string, 0, 1)
-
-    pdf.set_font("Arial", "B", 16)
-    info_string = f"{selected_month} {selected_year}"
-    pdf.cell(0, 10, info_string, 0, 1)
-
-    # Insert a horizontal line after the header
-    pdf.set_line_width(0.2)
-    pdf.line(10, 45, 200, 45)  # (x1, y1, x2, y2)
-
-    pdf.ln(7)
-
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(
-        0, 10, "SECTION 1: Recommendation % and Rating Counts", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.set_font("Arial", "", 12)
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(
-        0,
-        10,
-        f"The total feedback received during {selected_month} {selected_year} was {total_feedback_count}.",
-        0,
-        1,
-    )
-
-    pdf.set_font("Arial", "", 12)
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(
-        0, 5, f"Recommended - {recomended}%  (PCN Average - {pcn_recomended}%)", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.set_font("Arial", "", 12)
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(
-        0,
-        5,
-        f"Not Recommended - {not_recomended}%  (PCN Average - {pcn_not_recomended}%)",
-        0,
-        1,
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.image(
-        "reports/recommendation.png", x=10, y=85, w=180
-    )  # Adjust x, y, w as necessary
-    pdf.image("images/nhs_scoring.png", x=50, y=165, w=100)
-
-    pdf.image(plot_filename, x=10, y=195, w=180)  # Adjust x, y, w as necessary
-
-    pdf.add_page()
-
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(
-        0, 10, "SECTION 2: Response Rate", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.image(
-        "reports/daily_count.png", x=10, y=25, w=180
-    )  # Adjust x, y, w as necessary
-
-    pdf.add_page()
-
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(
-        0, 10, "SECTION 3: Feedback - Responses", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.set_font("Arial", "", 8)
-    pdf.set_text_color(35, 37, 41)
-
     text_list = col_to_list(df, "free_text")
     all_feedback = ""
     for index, text in enumerate(text_list):
-        pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
         all_feedback = all_feedback + f"{index} - {text} "
-
-    pdf.ln(8)
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(39, 69, 98)
-    pdf.cell(0, 10, "Feedback Insights by Groq LLM", 0, 1)
-
-    pdf.set_font("Arial", "", 11)
-    pdf.set_text_color(39, 69, 98)
-    pdf.multi_cell(
-        0,
-        4,
-        ask_groq(
-            f"Summarize this GP Surgery feedback, identifying positive and negative trends: {all_feedback}, your output should be plain text only, don't use markdown in your output."
-        )
-        .replace("*", "")
-        .replace("#", ""),
-    )
-
-    pdf.add_page()
-
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(
-        0, 10, "SECTION 4: Improvement Suggestions - Responses", 0, 1
-    )  # '0' for cell width, '1' for the new line
-
-    pdf.set_font("Arial", "", 8)
-    pdf.set_text_color(35, 37, 41)
 
     text_list2 = col_to_list(df, "do_better")
     all_improvement = ""
     for index, text in enumerate(text_list2):
-        pdf.multi_cell(0, 4, f"{index}: {strip_emojis(text)}")
         all_improvement = all_improvement + f"{index} - {text} "
 
-    pdf.ln(8)
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(39, 69, 98)
-    pdf.cell(0, 10, "Improvement Suggestions Insights by Groq LLM", 0, 1)
-
-    pdf.set_font("Arial", "", 11)
-    pdf.set_text_color(39, 69, 98)
-    pdf.multi_cell(
-        0,
-        4,
+    feedback_summary = (
+        ask_groq(
+            f"Summarize this GP Surgery feedback, identifying positive and negative trends: {all_feedback}, your output should be plain text only, don't use markdown in your output."
+        )
+        .replace("*", "")
+        .replace("#", "")
+        if all_feedback.strip()
+        else "No free-text feedback was available for this reporting period."
+    )
+    improvement_summary = (
         ask_groq(
             f"Summarize this GP Surgery improvement suggestions, identifying trends: {all_improvement}, your output should be plain text only, don't use markdown in your output."
         )
         .replace("*", "")
-        .replace("#", ""),
+        .replace("#", "")
+        if all_improvement.strip()
+        else "No improvement suggestions were available for this reporting period."
+    )
+
+    total_recommendation_count = total_rated_count
+    response_period = f"{selected_month} {selected_year}"
+    monthly_metrics = [
+        {
+            "label": "Total Responses",
+            "value": str(total_feedback_count),
+            "caption": "FFT responses this month",
+            "fill": (239, 244, 248),
+        },
+        {
+            "label": "Recommended",
+            "value": f"{recomended}%",
+            "caption": f"PCN avg {pcn_recomended}%",
+            "fill": (235, 244, 233),
+        },
+        {
+            "label": "Not Recommended",
+            "value": f"{not_recomended}%",
+            "caption": f"PCN avg {pcn_not_recomended}%",
+            "fill": (252, 239, 232),
+        },
+    ]
+
+    # Create the PDF
+    pdf = AIReportPDF()
+    pdf.report_title = f"{selected_surgery.replace('-', ' ')} - {response_period}"
+    pdf.set_title(
+        pdf_safe_text(
+            f"AI MedReview: FFT Monthly Report - {selected_surgery} {selected_month} {selected_year}"
+        )
+    )
+    pdf.set_author(pdf_safe_text("Jan du Plessis"))
+    pdf.set_subject(pdf_safe_text("Monthly Medical Review Report"))
+    pdf.set_keywords(pdf_safe_text("AIMedReview, Medical, Report, Monthly, FFT"))
+    pdf.set_creator(pdf_safe_text("AI MedReview System"))
+
+    pdf.add_cover_page(
+        selected_surgery,
+        selected_pcn,
+        selected_month,
+        selected_year,
+        monthly_metrics,
     )
 
     pdf.add_page()
+    pdf.add_section_heading(
+        "1. Performance Overview",
+        f"Summary of patient feedback volumes and recommendation performance for {response_period}.",
+    )
+    pdf.draw_metric_cards(monthly_metrics)
+    pdf.draw_info_box(
+        "At a glance",
+        [
+            f"The surgery received {total_feedback_count} FFT responses during {response_period}.",
+            f"Recommended responses accounted for {recomended}% of submissions compared with a PCN average of {pcn_recomended}%.",
+            f"Not recommended responses accounted for {not_recomended}% of submissions from {total_recommendation_count} rated responses.",
+        ],
+    )
+    pdf.ln(5)
+    pdf.add_chart(
+        "Recommendation comparison",
+        "reports/recommendation.png",
+        subtitle="Surgery performance against the selected PCN average for the same reporting period.",
+        image_height=62,
+    )
+    pdf.add_chart(
+        "Rating distribution",
+        plot_filename,
+        subtitle="Distribution of FFT rating categories across all responses in the selected month.",
+        image_height=66,
+    )
 
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(197, 58, 50)
-    pdf.cell(
-        0, 10, "SECTION 5: Word Clouds", 0, 1
-    )  # '0' for cell width, '1' for the new line
+    pdf.add_page()
+    pdf.add_section_heading(
+        "2. Response Pattern",
+        "Daily submission trend to help spot surges, gaps, and review activity across the month.",
+    )
+    pdf.draw_info_box(
+        "Interpretation",
+        [
+            "Use the time series below to identify higher-volume days and quieter periods.",
+            "Sharp spikes can reflect service events, campaigns, or operational changes worth exploring alongside the comments.",
+        ],
+    )
+    pdf.ln(5)
+    pdf.add_chart(
+        "Daily FFT responses",
+        "reports/daily_count.png",
+        subtitle="Review volume plotted by day across the selected reporting window.",
+        image_height=90,
+    )
 
-    pdf.set_font("Arial", "", 12)
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 5, f"Feedback Free-Text (Blue)", 0, 1)
+    pdf.add_page()
+    pdf.add_section_heading(
+        "3. Feedback Themes",
+        "Patient free-text comments with a companion AI summary to surface the main experience patterns.",
+    )
+    pdf.add_insight_box("Groq insight summary", feedback_summary)
+    pdf.add_response_entries(
+        f"Feedback responses ({len(text_list)})",
+        [f"{index}: {text}" for index, text in enumerate(text_list)],
+    )
 
-    pdf.set_font("Arial", "", 12)
-    pdf.set_text_color(35, 37, 41)
-    pdf.cell(0, 5, f"Improvement Suggestions (Red)", 0, 1)
+    pdf.add_page()
+    pdf.add_section_heading(
+        "4. Improvement Suggestions",
+        "Suggestions from patients on what could be improved, supported by an AI-generated theme summary.",
+    )
+    pdf.add_insight_box("Groq insight summary", improvement_summary)
+    pdf.add_response_entries(
+        f"Improvement suggestions ({len(text_list2)})",
+        [f"{index}: {text}" for index, text in enumerate(text_list2)],
+    )
 
+    pdf.add_page()
+    pdf.add_section_heading(
+        "5. Language Snapshot",
+        "Word clouds provide a quick visual summary of the language patients used in feedback and improvement comments.",
+    )
     if display_wc1:
-        pdf.image("reports/wordcloud1.png", x=10, y=20, w=180)
+        pdf.add_chart(
+            "Feedback free-text",
+            "reports/wordcloud1.png",
+            subtitle="Most frequently used terms in patient feedback comments.",
+            image_height=82,
+        )
     if display_wc2:
-        pdf.image("reports/wordcloud2.png", x=10, y=120, w=180)
+        pdf.add_chart(
+            "Improvement suggestions",
+            "reports/wordcloud2.png",
+            subtitle="Most frequently used terms in patient suggestions for improvement.",
+            image_height=82,
+        )
+    if not display_wc1 and not display_wc2:
+        pdf.draw_info_box(
+            "Word clouds unavailable",
+            ["There was not enough free-text content in this reporting period to generate word clouds."],
+        )
 
     # Output the PDF
     pdf.output("reports/report.pdf", "F")
