@@ -23,8 +23,9 @@ st.logo(
 )
 
 
-
-tab1, tab2, tab3, tab4 = st.tabs(["Find Your Surgery", "Brompton Health PCN", "About AI-MedReview", "Contact Us"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["Find Your Surgery", "Brompton Health PCN", "About AI-MedReview", "Contact Us"]
+)
 
 with tab1:
     st.header("Find Your Surgery")

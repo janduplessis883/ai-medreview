@@ -25,9 +25,6 @@ import re
 from utils import *
 from reports import *
 
-
-
-
 # Initialize the Groq client
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
@@ -54,7 +51,6 @@ st.logo(
     link="https://github.com/janduplessis883/ai-medreview",
     size="large",
 )
-
 
 
 # Function to check passcode
@@ -91,11 +87,13 @@ def check_passcode():
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
+
 # Function to clear cache and reload the page
 def clear_cache_and_reload():
     st.cache_data.clear()
     st.cache_resource.clear()
     st.rerun()
+
 
 # UI button to trigger cache clearing and page reload
 if st.sidebar.button("Clear Cache and Reload"):
@@ -166,7 +164,6 @@ else:
         "Select a Primary Care Network", pcn_names, key="pcn_selector"
     )
 
-
     def prepare_reviews_dataframe(df):
         if df.empty:
             return df.copy()
@@ -178,7 +175,6 @@ else:
         prepared["monthofyear"] = prepared["time"].dt.month
         prepared["year"] = prepared["time"].dt.year
         return prepared
-
 
     @st.cache_data(ttl=3600, show_spinner="Loading reviews...")
     def load_data():
@@ -200,7 +196,6 @@ else:
 
         return valid_times.iloc[-1]
 
-
     def ensure_time_column(df):
         prepared = df.copy()
         if "time" not in prepared.columns:
@@ -211,11 +206,9 @@ else:
             prepared["time"] = pd.to_datetime(prepared["time"], errors="coerce")
         return prepared
 
-
     def with_time_index(df):
         prepared = ensure_time_column(df)
         return prepared.set_index("time").sort_index()
-
 
     def get_date_bounds(df):
         if df.empty or "time" not in df.columns:
@@ -231,7 +224,6 @@ else:
             start_date -= timedelta(days=1)
 
         return start_date, end_date
-
 
     def render_date_range_slider(label, df, *, key=None, help=None):
         bounds = get_date_bounds(df)
@@ -254,7 +246,6 @@ else:
             st.error(f"Cannot display slider: {error}")
             return None
 
-
     def filter_sentiment_rows(df, sentiment_column, radio_value):
         filtered = df.copy()
         if radio_value == "pos":
@@ -263,9 +254,10 @@ else:
             return filtered[filtered[sentiment_column] == "negative"].copy()
         return filtered[filtered[sentiment_column].isin(ALL_SENTIMENTS)].copy()
 
-
     def build_monthly_counts(df, label_column):
-        indexed = with_time_index(df[["time", label_column]].dropna(subset=[label_column]))
+        indexed = with_time_index(
+            df[["time", label_column]].dropna(subset=[label_column])
+        )
         if indexed.empty:
             return pd.DataFrame()
 
@@ -275,7 +267,6 @@ else:
         )
         monthly_counts.index = monthly_counts.index.to_timestamp()
         return monthly_counts
-
 
     def build_time_series_figure(monthly_counts, title, legend_title, value_label):
         fig = px.line(
@@ -313,7 +304,6 @@ else:
             plot_bgcolor="white",
         )
         return fig
-
 
     def get_negative_review_frames(df, last_n_days=30):
         negative = ensure_time_column(df)
@@ -358,6 +348,7 @@ else:
             (data["time"].dt.date >= date_range[0])
             & (data["time"].dt.date <= date_range[1])
         ].copy()
+
     # Page selection
     page = st.sidebar.radio(
         "Select a Page",
@@ -372,7 +363,9 @@ else:
     if page not in [PCN_DASHBOARD_PAGE, ABOUT_PAGE]:
         surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
         if len(surgery_list) > 0:
-            selected_surgery = st.sidebar.selectbox("Select a Surgery", surgery_list, index=0)
+            selected_surgery = st.sidebar.selectbox(
+                "Select a Surgery", surgery_list, index=0
+            )
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery].copy()
 
             if not surgery_data.empty:
@@ -641,37 +634,72 @@ else:
             tab_selector == "Sentim.-Emotion"
         ):  # -------------------------------------------------------------------------------------- Sentiment Analysis ----
             st.subheader("Automated FFT - Mean Sentiment Analysis Score")
-            st.caption("Heatmap key: **blue** = poor patient feedback, **red** = good. Scan by month (across) or topic (down) to spot **PCN-wide problem or success patterns**.")
-            pcn_data['sentiment_score_freetext_corrected'] = pcn_data['sentiment_score_free_text'].where(
-                pcn_data['sentiment_free_text'] == 'positive',
-                -pcn_data['sentiment_score_free_text'].abs()
+            st.caption(
+                "Heatmap key: **blue** = poor patient feedback, **red** = good. Scan by month (across) or topic (down) to spot **PCN-wide problem or success patterns**."
             )
-            pcn_data['sentiment_score_do_better_corrected'] = pcn_data['sentiment_score_do_better'].where(
-                    pcn_data['sentiment_do_better'] == 'positive',
-                    -pcn_data['sentiment_score_do_better'].abs()
-                )
-            feedback = pcn_data[['time', 'feedback_labels', 'sentiment_score_freetext_corrected', 'year', 'monthofyear']]
-            dobetter = pcn_data[['time', 'improvement_labels', 'sentiment_score_do_better_corrected', 'year', 'monthofyear']]
-            feedback = feedback.rename(columns={'feedback_labels': 'labels', 'sentiment_score_freetext_corrected': 'sentiment_score_corrected'})
-            dobetter = dobetter.rename(columns={'improvement_labels': 'labels', 'sentiment_score_do_better_corrected': 'sentiment_score_corrected'})
-            combined = pd.concat([feedback, dobetter], ignore_index=True).dropna(subset=['labels'])
+            pcn_data["sentiment_score_freetext_corrected"] = pcn_data[
+                "sentiment_score_free_text"
+            ].where(
+                pcn_data["sentiment_free_text"] == "positive",
+                -pcn_data["sentiment_score_free_text"].abs(),
+            )
+            pcn_data["sentiment_score_do_better_corrected"] = pcn_data[
+                "sentiment_score_do_better"
+            ].where(
+                pcn_data["sentiment_do_better"] == "positive",
+                -pcn_data["sentiment_score_do_better"].abs(),
+            )
+            feedback = pcn_data[
+                [
+                    "time",
+                    "feedback_labels",
+                    "sentiment_score_freetext_corrected",
+                    "year",
+                    "monthofyear",
+                ]
+            ]
+            dobetter = pcn_data[
+                [
+                    "time",
+                    "improvement_labels",
+                    "sentiment_score_do_better_corrected",
+                    "year",
+                    "monthofyear",
+                ]
+            ]
+            feedback = feedback.rename(
+                columns={
+                    "feedback_labels": "labels",
+                    "sentiment_score_freetext_corrected": "sentiment_score_corrected",
+                }
+            )
+            dobetter = dobetter.rename(
+                columns={
+                    "improvement_labels": "labels",
+                    "sentiment_score_do_better_corrected": "sentiment_score_corrected",
+                }
+            )
+            combined = pd.concat([feedback, dobetter], ignore_index=True).dropna(
+                subset=["labels"]
+            )
 
             grouped = (
-                        combined
-                        .groupby(['year', 'monthofyear', 'labels'])
-                        .agg(sentiment_mean=('sentiment_score_corrected', 'mean'))
-                        .reset_index()
-                        )
+                combined.groupby(["year", "monthofyear", "labels"])
+                .agg(sentiment_mean=("sentiment_score_corrected", "mean"))
+                .reset_index()
+            )
 
-            grouped['year_month'] = grouped['year'].astype(str) + '-' + grouped['monthofyear'].astype(str).str.zfill(2)
+            grouped["year_month"] = (
+                grouped["year"].astype(str)
+                + "-"
+                + grouped["monthofyear"].astype(str).str.zfill(2)
+            )
             heatmap_df = grouped.pivot(
-                            index='labels',
-                            columns='year_month',
-                            values='sentiment_mean'
-                        )
+                index="labels", columns="year_month", values="sentiment_mean"
+            )
 
             fig, ax = plt.subplots(figsize=(14, 12))
-            sns.heatmap(heatmap_df, annot=True, fmt=".2f", ax=ax, cmap='coolwarm')
+            sns.heatmap(heatmap_df, annot=True, fmt=".2f", ax=ax, cmap="coolwarm")
 
             ax.set_xlabel("Year-Month")
             ax.set_ylabel("Feedback Labels")
@@ -682,43 +710,55 @@ else:
             st.divider()
 
             g = grouped.iloc[:, 1:]  # drop empty first column
-            g['year_month'] = pd.to_datetime(g['year_month'])
+            g["year_month"] = pd.to_datetime(g["year_month"])
 
-            gdf = g.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+            gdf = g.pivot(
+                index="year_month", columns="labels", values="sentiment_mean"
+            ).sort_index()
 
             # Optional: round to 2 decimals for nicer display
             gdf = gdf.round(3)
 
-
-            column = st.selectbox("Select Column to Visualise", options=gdf.columns.tolist())
+            column = st.selectbox(
+                "Select Column to Visualise", options=gdf.columns.tolist()
+            )
 
             def plot_column(gdf, column):
                 # Make sure the dataframe is sorted by time
                 df = gdf.copy()
-                df = df.sort_values('year_month')
+                df = df.sort_values("year_month")
 
                 # Create figure
                 fig, ax = plt.subplots(figsize=(12, 6))
 
-                sns.lineplot(data=gdf, x='year_month', y=column,
-                            linewidth=3, color='#102f47', label=column, ax=ax)
+                sns.lineplot(
+                    data=gdf,
+                    x="year_month",
+                    y=column,
+                    linewidth=3,
+                    color="#102f47",
+                    label=column,
+                    ax=ax,
+                )
 
                 # Horizontal zero line (green dashed)
-                ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
+                ax.axhline(y=0, color="#749857", linestyle="--", linewidth=2, alpha=0.8)
 
                 # Force Y-axis from -1 to +1
                 ax.set_ylim(-1, 1)
 
                 # Styling
-                ax.set_title(f'{column} over Time', fontsize=16, pad=20)
-                ax.set_xlabel('Year-Month', fontsize=12)
+                ax.set_title(f"{column} over Time", fontsize=16, pad=20)
+                ax.set_xlabel("Year-Month", fontsize=12)
                 ax.set_ylabel(column, fontsize=12)
-                ax.tick_params(axis='x', rotation=45)  # rotation
-                ax.grid(True, alpha=0.3, linestyle='--')
-                ax.legend(loc='best')
+                ax.tick_params(axis="x", rotation=45)  # rotation
+                ax.grid(True, alpha=0.3, linestyle="--")
+                ax.legend(loc="best")
 
                 # <<< DESPINE HERE >>>
-                sns.despine(left=True, bottom=False, right=True, top=True)  # removes left, top, right
+                sns.despine(
+                    left=True, bottom=False, right=True, top=True
+                )  # removes left, top, right
 
                 plt.tight_layout()
 
@@ -1520,7 +1560,9 @@ else:
                 )
                 heatmap_data = pd.crosstab(
                     surgery_heatmap_data.dropna(subset=["free_text"])["surgery"],
-                    surgery_heatmap_data.dropna(subset=["free_text"])["feedback_labels"],
+                    surgery_heatmap_data.dropna(subset=["free_text"])[
+                        "feedback_labels"
+                    ],
                 )
                 normalized_heatmap_data = heatmap_data.div(
                     heatmap_data.sum(axis=1), axis=0
@@ -1547,7 +1589,9 @@ else:
                 )
                 heatmap_data = pd.crosstab(
                     surgery_heatmap_data.dropna(subset=["do_better"])["surgery"],
-                    surgery_heatmap_data.dropna(subset=["do_better"])["improvement_labels"],
+                    surgery_heatmap_data.dropna(subset=["do_better"])[
+                        "improvement_labels"
+                    ],
                 )
                 normalized_heatmap_data = heatmap_data.div(
                     heatmap_data.sum(axis=1), axis=0
@@ -1582,27 +1626,36 @@ else:
             default_value="Surgery Rating",
             key="tab4",
         )
-        st.toast(body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!", icon="🔥")
-
+        st.toast(
+            body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!",
+            icon="🔥",
+        )
 
         if surgery_tab_selector == "ALERTS":
-            st.caption("New **ALERTS** tab to help you identify reviews that need your attention!")
+            st.caption(
+                "New **ALERTS** tab to help you identify reviews that need your attention!"
+            )
             # Create a toggle switch for filtering data to the last 30 days
             toggle = st.toggle(
-                label="Last 30 days only.", value=True, key="switch_dash_neg", disabled=True
+                label="Last 30 days only.",
+                value=True,
+                key="switch_dash_neg",
+                disabled=True,
             )
 
             # React to the toggle's state
             if toggle:
-                neg, neg1, neg2 = get_negative_review_frames(filtered_data, last_n_days=30)
+                neg, neg1, neg2 = get_negative_review_frames(
+                    filtered_data, last_n_days=30
+                )
             else:
-                neg, neg1, neg2 = get_negative_review_frames(filtered_data, last_n_days=None)
+                neg, neg1, neg2 = get_negative_review_frames(
+                    filtered_data, last_n_days=None
+                )
 
             # Create tabs for sentiment analysis views
             sentiment_tab_selector = ui.tabs(
-                options=["Feedback Responses",
-                         "Improvement Suggestions"
-                         ],
+                options=["Feedback Responses", "Improvement Suggestions"],
                 default_value="Feedback Responses",
                 key="tab45",
             )
@@ -1718,8 +1771,6 @@ else:
                                     )
 
                             icounter += 1
-
-
 
         if surgery_tab_selector == "Surgery Rating":
 
@@ -2250,10 +2301,11 @@ else:
             negative_df2.columns = ["Label", "Count"]
 
             negative_df = pd.concat([negative_df1, negative_df2], axis=0)
-            negative_df = (
-                negative_df.groupby("Label")["Count"].sum().reset_index())
+            negative_df = negative_df.groupby("Label")["Count"].sum().reset_index()
 
-            negative_df = negative_df.sort_values(by="Count", ascending=False).reset_index()
+            negative_df = negative_df.sort_values(
+                by="Count", ascending=False
+            ).reset_index()
             negative_df["Cumulative Count"] = negative_df["Count"].cumsum()
             negative_df["Cumulative Percentage"] = (
                 100 * negative_df["Cumulative Count"] / negative_df["Count"].sum()
@@ -2263,9 +2315,7 @@ else:
             fig, ax1 = plt.subplots(figsize=(12, 8))
 
             # Bar plot for the count of feedback labels
-            sns.barplot(
-                x="Label", y="Count", data=negative_df, color="#4aa2e5", ax=ax1
-            )
+            sns.barplot(x="Label", y="Count", data=negative_df, color="#4aa2e5", ax=ax1)
             plt.xticks(rotation=45, ha="right")
 
             # Create a secondary axis for the cumulative percentage
@@ -2343,8 +2393,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             with st.expander(
                 "**Evidence Based Intervention**", icon=":material/search_insights:"
             ):
-                st.write(
-                    """## **1. Reception Staff Interaction**
+                st.write("""## **1. Reception Staff Interaction**
 
 **Key Issues Identified:**
 
@@ -2528,8 +2577,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 - Mueller, S. K., et al. (2012). Hospital-based medication reconciliation practices: a systematic review. Archives of Internal Medicine, 172(14), 1057–1069.
 - Murray, M., & Berwick, D. M. (2003). Advanced access: reducing waiting and delays in primary care. JAMA, 289(8), 1035–1040.
 - Murray, M., & Tantau, C. (2000). Same-day appointments: exploding
-                         """
-                )
+                         """)
 
         st.toast(
             "**Pareto Analysis Chart** Select from submenu.",
@@ -2568,7 +2616,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["free_text"]
-                    qa = json.loads(row['free_text_qa'].replace("'", '"'))
+                    qa = json.loads(row["free_text_qa"].replace("'", '"'))
 
                     sentiment = row["sentiment_free_text"]
                     if sentiment == "neutral":
@@ -2578,14 +2626,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
-                    substring = text[qa['start']:qa['end']]
-                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+                    substring = text[qa["start"] : qa["end"]]
+                    bolded_text = (
+                        text[: qa["start"]] + f"**{substring}**" + text[qa["end"] :]
+                    )
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{bolded_text}]")
 
                         selected_text = selected_text + " " + text
-
 
                 _ = st.popover(
                     f"Summarize **{rating}** Feedback", icon=":material/robot_2:"
@@ -2602,11 +2651,17 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         )
                         with st.container(border=True):
                             # extract reasoning separately if you still want to make it optional
-                            match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                            match = re.search(
+                                r"<think>(.*?)</think>", summary, flags=re.DOTALL
+                            )
                             reasoning = match.group(1).strip() if match else None
-                            visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                            visible_text = re.sub(
+                                r"<think>.*?</think>", "", summary, flags=re.DOTALL
+                            )
                             if reasoning:
-                                with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                with st.expander(
+                                    "Show hidden reasoning", icon=":material/neurology:"
+                                ):
                                     st.markdown(f"{reasoning}")
                             st.markdown(f"### {rating}:\n {visible_text}")
     # -- Improvement Suggestions ------------------------------------------------------------------- Improvement Suggestions
@@ -2899,7 +2954,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["do_better"]
-                    qa = json.loads(row['do_better_qa'].replace("'", '"'))
+                    qa = json.loads(row["do_better_qa"].replace("'", '"'))
 
                     sentiment = row["sentiment_do_better"]
                     if sentiment == "neutral":
@@ -2909,8 +2964,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
-                    substring = text[qa['start']:qa['end']]
-                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+                    substring = text[qa["start"] : qa["end"]]
+                    bolded_text = (
+                        text[: qa["start"]] + f"**{substring}**" + text[qa["end"] :]
+                    )
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{bolded_text}]")
@@ -2933,11 +2990,17 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                         )
                         with st.container(border=True):
                             # extract reasoning separately if you still want to make it optional
-                            match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                            match = re.search(
+                                r"<think>(.*?)</think>", summary, flags=re.DOTALL
+                            )
                             reasoning = match.group(1).strip() if match else None
-                            visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                            visible_text = re.sub(
+                                r"<think>.*?</think>", "", summary, flags=re.DOTALL
+                            )
                             if reasoning:
-                                with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                                with st.expander(
+                                    "Show hidden reasoning", icon=":material/neurology:"
+                                ):
                                     st.markdown(f"{reasoning}")
                             st.markdown(f"### {rating}:\n {visible_text}")
 
@@ -3230,35 +3293,66 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         filtered_data["time"] = pd.to_datetime(filtered_data["time"])
         filtered_data.set_index("time", inplace=True)
 
-
-        pos_sentiment24 = filtered_data[(filtered_data["sentiment_free_text"] == "positive") & (filtered_data["year"] == 2024)]
-        pos_sentiment25 = filtered_data[(filtered_data["sentiment_free_text"] == "positive") & (filtered_data["year"] == 2025)]
-        neg_sentiment24 = filtered_data[(filtered_data["sentiment_free_text"] == "negative") & (filtered_data["year"] == 2024)]
-        neg_sentiment25 = filtered_data[(filtered_data["sentiment_free_text"] == "negative") & (filtered_data["year"] == 2025)]
+        pos_sentiment24 = filtered_data[
+            (filtered_data["sentiment_free_text"] == "positive")
+            & (filtered_data["year"] == 2024)
+        ]
+        pos_sentiment25 = filtered_data[
+            (filtered_data["sentiment_free_text"] == "positive")
+            & (filtered_data["year"] == 2025)
+        ]
+        neg_sentiment24 = filtered_data[
+            (filtered_data["sentiment_free_text"] == "negative")
+            & (filtered_data["year"] == 2024)
+        ]
+        neg_sentiment25 = filtered_data[
+            (filtered_data["sentiment_free_text"] == "negative")
+            & (filtered_data["year"] == 2025)
+        ]
 
         st.subheader("Sentiment Scores by Month of Year")
         st.subheader("2024")
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=pos_sentiment24, x="monthofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.boxplot(
+            data=pos_sentiment24,
+            x="monthofyear",
+            y="sentiment_score_free_text",
+            color="#7b94a6",
+        )
         sns.despine(top=True, left=True, right=True)
         plt.title("Positive Sentiment Scores by Month of Year (2024)", fontsize=16)
         st.pyplot(plt)
 
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=neg_sentiment24, x="monthofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.boxplot(
+            data=neg_sentiment24,
+            x="monthofyear",
+            y="sentiment_score_free_text",
+            color="#ae4f4d",
+        )
         sns.despine(top=True, left=True, right=True)
         plt.title("Negative Sentiment Scores by Month of Year (2024)", fontsize=16)
         st.pyplot(plt)
 
         st.subheader("2025")
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=pos_sentiment25, x="monthofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.boxplot(
+            data=pos_sentiment25,
+            x="monthofyear",
+            y="sentiment_score_free_text",
+            color="#7b94a6",
+        )
         sns.despine(top=True, left=True, right=True)
         plt.title("Positive Sentiment Scores by Month of Year (2025)", fontsize=16)
         st.pyplot(plt)
 
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=neg_sentiment25, x="monthofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.boxplot(
+            data=neg_sentiment25,
+            x="monthofyear",
+            y="sentiment_score_free_text",
+            color="#ae4f4d",
+        )
         sns.despine(top=True, left=True, right=True)
         plt.title("Negative Sentiment Scores by Week of Year (2025)", fontsize=16)
         st.pyplot(plt)
@@ -3267,19 +3361,39 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.subheader("Sentiment Scores by Week of Year")
         st.subheader("2024")
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=pos_sentiment24, x="weekofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.boxplot(
+            data=pos_sentiment24,
+            x="weekofyear",
+            y="sentiment_score_free_text",
+            color="#7b94a6",
+        )
         st.pyplot(plt)
 
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=neg_sentiment24, x="weekofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.boxplot(
+            data=neg_sentiment24,
+            x="weekofyear",
+            y="sentiment_score_free_text",
+            color="#ae4f4d",
+        )
         st.pyplot(plt)
         st.subheader("2025")
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=pos_sentiment25, x="weekofyear", y="sentiment_score_free_text", color="#7b94a6")
+        sns.boxplot(
+            data=pos_sentiment25,
+            x="weekofyear",
+            y="sentiment_score_free_text",
+            color="#7b94a6",
+        )
         st.pyplot(plt)
 
         plt.figure(figsize=(18, 5))
-        sns.boxplot(data=neg_sentiment25, x="weekofyear", y="sentiment_score_free_text", color="#ae4f4d")
+        sns.boxplot(
+            data=neg_sentiment25,
+            x="weekofyear",
+            y="sentiment_score_free_text",
+            color="#ae4f4d",
+        )
         st.pyplot(plt)
         st.divider()
         # Assuming filtered_data is your DataFrame and 'sentiment_score' is the column with the scores
@@ -3422,7 +3536,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.pyplot(plt)
 
         st.markdown("---")
-
 
     # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
     elif page == "Word Cloud":
@@ -3615,13 +3728,18 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                             f"Date range: {selected_date_range[0]} - {selected_date_range[1]}"
                         )
 
-
                         # extract reasoning separately if you still want to make it optional
-                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        match = re.search(
+                            r"<think>(.*?)</think>", summary, flags=re.DOTALL
+                        )
                         reasoning = match.group(1).strip() if match else None
-                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        visible_text = re.sub(
+                            r"<think>.*?</think>", "", summary, flags=re.DOTALL
+                        )
                         if reasoning:
-                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                            with st.expander(
+                                "Show hidden reasoning", icon=":material/neurology:"
+                            ):
                                 st.markdown(f"{reasoning}")
                         st.markdown(f"{visible_text}")
 
@@ -3718,10 +3836,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         )
 
         # Only proceed with month and year selection if a specific surgery is selected  -------------Month and Year Selector
-        if (
-            page not in [PCN_DASHBOARD_PAGE, ABOUT_PAGE]
-            and selected_surgery
-        ):
+        if page not in [PCN_DASHBOARD_PAGE, ABOUT_PAGE] and selected_surgery:
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
             if not surgery_data.empty:
@@ -3900,9 +4015,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         if debug_toggle:
             st.dataframe(data.tail(50))
 
-
-
-
     # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
         st.markdown("# :material/psychology_alt: NER - People")
@@ -3986,8 +4098,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 ]
             )
 
-
-
             st.download_button(
                 label="Download Selected Entries",
                 data=selected_entries,
@@ -3996,7 +4106,9 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 icon=":material/download:",
             )
 
-            with st.popover("Summarize Personal feedback", icon=":material/robot_2:", width=300):
+            with st.popover(
+                "Summarize Personal feedback", icon=":material/robot_2:", width=300
+            ):
                 llm_button = st.button("Summarize with LLM", icon=":material/robot_2:")
                 if llm_button == True:
                     summary = ask_groq(
@@ -4008,11 +4120,17 @@ Example Feedback Text: Dr PERSON is very friendly.
                     )
                     with st.container(border=True):
                         # extract reasoning separately if you still want to make it optional
-                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        match = re.search(
+                            r"<think>(.*?)</think>", summary, flags=re.DOTALL
+                        )
                         reasoning = match.group(1).strip() if match else None
-                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        visible_text = re.sub(
+                            r"<think>.*?</think>", "", summary, flags=re.DOTALL
+                        )
                         if reasoning:
-                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                            with st.expander(
+                                "Show hidden reasoning", icon=":material/neurology:"
+                            ):
                                 st.markdown(f"{reasoning}")
                         st.markdown(f"### NER Summary\n {visible_text}")
 
@@ -4046,7 +4164,9 @@ Example Feedback Text: Dr PERSON is very friendly.
         if len(campaign_list) != 0:
 
             selected_campaign = st.selectbox(
-                "Select a **Campaign**", options=campaign_list, index=(len(campaign_list)-1)
+                "Select a **Campaign**",
+                options=campaign_list,
+                index=(len(campaign_list) - 1),
             )
 
             # Filter campaign_df by selected_campaign
@@ -4160,11 +4280,17 @@ Example Feedback Text: Dr PERSON is very friendly.
                     )
                     with st.container(border=True):
                         # extract reasoning separately if you still want to make it optional
-                        match = re.search(r"<think>(.*?)</think>", summary, flags=re.DOTALL)
+                        match = re.search(
+                            r"<think>(.*?)</think>", summary, flags=re.DOTALL
+                        )
                         reasoning = match.group(1).strip() if match else None
-                        visible_text = re.sub(r"<think>.*?</think>", "", summary, flags=re.DOTALL)
+                        visible_text = re.sub(
+                            r"<think>.*?</think>", "", summary, flags=re.DOTALL
+                        )
                         if reasoning:
-                            with st.expander("Show hidden reasoning", icon=":material/neurology:"):
+                            with st.expander(
+                                "Show hidden reasoning", icon=":material/neurology:"
+                            ):
                                 st.markdown(f"{reasoning}")
                         st.markdown(f"### Campaign Feedback Summary\n {visible_text}")
 
@@ -4177,65 +4303,135 @@ Example Feedback Text: Dr PERSON is very friendly.
                 key="badges1134",
             )
 
-       # -- Automated FFT ------------------------------------------------------------------------------------------------------- Campaings
+    # -- Automated FFT ------------------------------------------------------------------------------------------------------- Campaings
     elif page == "Automated FFT":
         st.markdown("# :material/automation: Automated FFT")
-        st.caption("To interpret a heatmap displaying GP surgery feedback, focus on the intersection of the topic (y-axis) and the **average monthly sentiment analysis score** (x-axis). Each colored cell represents the intensity of sentiment for a specific topic in a given month. The color scale is key: **blue** indicates a negative average sentiment score for that topic in that month, suggesting **areas needing improvement**, while red signifies a **positive average sentiment**, highlighting successful aspects of the surgery's operation. Areas with the deepest red have the highest positive sentiment, meaning patients consistently rated those topics highly. Conversely, the deepest blue areas represent topics with the most pronounced negative feedback. By scanning the map, you can identify patterns over time (horizontally) and compare sentiment across different service areas (vertically) to quickly pinpoint **persistent problem** areas or **long-term successes**.")
+        st.caption(
+            "To interpret a heatmap displaying GP surgery feedback, focus on the intersection of the topic (y-axis) and the **average monthly sentiment analysis score** (x-axis). Each colored cell represents the intensity of sentiment for a specific topic in a given month. The color scale is key: **blue** indicates a negative average sentiment score for that topic in that month, suggesting **areas needing improvement**, while red signifies a **positive average sentiment**, highlighting successful aspects of the surgery's operation. Areas with the deepest red have the highest positive sentiment, meaning patients consistently rated those topics highly. Conversely, the deepest blue areas represent topics with the most pronounced negative feedback. By scanning the map, you can identify patterns over time (horizontally) and compare sentiment across different service areas (vertically) to quickly pinpoint **persistent problem** areas or **long-term successes**."
+        )
         st.divider()
 
-        pcn_data['sentiment_score_freetext_corrected'] = pcn_data['sentiment_score_free_text'].where(
-                pcn_data['sentiment_free_text'] == 'positive',
-                -pcn_data['sentiment_score_free_text'].abs()
-            )
-        pcn_data['sentiment_score_do_better_corrected'] = pcn_data['sentiment_score_do_better'].where(
-                pcn_data['sentiment_do_better'] == 'positive',
-                -pcn_data['sentiment_score_do_better'].abs()
-            )
-        feedbackp = pcn_data[['time', 'feedback_labels', 'sentiment_score_freetext_corrected', 'year', 'monthofyear']]
-        dobetterp = pcn_data[['time', 'improvement_labels', 'sentiment_score_do_better_corrected', 'year', 'monthofyear']]
-        feedbackp = feedbackp.rename(columns={'feedback_labels': 'labels', 'sentiment_score_freetext_corrected': 'sentiment_score_corrected'})
-        dobetterp = dobetterp.rename(columns={'improvement_labels': 'labels', 'sentiment_score_do_better_corrected': 'sentiment_score_corrected'})
-        combinedp = pd.concat([feedbackp, dobetterp], ignore_index=True).dropna(subset=['labels'])
+        pcn_data["sentiment_score_freetext_corrected"] = pcn_data[
+            "sentiment_score_free_text"
+        ].where(
+            pcn_data["sentiment_free_text"] == "positive",
+            -pcn_data["sentiment_score_free_text"].abs(),
+        )
+        pcn_data["sentiment_score_do_better_corrected"] = pcn_data[
+            "sentiment_score_do_better"
+        ].where(
+            pcn_data["sentiment_do_better"] == "positive",
+            -pcn_data["sentiment_score_do_better"].abs(),
+        )
+        feedbackp = pcn_data[
+            [
+                "time",
+                "feedback_labels",
+                "sentiment_score_freetext_corrected",
+                "year",
+                "monthofyear",
+            ]
+        ]
+        dobetterp = pcn_data[
+            [
+                "time",
+                "improvement_labels",
+                "sentiment_score_do_better_corrected",
+                "year",
+                "monthofyear",
+            ]
+        ]
+        feedbackp = feedbackp.rename(
+            columns={
+                "feedback_labels": "labels",
+                "sentiment_score_freetext_corrected": "sentiment_score_corrected",
+            }
+        )
+        dobetterp = dobetterp.rename(
+            columns={
+                "improvement_labels": "labels",
+                "sentiment_score_do_better_corrected": "sentiment_score_corrected",
+            }
+        )
+        combinedp = pd.concat([feedbackp, dobetterp], ignore_index=True).dropna(
+            subset=["labels"]
+        )
 
         groupedp = (
-                    combinedp
-                    .groupby(['year', 'monthofyear', 'labels'])
-                    .agg(sentiment_mean=('sentiment_score_corrected', 'mean'))
-                    .reset_index()
-                    )
+            combinedp.groupby(["year", "monthofyear", "labels"])
+            .agg(sentiment_mean=("sentiment_score_corrected", "mean"))
+            .reset_index()
+        )
 
-        groupedp['year_month'] = groupedp['year'].astype(str) + '-' + groupedp['monthofyear'].astype(str).str.zfill(2)
+        groupedp["year_month"] = (
+            groupedp["year"].astype(str)
+            + "-"
+            + groupedp["monthofyear"].astype(str).str.zfill(2)
+        )
         # ------------------------------above pcn data --------------------------------------------
-        filtered_data['sentiment_score_freetext_corrected'] = filtered_data['sentiment_score_free_text'].where(
-                filtered_data['sentiment_free_text'] == 'positive',
-                -filtered_data['sentiment_score_free_text'].abs()
-            )
-        filtered_data['sentiment_score_do_better_corrected'] = filtered_data['sentiment_score_do_better'].where(
-                filtered_data['sentiment_do_better'] == 'positive',
-                -filtered_data['sentiment_score_do_better'].abs()
-            )
-        feedback = filtered_data[['time', 'feedback_labels', 'sentiment_score_freetext_corrected', 'year', 'monthofyear']]
-        dobetter = filtered_data[['time', 'improvement_labels', 'sentiment_score_do_better_corrected', 'year', 'monthofyear']]
-        feedback = feedback.rename(columns={'feedback_labels': 'labels', 'sentiment_score_freetext_corrected': 'sentiment_score_corrected'})
-        dobetter = dobetter.rename(columns={'improvement_labels': 'labels', 'sentiment_score_do_better_corrected': 'sentiment_score_corrected'})
-        combined = pd.concat([feedback, dobetter], ignore_index=True).dropna(subset=['labels'])
+        filtered_data["sentiment_score_freetext_corrected"] = filtered_data[
+            "sentiment_score_free_text"
+        ].where(
+            filtered_data["sentiment_free_text"] == "positive",
+            -filtered_data["sentiment_score_free_text"].abs(),
+        )
+        filtered_data["sentiment_score_do_better_corrected"] = filtered_data[
+            "sentiment_score_do_better"
+        ].where(
+            filtered_data["sentiment_do_better"] == "positive",
+            -filtered_data["sentiment_score_do_better"].abs(),
+        )
+        feedback = filtered_data[
+            [
+                "time",
+                "feedback_labels",
+                "sentiment_score_freetext_corrected",
+                "year",
+                "monthofyear",
+            ]
+        ]
+        dobetter = filtered_data[
+            [
+                "time",
+                "improvement_labels",
+                "sentiment_score_do_better_corrected",
+                "year",
+                "monthofyear",
+            ]
+        ]
+        feedback = feedback.rename(
+            columns={
+                "feedback_labels": "labels",
+                "sentiment_score_freetext_corrected": "sentiment_score_corrected",
+            }
+        )
+        dobetter = dobetter.rename(
+            columns={
+                "improvement_labels": "labels",
+                "sentiment_score_do_better_corrected": "sentiment_score_corrected",
+            }
+        )
+        combined = pd.concat([feedback, dobetter], ignore_index=True).dropna(
+            subset=["labels"]
+        )
 
         grouped = (
-                    combined
-                    .groupby(['year', 'monthofyear', 'labels'])
-                    .agg(sentiment_mean=('sentiment_score_corrected', 'mean'))
-                    .reset_index()
-                    )
+            combined.groupby(["year", "monthofyear", "labels"])
+            .agg(sentiment_mean=("sentiment_score_corrected", "mean"))
+            .reset_index()
+        )
 
-        grouped['year_month'] = grouped['year'].astype(str) + '-' + grouped['monthofyear'].astype(str).str.zfill(2)
+        grouped["year_month"] = (
+            grouped["year"].astype(str)
+            + "-"
+            + grouped["monthofyear"].astype(str).str.zfill(2)
+        )
         heatmap_df = grouped.pivot(
-                        index='labels',
-                        columns='year_month',
-                        values='sentiment_mean'
-                    )
+            index="labels", columns="year_month", values="sentiment_mean"
+        )
 
         fig, ax = plt.subplots(figsize=(14, 12))
-        sns.heatmap(heatmap_df, annot=True, fmt=".2f", ax=ax, cmap='coolwarm')
+        sns.heatmap(heatmap_df, annot=True, fmt=".2f", ax=ax, cmap="coolwarm")
 
         ax.set_xlabel("Year-Month")
         ax.set_ylabel("Feedback Labels")
@@ -4243,57 +4439,77 @@ Example Feedback Text: Dr PERSON is very friendly.
 
         st.pyplot(fig)
 
-
         st.divider()
 
         g = grouped.iloc[:, 1:]  # drop empty first column
-        g['year_month'] = pd.to_datetime(g['year_month'])
+        g["year_month"] = pd.to_datetime(g["year_month"])
 
-        gdf = g.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+        gdf = g.pivot(
+            index="year_month", columns="labels", values="sentiment_mean"
+        ).sort_index()
 
         # Optional: round to 2 decimals for nicer display
         gdf = gdf.round(3)
 
         gp = groupedp.iloc[:, 1:]  # drop empty first column
-        gp['year_month'] = pd.to_datetime(gp['year_month'])
+        gp["year_month"] = pd.to_datetime(gp["year_month"])
 
-        gdfp = gp.pivot(index='year_month', columns='labels', values='sentiment_mean').sort_index()
+        gdfp = gp.pivot(
+            index="year_month", columns="labels", values="sentiment_mean"
+        ).sort_index()
 
         # Optional: round to 2 decimals for nicer display
         gdfp = gdfp.round(3)
 
-
-        column = st.selectbox("Select Column to Visualise", options=gdf.columns.tolist())
+        column = st.selectbox(
+            "Select Column to Visualise", options=gdf.columns.tolist()
+        )
 
         def plot_column(gdf, gdfp, column):
             # Make sure the dataframe is sorted by time
             df = gdf.copy()
-            df = df.sort_values('year_month')
+            df = df.sort_values("year_month")
 
             # Create figure
             fig, ax = plt.subplots(figsize=(12, 6))
 
-            sns.lineplot(data=gdf, x='year_month', y=column,
-                        linewidth=3, color='#102f47', label=f"Surgery - {column}", ax=ax)
-            sns.lineplot(data=gdfp, x='year_month', y=column,
-                        linewidth=1.5, color='#ebbd5a', label=f"PCN - {column}", ax=ax)
+            sns.lineplot(
+                data=gdf,
+                x="year_month",
+                y=column,
+                linewidth=3,
+                color="#102f47",
+                label=f"Surgery - {column}",
+                ax=ax,
+            )
+            sns.lineplot(
+                data=gdfp,
+                x="year_month",
+                y=column,
+                linewidth=1.5,
+                color="#ebbd5a",
+                label=f"PCN - {column}",
+                ax=ax,
+            )
 
             # Horizontal zero line (green dashed)
-            ax.axhline(y=0, color='#749857', linestyle='--', linewidth=2, alpha=0.8)
+            ax.axhline(y=0, color="#749857", linestyle="--", linewidth=2, alpha=0.8)
 
             # Force Y-axis from -1 to +1
             ax.set_ylim(-1, 1)
 
             # Styling
-            ax.set_title(f'{column} over Time', fontsize=16, pad=20)
-            ax.set_xlabel('Year-Month', fontsize=12)
+            ax.set_title(f"{column} over Time", fontsize=16, pad=20)
+            ax.set_xlabel("Year-Month", fontsize=12)
             ax.set_ylabel(column, fontsize=12)
-            ax.tick_params(axis='x', rotation=45)  # rotation
-            ax.grid(True, alpha=0.3, linestyle='--')
-            ax.legend(loc='best')
+            ax.tick_params(axis="x", rotation=45)  # rotation
+            ax.grid(True, alpha=0.3, linestyle="--")
+            ax.legend(loc="best")
 
             # <<< DESPINE HERE >>>
-            sns.despine(left=True, bottom=False, right=True, top=True)  # removes left, top, right
+            sns.despine(
+                left=True, bottom=False, right=True, top=True
+            )  # removes left, top, right
 
             plt.tight_layout()
 

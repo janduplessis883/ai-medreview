@@ -33,8 +33,6 @@ from ai_medreview.automation.git_merge import *
 from ai_medreview.params import *
 from ai_medreview.utils import *
 
-
-
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 init(autoreset=True)
 warnings.filterwarnings("ignore")
@@ -44,6 +42,7 @@ from loguru import logger
 logger.add("/tmp/ai_medreview_debug.log", rotation="5000 KB")
 
 # Select Classification Model - facebook/bart-large-mnli or FacebookAI/roberta-large-mnli
+
 
 @time_it
 def load_google_sheet():
@@ -71,6 +70,7 @@ def load_google_sheet():
 
     data.sort_values(by="time", inplace=True)
     return data
+
 
 @time_it
 def word_count(df):
@@ -209,6 +209,8 @@ ner_pipeline = pipeline(
 )
 
 qa_pipe = pipeline("question-answering", model="deepset/roberta-base-squad2")
+
+
 # Function to anonymize names in text
 @time_it
 def question_answering(data, column):
@@ -216,18 +218,18 @@ def question_answering(data, column):
 
     output_list = []
 
-    for _, row in tqdm(data.iterrows(), '🅾️ Answering', total=data.shape[0]):
+    for _, row in tqdm(data.iterrows(), "🅾️ Answering", total=data.shape[0]):
         text = row[column]
 
         if column == "free_text":
             input_dict = {
-            "question": "Please tell us why you feel this way?",
-            "context": text,
+                "question": "Please tell us why you feel this way?",
+                "context": text,
             }
         elif column == "do_better":
             input_dict = {
-            "question": "Is there anything that would have made your experience better?",
-            "context": text,
+                "question": "Is there anything that would have made your experience better?",
+                "context": text,
             }
 
         # Check if free_text is a valid string and not empty or np.nan
@@ -239,10 +241,10 @@ def question_answering(data, column):
             # Append np.nan if free_text is empty, np.nan, or not a string
             output_list.append(np.nan)
 
-
     # Add labels and scores as new columns
     data[f"{column}_qa"] = output_list
     return data
+
 
 def anonymize_names_with_transformers(text):
 
@@ -285,7 +287,9 @@ def feedback_classification(data, batch_size=16):
     model = AutoModelForSequenceClassification.from_pretrained(
         "MoritzLaurer/deberta-v3-large-zeroshot-v2.0"
     ).to("cpu")
-    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
+    tokenizer = AutoTokenizer.from_pretrained(
+        "MoritzLaurer/deberta-v3-large-zeroshot-v2.0"
+    )
 
     # Create classifier pipeline
     try:
@@ -303,24 +307,24 @@ def feedback_classification(data, batch_size=16):
 
     # Define the categories for classification
     final_categories = [
-    "Appointment Booking and Online Systems",          # merges your booking + broader admin
-    "Appointment Availability and Waiting Times",     # long waits + general availability
-    "Difficulty Getting Through on Phone",             # kept separate — very common & distinct theme
-    "Reception Staff Rude or Unhelpful",               # negative reception
-    "Reception Staff Friendly and Helpful",            # positive reception
-    "Prescriptions and Repeat Medication Issues",      # your specific + broader medication mgmt
-    "Blood Tests and Results Delays",                  # specific & frequent
-    "Waiting Time in Surgery / Waiting Room",          # in-person waiting (distinct from booking delays)
-    "Excellent Clinical Care and Thorough Explanation",
-    "Rushed Consultation or Not Listened To",
-    "Staff Kindness, Empathy and Compassion",         # doctors/nurses/staff caring
-    "Staff Professionalism and Knowledge",
-    "Vaccinations and Immunisations",
-    "Telehealth / Phone Consultations",
-    "Treatment Quality and Effectiveness",
-    "Follow-up and Continuity of Care",
-    "Overall Excellent Service and Practice",          # very positive global feedback
-    "Irrelevant / Unclassifiable / Noise"              # catch-all for names-only, surveys, gibberish etc.
+        "Appointment Booking and Online Systems",  # merges your booking + broader admin
+        "Appointment Availability and Waiting Times",  # long waits + general availability
+        "Difficulty Getting Through on Phone",  # kept separate — very common & distinct theme
+        "Reception Staff Rude or Unhelpful",  # negative reception
+        "Reception Staff Friendly and Helpful",  # positive reception
+        "Prescriptions and Repeat Medication Issues",  # your specific + broader medication mgmt
+        "Blood Tests and Results Delays",  # specific & frequent
+        "Waiting Time in Surgery / Waiting Room",  # in-person waiting (distinct from booking delays)
+        "Excellent Clinical Care and Thorough Explanation",
+        "Rushed Consultation or Not Listened To",
+        "Staff Kindness, Empathy and Compassion",  # doctors/nurses/staff caring
+        "Staff Professionalism and Knowledge",
+        "Vaccinations and Immunisations",
+        "Telehealth / Phone Consultations",
+        "Treatment Quality and Effectiveness",
+        "Follow-up and Continuity of Care",
+        "Overall Excellent Service and Practice",  # very positive global feedback
+        "Irrelevant / Unclassifiable / Noise",  # catch-all for names-only, surveys, gibberish etc.
     ]
 
     # Initialize the list to store labels
@@ -369,7 +373,9 @@ def improvement_classification(data, batch_size=16):
     model = AutoModelForSequenceClassification.from_pretrained(
         "MoritzLaurer/deberta-v3-large-zeroshot-v2.0"
     ).to("cpu")
-    tokenizer = AutoTokenizer.from_pretrained("MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
+    tokenizer = AutoTokenizer.from_pretrained(
+        "MoritzLaurer/deberta-v3-large-zeroshot-v2.0"
+    )
 
     # Create classifier pipeline
     try:
@@ -382,24 +388,24 @@ def improvement_classification(data, batch_size=16):
 
     # Define the labels for improvement categories
     final_categories = [
-    "Appointment Booking and Online Systems",          # merges your booking + broader admin
-    "Appointment Availability and Waiting Times",     # long waits + general availability
-    "Difficulty Getting Through on Phone",             # kept separate — very common & distinct theme
-    "Reception Staff Rude or Unhelpful",               # negative reception
-    "Reception Staff Friendly and Helpful",            # positive reception
-    "Prescriptions and Repeat Medication Issues",      # your specific + broader medication mgmt
-    "Blood Tests and Results Delays",                  # specific & frequent
-    "Waiting Time in Surgery / Waiting Room",          # in-person waiting (distinct from booking delays)
-    "Excellent Clinical Care and Thorough Explanation",
-    "Rushed Consultation or Not Listened To",
-    "Staff Kindness, Empathy and Compassion",         # doctors/nurses/staff caring
-    "Staff Professionalism and Knowledge",
-    "Vaccinations and Immunisations",
-    "Telehealth / Phone Consultations",
-    "Treatment Quality and Effectiveness",
-    "Follow-up and Continuity of Care",
-    "Overall Excellent Service and Practice",          # very positive global feedback
-    "Irrelevant / Unclassifiable / Noise"              # catch-all for names-only, surveys, gibberish etc.
+        "Appointment Booking and Online Systems",  # merges your booking + broader admin
+        "Appointment Availability and Waiting Times",  # long waits + general availability
+        "Difficulty Getting Through on Phone",  # kept separate — very common & distinct theme
+        "Reception Staff Rude or Unhelpful",  # negative reception
+        "Reception Staff Friendly and Helpful",  # positive reception
+        "Prescriptions and Repeat Medication Issues",  # your specific + broader medication mgmt
+        "Blood Tests and Results Delays",  # specific & frequent
+        "Waiting Time in Surgery / Waiting Room",  # in-person waiting (distinct from booking delays)
+        "Excellent Clinical Care and Thorough Explanation",
+        "Rushed Consultation or Not Listened To",
+        "Staff Kindness, Empathy and Compassion",  # doctors/nurses/staff caring
+        "Staff Professionalism and Knowledge",
+        "Vaccinations and Immunisations",
+        "Telehealth / Phone Consultations",
+        "Treatment Quality and Effectiveness",
+        "Follow-up and Continuity of Care",
+        "Overall Excellent Service and Practice",  # very positive global feedback
+        "Irrelevant / Unclassifiable / Noise",  # catch-all for names-only, surveys, gibberish etc.
     ]
 
     # Initialize the list to store improvement labels
@@ -428,9 +434,7 @@ def improvement_classification(data, batch_size=16):
 
         try:
             # Classify the valid sentences
-            model_outputs = classifier(
-                list(sentences), final_categories, device="cpu"
-            )
+            model_outputs = classifier(list(sentences), final_categories, device="cpu")
             # Update labels based on classification output
             for output, idx in zip(model_outputs, valid_indices):
                 improvement_labels[start_index + idx] = output["labels"][0]

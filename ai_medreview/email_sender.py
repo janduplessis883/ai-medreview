@@ -3,6 +3,7 @@ from email.message import EmailMessage
 import mimetypes
 import os
 
+
 def send_email_with_attachment(
     smtp_server: str,
     smtp_port: int,
@@ -13,7 +14,7 @@ def send_email_with_attachment(
     subject: str,
     body: str,
     attachment_path: str,
-    html_body: str = None
+    html_body: str = None,
 ):
     """
     Send an email with a CSV attachment using Python's built-in libraries.
@@ -60,10 +61,7 @@ def send_email_with_attachment(
                 file_data = f.read()
                 file_name = os.path.basename(attachment_path)
                 msg.add_attachment(
-                    file_data,
-                    maintype=maintype,
-                    subtype=subtype,
-                    filename=file_name
+                    file_data, maintype=maintype, subtype=subtype, filename=file_name
                 )
             print(f"✅ File '{file_name}' attached successfully.")
         else:
@@ -94,6 +92,7 @@ def send_email_with_attachment(
         print(f"❌ Error sending email: {e}")
         raise
 
+
 if __name__ == "__main__":
     import sys
 
@@ -115,7 +114,12 @@ if __name__ == "__main__":
 
     # Read environment variables
     required_env = [
-        "SMTP_SERVER", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SENDER", "RECIPIENT"
+        "SMTP_SERVER",
+        "SMTP_PORT",
+        "SMTP_USER",
+        "SMTP_PASSWORD",
+        "SENDER",
+        "RECIPIENT",
     ]
     missing = [var for var in required_env if var not in os.environ]
     if missing:
@@ -147,5 +151,5 @@ if __name__ == "__main__":
         subject=subject,
         body=body,
         attachment_path=attachment_path,
-        html_body=modern_html
+        html_body=modern_html,
     )

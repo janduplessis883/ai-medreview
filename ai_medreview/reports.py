@@ -411,7 +411,9 @@ class AIReportPDF(FPDF):
             self.multi_cell(0, 4.5, pdf_safe_text(subtitle))
         self.ln(2)
         image_width = self.content_width
-        self.image(image_path, x=self.l_margin, y=self.get_y(), w=image_width, h=image_height)
+        self.image(
+            image_path, x=self.l_margin, y=self.get_y(), w=image_width, h=image_height
+        )
         self.ln(image_height + 6)
 
     def add_insight_box(self, title, body):
@@ -438,8 +440,9 @@ class AIReportPDF(FPDF):
             self.set_draw_color(*self.SOFT_BORDER)
             self.set_line_width(0.15)
             self.cell(10, 7, str(index), 1, 0, "C", True)
-            self.multi_cell(self.content_width - 10, 7, pdf_safe_text(text), 1, "L", False)
-
+            self.multi_cell(
+                self.content_width - 10, 7, pdf_safe_text(text), 1, "L", False
+            )
 
 
 def send_webhook(url, surgery, month, year):
@@ -536,7 +539,9 @@ def simple_pdf(
         + pcn_dk_count
     )
     pcn_recomended = safe_percentage(pcn_vg_count + pcn_g_count, pcn_total_rated_count)
-    pcn_not_recomended = safe_percentage(pcn_p_count + pcn_vp_count, pcn_total_rated_count)
+    pcn_not_recomended = safe_percentage(
+        pcn_p_count + pcn_vp_count, pcn_total_rated_count
+    )
 
     recommendation_plot(
         recomended,
@@ -710,7 +715,9 @@ def simple_pdf(
     if not display_wc1 and not display_wc2:
         pdf.draw_info_box(
             "Word clouds unavailable",
-            ["There was not enough free-text content in this reporting period to generate word clouds."],
+            [
+                "There was not enough free-text content in this reporting period to generate word clouds."
+            ],
         )
 
     # Output the PDF

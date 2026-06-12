@@ -33,8 +33,6 @@ from ai_medreview.automation.git_merge import *
 from ai_medreview.params import *
 from ai_medreview.utils import *
 
-
-
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 init(autoreset=True)
 warnings.filterwarnings("ignore")
@@ -44,6 +42,7 @@ from loguru import logger
 logger.add("/tmp/ai_medreview_debug.log", rotation="5000 KB")
 
 # Select Classification Model - facebook/bart-large-mnli or FacebookAI/roberta-large-mnli
+
 
 @time_it
 def load_google_sheet():
@@ -71,6 +70,7 @@ def load_google_sheet():
 
     data.sort_values(by="time", inplace=True)
     return data
+
 
 @time_it
 def word_count(df):
@@ -209,6 +209,8 @@ ner_pipeline = pipeline(
 )
 
 qa_pipe = pipeline("question-answering", model="deepset/roberta-base-squad2")
+
+
 # Function to anonymize names in text
 @time_it
 def question_answering(data, column):
@@ -216,18 +218,18 @@ def question_answering(data, column):
 
     output_list = []
 
-    for _, row in tqdm(data.iterrows(), '🅾️ Answering', total=data.shape[0]):
+    for _, row in tqdm(data.iterrows(), "🅾️ Answering", total=data.shape[0]):
         text = row[column]
 
         if column == "free_text":
             input_dict = {
-            "question": "Please tell us why you feel this way?",
-            "context": text,
+                "question": "Please tell us why you feel this way?",
+                "context": text,
             }
         elif column == "do_better":
             input_dict = {
-            "question": "Is there anything that would have made your experience better?",
-            "context": text,
+                "question": "Is there anything that would have made your experience better?",
+                "context": text,
             }
 
         # Check if free_text is a valid string and not empty or np.nan
@@ -239,10 +241,10 @@ def question_answering(data, column):
             # Append np.nan if free_text is empty, np.nan, or not a string
             output_list.append(np.nan)
 
-
     # Add labels and scores as new columns
     data[f"{column}_qa"] = output_list
     return data
+
 
 def anonymize_names_with_transformers(text):
 
@@ -386,28 +388,28 @@ def improvement_classification(data, batch_size=16):
 
     # Define the labels for improvement categories
     improvement_labels_list = [
-            "Accessibility and Convenience",
-            "Administrative Efficiency",
-            "Appointment Availability",
-            "Communication Effectiveness",
-            "Environment Ambiance",
-            "Facility Cleanliness",
-            "Feedback and Complaints Handling",
-            "Follow-up and Continuity of Care",
-            "Mental Health Support",
-            "Patient Education and Information",
-            "Patient Respect",
-            "Prescriptions and Medication Management",
-            "Reception Staff Interaction",
-            "Staff Empathy and Compassion",
-            "Staff Professionalism",
-            "Surgery Website",
-            "Telehealth",
-            "Test Results",
-            "Treatment Quality",
-            "Unclassifiable",
-            "Vaccinations",
-            "Waiting Time",
+        "Accessibility and Convenience",
+        "Administrative Efficiency",
+        "Appointment Availability",
+        "Communication Effectiveness",
+        "Environment Ambiance",
+        "Facility Cleanliness",
+        "Feedback and Complaints Handling",
+        "Follow-up and Continuity of Care",
+        "Mental Health Support",
+        "Patient Education and Information",
+        "Patient Respect",
+        "Prescriptions and Medication Management",
+        "Reception Staff Interaction",
+        "Staff Empathy and Compassion",
+        "Staff Professionalism",
+        "Surgery Website",
+        "Telehealth",
+        "Test Results",
+        "Treatment Quality",
+        "Unclassifiable",
+        "Vaccinations",
+        "Waiting Time",
     ]
 
     # Initialize the list to store improvement labels

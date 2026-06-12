@@ -24,7 +24,7 @@ from utils import *
 from reports import *
 
 # Initialize the Groq client
-#client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+# client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 
 # # Simple function to get a response from Groq
@@ -188,7 +188,9 @@ else:
     if page not in ["**:blue-background[PCN Dashboard]**", "**About**"]:
         surgery_list = get_surgeries_by_pcn(pcn_data, selected_pcn)
         if len(surgery_list) > 0:
-            selected_surgery = st.sidebar.selectbox("Select a Surgery", surgery_list, index=0)
+            selected_surgery = st.sidebar.selectbox(
+                "Select a Surgery", surgery_list, index=0
+            )
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery]
 
             if not surgery_data.empty:
@@ -1498,24 +1500,32 @@ else:
             default_value="Surgery Rating",
             key="tab4",
         )
-        st.toast(body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!", icon="🔥")
-
+        st.toast(
+            body="New **ALERTS** Tab — Don’t Miss Reviews That Need Your Action!",
+            icon="🔥",
+        )
 
         if surgery_tab_selector == "ALERTS":
-            st.caption("New **ALERTS** tab to help you identify reviews that need your attention!")
+            st.caption(
+                "New **ALERTS** tab to help you identify reviews that need your attention!"
+            )
             # Create a toggle switch for filtering data to the last 30 days
             toggle = st.toggle(
-                label="Last 30 days only.", value=True, key="switch_dash_neg", disabled=True
+                label="Last 30 days only.",
+                value=True,
+                key="switch_dash_neg",
+                disabled=True,
             )
 
             # React to the toggle's state
             if toggle:
 
                 if "time" not in filtered_data.columns:
-                    negative = filtered_data.reset_index().rename(columns={filtered_data.index.name or "index": "time"})
+                    negative = filtered_data.reset_index().rename(
+                        columns={filtered_data.index.name or "index": "time"}
+                    )
                 else:
                     negative = filtered_data.copy()
-
 
                 # Convert "time" to datetime only if it isn’t already
                 if not pd.api.types.is_datetime64_any_dtype(negative["time"]):
@@ -1548,9 +1558,7 @@ else:
 
             # Create tabs for sentiment analysis views
             sentiment_tab_selector = ui.tabs(
-                options=["Feedback Responses",
-                         "Improvement Suggestions"
-                         ],
+                options=["Feedback Responses", "Improvement Suggestions"],
                 default_value="Feedback Responses",
                 key="tab45",
             )
@@ -1666,8 +1674,6 @@ else:
                                     )
 
                             icounter += 1
-
-
 
         if surgery_tab_selector == "Surgery Rating":
 
@@ -2277,8 +2283,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
             with st.expander(
                 "**Evidence Based Intervention**", icon=":material/search_insights:"
             ):
-                st.write(
-                    """## **1. Reception Staff Interaction**
+                st.write("""## **1. Reception Staff Interaction**
 
 **Key Issues Identified:**
 
@@ -2462,8 +2467,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
 - Mueller, S. K., et al. (2012). Hospital-based medication reconciliation practices: a systematic review. Archives of Internal Medicine, 172(14), 1057–1069.
 - Murray, M., & Berwick, D. M. (2003). Advanced access: reducing waiting and delays in primary care. JAMA, 289(8), 1035–1040.
 - Murray, M., & Tantau, C. (2000). Same-day appointments: exploding
-                         """
-                )
+                         """)
 
         st.toast(
             "**Pareto Analysis Chart** Select from submenu.",
@@ -2502,7 +2506,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["free_text"]
-                    qa = json.loads(row['free_text_qa'].replace("'", '"'))
+                    qa = json.loads(row["free_text_qa"].replace("'", '"'))
 
                     sentiment = row["sentiment_free_text"]
                     if sentiment == "neutral":
@@ -2512,14 +2516,15 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
-                    substring = text[qa['start']:qa['end']]
-                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+                    substring = text[qa["start"] : qa["end"]]
+                    bolded_text = (
+                        text[: qa["start"]] + f"**{substring}**" + text[qa["end"] :]
+                    )
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{bolded_text}]")
 
                         selected_text = selected_text + " " + text
-
 
                 _ = st.popover(
                     f"Summarize **{rating}** Feedback", icon=":material/robot_2:"
@@ -2826,7 +2831,7 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 selected_text = ""
                 for index, row in specific_class.iterrows():
                     text = row["do_better"]
-                    qa = json.loads(row['do_better_qa'].replace("'", '"'))
+                    qa = json.loads(row["do_better_qa"].replace("'", '"'))
 
                     sentiment = row["sentiment_do_better"]
                     if sentiment == "neutral":
@@ -2836,8 +2841,10 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                     elif sentiment == "positive":
                         text_color = "blue"
 
-                    substring = text[qa['start']:qa['end']]
-                    bolded_text = text[:qa['start']] + f"**{substring}**" + text[qa['end']:]
+                    substring = text[qa["start"] : qa["end"]]
+                    bolded_text = (
+                        text[: qa["start"]] + f"**{substring}**" + text[qa["end"] :]
+                    )
 
                     if str(text).lower() != "nan":
                         st.markdown(f"- :{text_color}[{bolded_text}]")
@@ -3289,7 +3296,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         st.pyplot(plt)
 
         st.markdown("---")
-
 
     # -- Word Cloud --------------------------------------------------------------------------------------------- Word Cloud
     elif page == "Word Cloud":
@@ -3759,9 +3765,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
         if debug_toggle:
             st.dataframe(data.tail(50))
 
-
-
-
     # -- About ------------------------------------------------------------------------------------------------------- NER People
     elif page == "NER People":
         st.markdown("# :material/psychology_alt: NER - People")
@@ -3845,8 +3848,6 @@ This type of analysis can be customized per GP surgery based on patient reviews.
                 ]
             )
 
-
-
             st.download_button(
                 label="Download Selected Entries",
                 data=selected_entries,
@@ -3897,7 +3898,9 @@ Example Feedback Text: Dr PERSON is very friendly.
         if len(campaign_list) != 0:
 
             selected_campaign = st.selectbox(
-                "Select a **Campaign**", options=campaign_list, index=(len(campaign_list)-1)
+                "Select a **Campaign**",
+                options=campaign_list,
+                index=(len(campaign_list) - 1),
             )
 
             # Filter campaign_df by selected_campaign

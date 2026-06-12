@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from build_surgery_metrics import run_supabase_query
 
+
 class MetricBase:
     """
     Base class for time series metrics.
@@ -10,6 +11,7 @@ class MetricBase:
         surgery_list_size (float): The size of the surgery list. This value can impact normalization.
         timeseries (pd.Series): The absolute time series data for the metric.
     """
+
     def __init__(self, surgery_list_size: float, timeseries: pd.Series):
         self.surgery_list_size = surgery_list_size
         self.timeseries = timeseries
@@ -48,7 +50,10 @@ class CxScreeningMetric(MetricBase):
     For cx_screening, normalization might be more appropriately done using the monthly demand
     rather than the overall surgery list size.
     """
-    def __init__(self, surgery_list_size: float, timeseries: pd.Series, monthly_demand: float):
+
+    def __init__(
+        self, surgery_list_size: float, timeseries: pd.Series, monthly_demand: float
+    ):
         super().__init__(surgery_list_size, timeseries)
         self.monthly_demand = monthly_demand
 
@@ -61,7 +66,13 @@ class CxScreeningMetric(MetricBase):
         return self.timeseries / self.monthly_demand
 
 
-def df_to_timeseries(df: pd.DataFrame, date_col: str, value_col: str, freq: str = 'M', agg_func: str = 'sum') -> pd.Series:
+def df_to_timeseries(
+    df: pd.DataFrame,
+    date_col: str,
+    value_col: str,
+    freq: str = "M",
+    agg_func: str = "sum",
+) -> pd.Series:
     """
     Convert a pandas DataFrame to a time series.
 
@@ -82,7 +93,7 @@ def df_to_timeseries(df: pd.DataFrame, date_col: str, value_col: str, freq: str 
     4. Resamples the data to the specified frequency using the given aggregation function.
     """
     # Convert the date column to datetime if not already in datetime format
-    df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+    df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
 
     # Drop rows where date conversion failed
     df = df.dropna(subset=[date_col])
@@ -91,9 +102,9 @@ def df_to_timeseries(df: pd.DataFrame, date_col: str, value_col: str, freq: str 
     ts_df = df.set_index(date_col).sort_index()
 
     # Resample the DataFrame to the desired frequency and aggregate the value column
-    if agg_func == 'sum':
+    if agg_func == "sum":
         ts = ts_df[value_col].resample(freq).sum()
-    elif agg_func == 'mean':
+    elif agg_func == "mean":
         ts = ts_df[value_col].resample(freq).mean()
     else:
         ts = ts_df[value_col].resample(freq).agg(agg_func)
@@ -151,12 +162,16 @@ def import_supabase_data():
         df_female = pd.DataFrame(columns=["id", "pt_id", "age", "surgery_id"])
 
     # Overall monthly aggregate for cx_screening (count of tests per month)
-    overall_ts = df_to_timeseries(df_cx, date_col='event_date', value_col='id', agg_func='count')
+    overall_ts = df_to_timeseries(
+        df_cx, date_col="event_date", value_col="id", agg_func="count"
+    )
 
     # Monthly aggregate per surgery for cx_screening
     cx_per_surgery = {}
     for surgery_id, group in df_cx.groupby("surgery_id"):
-        cx_per_surgery[surgery_id] = df_to_timeseries(group, date_col='event_date', value_col='id', agg_func='count')
+        cx_per_surgery[surgery_id] = df_to_timeseries(
+            group, date_col="event_date", value_col="id", agg_func="count"
+        )
 
     # Calculate monthly demand from female_pts table for each surgery
     monthly_demand = {}
@@ -167,7 +182,7 @@ def import_supabase_data():
         n_young = eligible[eligible["age"] < 50].shape[0]
         n_old = eligible[eligible["age"] >= 50].shape[0]
         # Total smears over 5 years:
-        total_smears_5yr = n_old + (5/3) * n_young
+        total_smears_5yr = n_old + (5 / 3) * n_young
         # Monthly demand:
         monthly = total_smears_5yr / 60.0  # 60 months in 5 years
         monthly_demand[surgery_id] = monthly

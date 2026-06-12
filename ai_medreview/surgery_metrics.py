@@ -18,15 +18,12 @@ HOST = os.getenv("host")
 PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
+
 def run_supabase_query(sql_query):
     try:
         # Connect to the database
         connection = psycopg2.connect(
-            user=USER,
-            password=PASSWORD,
-            host=HOST,
-            port=PORT,
-            dbname=DBNAME
+            user=USER, password=PASSWORD, host=HOST, port=PORT, dbname=DBNAME
         )
 
         # Create a cursor and execute the query

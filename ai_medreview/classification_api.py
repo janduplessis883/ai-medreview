@@ -13,7 +13,9 @@ app = FastAPI(
 
 # Model Initialization (moved outside the API function for efficiency)
 try:
-    model = AutoModelForSequenceClassification.from_pretrained("facebook/bart-large-mnli")#.to("cuda" if torch.cuda.is_available() else 'cpu') #move model on cuda if available
+    model = AutoModelForSequenceClassification.from_pretrained(
+        "facebook/bart-large-mnli"
+    )  # .to("cuda" if torch.cuda.is_available() else 'cpu') #move model on cuda if available
     tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-mnli")
 
     classifier = pipeline(
@@ -24,7 +26,7 @@ try:
         framework="pt",
     )
 
-    print("Model and Tokenizer loaded successfully!")  #Confirmation
+    print("Model and Tokenizer loaded successfully!")  # Confirmation
 except Exception as e:
     print(f"Error initializing model and tokenizer: {e}")
     raise  # Raise the exception to prevent the API from starting if initialization fails
@@ -86,11 +88,14 @@ async def classify_review(request: ReviewRequest):
     try:
         result = classifier(request.review_text, categories)
         # Return the top category with associated score
-        return ClassificationResponse(category=result["labels"][0], confidence_score=result["scores"][0])
+        return ClassificationResponse(
+            category=result["labels"][0], confidence_score=result["scores"][0]
+        )
     except Exception as e:
         print(f"Error during classification: {e}")
-        raise HTTPException(status_code=500, detail=str(e))  # Return error to the client
-
+        raise HTTPException(
+            status_code=500, detail=str(e)
+        )  # Return error to the client
 
 
 if __name__ == "__main__":
