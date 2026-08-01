@@ -367,7 +367,7 @@ else:
                 "Select a Surgery", surgery_list, index=0
             )
             surgery_data = pcn_data[pcn_data["surgery"] == selected_surgery].copy()
-            st.html("<br><br><br><br><br><br><br><br><br><br><br><br>")
+            st.sidebar.html("<br><br><br><br><br><br><br><br><br><br><br><br>")
             if not surgery_data.empty:
                 selected_date_range = render_date_range_slider(
                     f"{selected_pcn} - **{selected_surgery}**",
