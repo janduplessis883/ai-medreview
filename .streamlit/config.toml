@@ -13,7 +13,7 @@ buttonRadius = "12px"
 font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
 codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
 codeFontSize = "1rem"
-baseFontSize = 17
+baseFontSize = 15
 baseFontWeight = 400
 headingFontSizes = ["48px", "32px", "24px", "20px", "17px", "14px"]
 headingFontWeights = [900, 900, 900, 900, 900, 900]
