@@ -19,7 +19,7 @@ wordcloud
 requests
 nlpretext
 plotly
-reportlab
+reportlab==4.4.7
 fpdf
 tqdm
 groq
