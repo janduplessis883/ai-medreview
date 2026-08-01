@@ -13,7 +13,7 @@ gspread
 transformers==4.37.0
 openai
 sentencepiece
-streamlit-shadcn-ui
+streamlit-shadcn-ui==0.1.18
 loguru
 wordcloud
 requests
