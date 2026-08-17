@@ -1,41 +1,88 @@
+# Amazon-inspired Streamlit Theme
+# To use: copy this content to .streamlit/config.toml or reference via base
+
 [theme]
-primaryColor = "#0096c7"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f5f5f7"
-codeBackgroundColor = "#fbfbfd"
-textColor = "#434346"
-linkColor = "#bdbea3"
-borderColor = "#d2d2d7"
+# Core Amazon colors
+primaryColor = "#FF9900"             # Amazon orange - primary buttons, links, accents
+backgroundColor = "#FFFFFF"          # Clean white background
+secondaryBackgroundColor = "#F7F8F8" # Light gray for cards and secondary areas
+textColor = "#0F1111"                # Near-black text (Amazon's body text)
+linkColor = "#007185"                # Amazon teal for links
+borderColor = "#D5D9D9"              # Light gray borders
+
+# Code styling
+codeBackgroundColor = "#F7F8F8"
+codeTextColor = "#0F1111"
+
+# Widget styling
 showWidgetBorder = true
 showSidebarBorder = true
-baseRadius = "12px"
+baseRadius = "12pxpx"       # Rounded corners like Amazon buttons
 buttonRadius = "12px"
-font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-codeFontSize = "1rem"
+
+# Typography - Amazon uses their proprietary "Amazon Ember" but we use a similar sans-serif
+font = "'Open Sans':https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
+headingFont = "'Open Sans':https://fonts.googleapis.com/css2?family=Open+Sans:wght@600;700;800&display=swap"
+codeFont = "'Source Code Pro':https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap"
+
 baseFontSize = 15
 baseFontWeight = 400
-headingFontSizes = ["48px", "32px", "24px", "20px", "17px", "14px"]
-headingFontWeights = [900, 900, 900, 900, 900, 900]
-chartCategoricalColors = ["#0071e3", "#34c759", "#ff9500", "#ff3b30", "#5856d6", "#af52de", "#00c7be"]
+codeFontSize = "13px"
+codeFontWeight = 400
+headingFontSizes = ["30px", "24px", "20px", "16px", "14px", "12px"]
+headingFontWeights = [700, 700, 600, 600, 500, 500]
+linkUnderline = false
 
-redColor = "#ae4f4d"
-orangeColor = "#fb8500"
-yellowColor = "#e4af6c"
-greenColor = "#a2a460"
-blueColor = "#659bb7"
-violetColor = "#db2777"
-grayColor = "#a3a3a3"
+# Semantic colors matching Amazon's UI
+blueColor = "#007185"   # Amazon teal/blue for links and info
+greenColor = "#067D62"  # Success green (Prime green variant)
+yellowColor = "#FFD814" # Amazon yellow (Buy button)
+orangeColor = "#FF9900" # Amazon orange
+redColor = "#B12704"    # Amazon price red / error
+violetColor = "#7B5AA6" # Supporting purple
+grayColor = "#565959"   # Secondary text gray
 
+# Green with background variants (for success states)
+greenBackgroundColor = "#E7F4E4"
+greenTextColor = "#067D62"
+
+# Red with background variants (for errors/alerts)
+redBackgroundColor = "#FFECEA"
+redTextColor = "#B12704"
+
+# Chart colors - Amazon-inspired palette
+chartCategoricalColors = [
+    "#FF9900",
+    "#232F3E",
+    "#007185",
+    "#067D62",
+    "#FFD814",
+    "#B12704",
+    "#565959",
+]
+chartSequentialColors = [
+    "#FFF8E7",
+    "#FFE8B3",
+    "#FFD580",
+    "#FFC24D",
+    "#FFAF1A",
+    "#FF9900",
+    "#E68A00",
+    "#CC7A00",
+    "#B36B00",
+    "#995C00",
+]
+
+# Dataframe styling
+dataframeBorderColor = "#D5D9D9"
+dataframeHeaderBackgroundColor = "#F7F8F8"
+
+# Sidebar - Amazon dark navy theme
 [theme.sidebar]
-backgroundColor = "#f5f5f7"
-secondaryBackgroundColor = "#ebebed"
-codeBackgroundColor = "#f5f5f7"
-borderColor = "#d2d2d7"
-
-
-[deprecation]
-showPyplotGlobalUse = false
-
-[server]
-enableStaticServing = false
+backgroundColor = "#232F3E"          # Amazon dark navy
+secondaryBackgroundColor = "#37475A" # Lighter navy for hover/active
+codeBackgroundColor = "#37475A"
+codeTextColor = "#FFAF1A"
+textColor = "#FFFFFF"                # White text on dark
+borderColor = "#37475A"
+primaryColor = "#FF9900"             # Orange accents in sidebar
