@@ -1,0 +1,11 @@
+{
+  "sample_size": 100,
+  "reviewed": 100,
+  "pending": 0,
+  "correct": 93,
+  "incorrect": 7,
+  "accuracy": 0.93,
+  "error_rate": 0.06999999999999995,
+  "accuracy_ci_95_low": 0.8625032899347026,
+  "accuracy_ci_95_high": 0.9656811756359359
+}

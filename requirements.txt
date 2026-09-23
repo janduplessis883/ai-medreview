@@ -17,6 +17,7 @@ streamlit-shadcn-ui==0.1.18
 loguru
 wordcloud
 requests
+rich
 nlpretext
 plotly
 reportlab==4.4.7
