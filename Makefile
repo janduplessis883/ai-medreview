@@ -18,6 +18,9 @@ test:
 app:
 	@streamlit run ai_medreview/app.py
 
+app4:
+	@streamlit run streamlitapp4.py
+
 app3:
 	@streamlit run ai_medreview/app_test.py
 
