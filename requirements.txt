@@ -1,27 +1,5 @@
+# Minimum requirements to run streamlitapp4.py (FFT review analysis dashboard).
+# The full package list for the data pipelines (data_v2.py / data_v4.py) is in
+# git history — see the version of this file before the "version 4" cleanup.
 streamlit
-colorama
-matplotlib
-seaborn
-numpy
 pandas
-google-auth
-distributed
-dateparser
-nlpaug
-torch
-gspread
-transformers==4.37.0
-openai
-sentencepiece
-streamlit-shadcn-ui==0.1.18
-loguru
-wordcloud
-requests
-rich
-nlpretext
-plotly
-reportlab==4.4.7
-fpdf
-tqdm
-groq
-resend
