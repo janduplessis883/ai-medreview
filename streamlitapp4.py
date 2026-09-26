@@ -97,7 +97,7 @@ df = df_all[mask]
 
 # --- Header & KPIs -----------------------------------------------------------------------------------
 
-st.title(":material/clinical_notes: Friends & Family Test — JEV analysis")
+st.title(":material/clinical_notes: Friends & Family Test — Jev")
 st.caption(f"{len(df):,} of {len(df_all):,} reviews · source: data_v4.csv")
 
 n = max(len(df), 1)
