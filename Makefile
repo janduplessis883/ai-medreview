@@ -30,6 +30,12 @@ gsheet:
 data:
 	@python ai_medreview/data_v2.py
 
+data4:
+	@python -m ai_medreview.data_v4
+
+data4_sample:
+	@python -m ai_medreview.data_v4 --sample 5
+
 
 data_old:
 	@python ai_medreview/data.py
