@@ -6,12 +6,14 @@ Run:  streamlit run streamlitapp4.py
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
 
-from ai_medreview.params import DATA_PATH
-
-DATA_FILE = f"{DATA_PATH}/data_v4.csv"
+# Resolve relative to this file so the app works both locally and on
+# Streamlit Cloud (params.DATA_PATH is home-directory based and local-only).
+DATA_FILE = str(Path(__file__).parent / "ai_medreview" / "data" / "data_v4.csv")
 
 SENTIMENTS = ["Positive", "Neutral or Mixed", "Negative"]
 SENTIMENT_COLORS = ["#2e9e5b", "#e8a13c", "#d64545"]
