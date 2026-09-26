@@ -180,6 +180,11 @@ with tab_overview:
             per_surgery = df["surgery"].value_counts()
             st.bar_chart(per_surgery, horizontal=True, x_label="Reviews")
 
+    with st.container(border=True):
+        st.subheader("Review categories")
+        category_counts = df["jev_primary_topic"].value_counts().sort_values()
+        st.bar_chart(category_counts, horizontal=True, x_label="Reviews")
+
 with tab_topics:
     col1, col2 = st.columns(2)
 
