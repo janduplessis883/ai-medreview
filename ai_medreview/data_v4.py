@@ -377,7 +377,8 @@ def load_google_sheet() -> pd.DataFrame:
     ]
 
     data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
-    data.sort_values(by="time", inplace=True)
+    # Preserve Google Sheet row order: incremental processing uses the CSV row
+    # count as the offset into this append-only source.
     data.reset_index(drop=True, inplace=True)
     return data
 
@@ -785,22 +786,20 @@ if __name__ == "__main__":
             "Export it before running this script."
         )
 
-    # Load new data from Google Sheet
+    # Load new data from Google Sheet in source row order.
     raw_data = load_google_sheet()
     logger.info("Google Sheet data loaded")
 
-    # Only reviews from 2026-01-01 onward
-    raw_data = filter_date_floor(raw_data)
-
-    # Stable dedup identity
-    raw_data["review_uid"] = raw_data.apply(make_review_uid, axis=1)
-
-    # Load already-processed data and keep only new rows
+    # Treat the number of saved CSV records as the last processed sheet-row
+    # offset. This intentionally does not use submission_id or review_uid.
     processed_data = load_local_data(output_path)
-    if not processed_data.empty:
-        data = raw_data[~raw_data["review_uid"].isin(processed_data["review_uid"])].copy()
-    else:
-        data = raw_data.copy()
+    start_row = 0 if args.sample else len(processed_data)
+    data = raw_data.iloc[start_row:].copy()
+
+    # Only reviews from 2026-01-01 onward; assign review UIDs after slicing for
+    # checkpointing and output consistency, not for incremental row selection.
+    data = filter_date_floor(data)
+    data["review_uid"] = data.apply(make_review_uid, axis=1)
     logger.info(f"🆕 New rows to process: {data.shape[0]}")
 
     if args.sample:
