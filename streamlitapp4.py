@@ -6,6 +6,7 @@ Run:  streamlit run streamlitapp4.py
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -180,11 +181,6 @@ with tab_overview:
             per_surgery = df["surgery"].value_counts()
             st.bar_chart(per_surgery, horizontal=True, x_label="Reviews")
 
-    with st.container(border=True):
-        st.subheader("Review categories")
-        category_counts = df["jev_primary_topic"].value_counts().sort_values()
-        st.bar_chart(category_counts, horizontal=True, x_label="Reviews")
-
 with tab_topics:
     col1, col2 = st.columns(2)
 
@@ -248,6 +244,7 @@ with tab_alerts:
 
     with st.container(horizontal=True):
         st.metric("Urgency ≥ 2", f"{(alerts['jev_urgency'] >= 2).sum():,}", border=True)
+        st.metric("Actionability ≥ 2", f"{(alerts['jev_actionability'] >= 2).sum():,}", border=True)
         st.metric(
             "Clinical safety",
             f"{alerts['jev_clinical_safety_concern'].sum():,}",
@@ -308,6 +305,7 @@ with tab_browser:
         "Search reviews",
         placeholder="e.g. parking, blood test, rude …",
         label_visibility="collapsed",
+        icon=":material/search:",
     )
     browser = df
     if search.strip():
@@ -326,6 +324,9 @@ with tab_browser:
                 "jev_staff_group",
                 "jev_actionability",
                 "jev_urgency",
+                "jev_dignity_or_inclusion_concern",
+                "jev_clinical_safety_concern",
+                "jev_leaving_risk",
             ]
         ],
         hide_index=True,
@@ -340,6 +341,11 @@ with tab_browser:
             "jev_staff_group": "Staff group",
             "jev_actionability": st.column_config.NumberColumn("Action", format="%d"),
             "jev_urgency": st.column_config.NumberColumn("Urgency", format="%d"),
+            "jev_dignity_or_inclusion_concern": st.column_config.CheckboxColumn(
+                "Inclusion / dignity"
+            ),
+            "jev_clinical_safety_concern": st.column_config.CheckboxColumn("Safety"),
+            "jev_leaving_risk": st.column_config.CheckboxColumn("Leaving risk"),
         },
     )
 
@@ -370,3 +376,7 @@ with tab_browser:
                 st.write(f"Clinical safety: {'⚠️' if row['jev_clinical_safety_concern'] else '—'} ({row['jev_clinical_safety_score']:.2f})")
                 st.write(f"Dignity/inclusion: {'⚠️' if row['jev_dignity_or_inclusion_concern'] else '—'} ({row['jev_dignity_or_inclusion_score']:.2f})")
                 st.write(f"Leaving risk: {'⚠️' if row['jev_leaving_risk'] else '—'} ({row['jev_leaving_risk_score']:.2f})")
+
+            jev_fields = [column for column in browser.columns if column.startswith("jev_")]
+            with st.expander("Complete Jev output (JSON)"):
+                st.json(json.loads(row[jev_fields].to_json()))
