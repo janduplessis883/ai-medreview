@@ -9,8 +9,8 @@ Differences from data_v2.py:
   question answering are removed. Topic classification AND sentiment are done
   by Jev (typesafe.ai) in a single call per review, including actionability,
   urgency and safety/inclusion scores with confidences.
-- Dedup uses a stable `review_uid` hash (time + surgery + raw text) instead of
-  fragile row-index matching.
+- Incremental processing uses the original Google Sheet row number and a
+  separate cursor, including rows intentionally skipped for missing/short text.
 - Output is written to data_v4.csv. data_v2.csv and the Streamlit app are
   untouched.
 
@@ -30,7 +30,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from colorama import Fore, init
+from colorama import init
 from nlpretext import Preprocessor
 from nlpretext.basic.preprocess import (
     normalize_whitespace,
@@ -64,7 +64,6 @@ DATE_FLOOR = "2026-01-01"  # only process reviews submitted on/after this date
 MIN_WORDS = 8  # combined reviews shorter than this are dropped
 OUTPUT_CSV = f"{DATA_PATH}/data_v4.csv"
 CHECKPOINT_CSV = f"{DATA_PATH}/data_v4_checkpoint.csv"
-
 JEV_MODEL = "jev-latest"
 JEV_TIMEOUT = 30.0
 JEV_MAX_RETRIES = 2
@@ -360,8 +359,7 @@ def load_google_sheet() -> pd.DataFrame:
         sheet_url="https://docs.google.com/spreadsheets/d/1c-811fFJYT9ulCneTZ7Z8b4CK4feEDRheR0Zea5--d0/edit#gid=0",
         sheet_id=0,
     )
-    data = sh.gsheet_to_df()
-    data.columns = [
+    columns = [
         "submission_id",
         "respondent-id",
         "time",
@@ -375,10 +373,19 @@ def load_google_sheet() -> pd.DataFrame:
         "campaign_rating",
         "campaign_freetext",
     ]
+    values = sh.sheet_instance.get_all_values()
+    rows = [
+        (row[: len(columns)] + [""] * max(0, len(columns) - len(row)))
+        for row in values[1:]
+    ]
+    data = pd.DataFrame(rows, columns=columns)
+    # Google Sheets row 1 contains headers; data rows therefore start at row 2.
+    data["source_sheet_row"] = np.arange(2, len(data) + 2)
 
-    data["time"] = pd.to_datetime(data["time"], format="%Y-%m-%d %H:%M:%S")
-    # Preserve Google Sheet row order: incremental processing uses the CSV row
-    # count as the offset into this append-only source.
+    data["time"] = pd.to_datetime(
+        data["time"], format="%Y-%m-%d %H:%M:%S", errors="coerce"
+    )
+    # Preserve source row order and blank rows so sheet row numbers stay exact.
     data.reset_index(drop=True, inplace=True)
     return data
 
@@ -717,7 +724,13 @@ def concat_save_final_df(
 ) -> None:
     logger.info(f"💾 Concat Dataframes to {output_path}")
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
-    combined_data.drop_duplicates(subset=["review_uid"], keep="first", inplace=True)
+    if "source_sheet_row" in combined_data.columns:
+        has_source_row = combined_data["source_sheet_row"].notna()
+        legacy_rows = combined_data[~has_source_row]
+        indexed_rows = combined_data[has_source_row].drop_duplicates(
+            subset=["source_sheet_row"], keep="first"
+        )
+        combined_data = pd.concat([legacy_rows, indexed_rows], ignore_index=True)
     combined_data.sort_values(by="time", inplace=True, ascending=True)
     combined_data.to_csv(output_path, encoding="utf-8", index=False)
     print(f"💾 Output saved to: {output_path}")
@@ -726,9 +739,30 @@ def concat_save_final_df(
         os.remove(checkpoint_path)
 
 
+def load_progress(path: str) -> int | None:
+    """Return the last fully handled Google Sheet row, if a cursor exists."""
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as progress_file:
+        return int(json.load(progress_file)["last_completed_sheet_row"])
+
+
+def save_progress(path: str, last_completed_sheet_row: int) -> None:
+    """Atomically persist the Google Sheet row cursor."""
+    temporary_path = f"{path}.tmp"
+    with open(temporary_path, "w", encoding="utf-8") as progress_file:
+        json.dump(
+            {"last_completed_sheet_row": int(last_completed_sheet_row)},
+            progress_file,
+        )
+        progress_file.write("\n")
+    os.replace(temporary_path, path)
+
+
 # --- Main --------------------------------------------------------------------------------------------
 
 OUTPUT_COLUMNS = [
+    "source_sheet_row",
     "submission_id",
     "respondent-id",
     "time",
@@ -786,21 +820,50 @@ if __name__ == "__main__":
             "Export it before running this script."
         )
 
-    # Load new data from Google Sheet in source row order.
+    # Load the sheet with original row numbers, including blank rows.
     raw_data = load_google_sheet()
     logger.info("Google Sheet data loaded")
 
-    # Treat the number of saved CSV records as the last processed sheet-row
-    # offset. This intentionally does not use submission_id or review_uid.
     processed_data = load_local_data(output_path)
-    start_row = 0 if args.sample else len(processed_data)
-    data = raw_data.iloc[start_row:].copy()
+    progress_path = output_path.replace(".csv", "_progress.json")
+    last_completed_row = None if args.sample else load_progress(progress_path)
 
-    # Only reviews from 2026-01-01 onward; assign review UIDs after slicing for
-    # checkpointing and output consistency, not for incremental row selection.
-    data = filter_date_floor(data)
+    if not args.sample and last_completed_row is None:
+        if not processed_data.empty:
+            # The legacy output has no source row mapping. Treat the current
+            # sheet as the migration baseline, so historical rows are not
+            # re-analyzed; subsequent appended rows are tracked exactly.
+            last_completed_row = (
+                int(raw_data["source_sheet_row"].max()) if len(raw_data) else 1
+            )
+            logger.warning(
+                "No row cursor found for the legacy output; initializing at "
+                f"the current last sheet row ({last_completed_row})."
+            )
+        else:
+            last_completed_row = 1  # header row; first Google Sheet data row is 2
+
+    if args.sample:
+        source_rows = raw_data.copy()
+    else:
+        processed_sheet_rows = set()
+        if "source_sheet_row" in processed_data.columns:
+            processed_sheet_rows = set(
+                pd.to_numeric(processed_data["source_sheet_row"], errors="coerce")
+                .dropna()
+                .astype(int)
+            )
+        source_rows = raw_data[
+            (raw_data["source_sheet_row"] > last_completed_row)
+            & ~raw_data["source_sheet_row"].isin(processed_sheet_rows)
+        ].copy()
+
+    data = filter_date_floor(source_rows)
     data["review_uid"] = data.apply(make_review_uid, axis=1)
-    logger.info(f"🆕 New rows to process: {data.shape[0]}")
+    logger.info(
+        f"🆕 New sheet rows to process: {len(source_rows)}; "
+        f"eligible by date: {data.shape[0]}"
+    )
 
     if args.sample:
         # Oversample so the 8-word filter still leaves ~N reviews.
@@ -808,15 +871,21 @@ if __name__ == "__main__":
             n=min(args.sample * 5, len(data)), random_state=42
         ).copy()
 
+    batch_last_row = (
+        int(source_rows["source_sheet_row"].max()) if len(source_rows) else None
+    )
+    progress_saved = False
+
     if data.shape[0] != 0:
         # Combine free_text + do_better into a single review
         data["review"] = data.apply(combine_review, axis=1)
         data = data[data["review"].str.strip() != ""].copy()
 
-        data = add_rating_score(data)
-        data = anonymize_reviews(data)
-        data = preprocess_reviews(data)
-        data = drop_short_reviews(data)
+        if not data.empty:
+            data = add_rating_score(data)
+            data = anonymize_reviews(data)
+            data = preprocess_reviews(data)
+            data = drop_short_reviews(data)
 
         if args.sample:
             data = data.head(args.sample).copy()
@@ -834,14 +903,22 @@ if __name__ == "__main__":
             concat_save_final_df(
                 processed_data, data, output_path, checkpoint_path
             )
+            if not args.sample and batch_last_row is not None:
+                save_progress(progress_path, batch_last_row)
+                progress_saved = True
 
             if push_to_git:
                 do_git_merge()  # Push everything to GitHub (master)
                 logger.info("👍 Pushed to GitHub - Master Branch")
             logger.info("🎉 Successful Run completed")
         else:
-            print(f"{Fore.RED}[*] No reviews >= {MIN_WORDS} words to add - terminated.")
-            logger.error("❌ Make Data v4 terminated - all new rows too short")
+            logger.info("No analyzable reviews in the new sheet rows; rows are skipped.")
     else:
-        print(f"{Fore.RED}[*] No New rows to add - terminated.")
-        logger.error("❌ Make Data v4 terminated - No new rows")
+        logger.info("No eligible new sheet rows to analyze.")
+
+    if not args.sample and not progress_saved:
+        # Persist only after analysis output has been saved, or after all rows
+        # in the batch were deliberately skipped (date, empty, or short text).
+        cursor_to_save = batch_last_row or last_completed_row
+        save_progress(progress_path, cursor_to_save)
+        logger.info(f"Saved sheet row cursor at {cursor_to_save}.")
