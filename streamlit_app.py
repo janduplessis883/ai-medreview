@@ -179,7 +179,7 @@ with tab_overview:
         with st.container(border=True):
             st.subheader("Reviews per surgery")
             per_surgery = df["surgery"].value_counts()
-            st.bar_chart(per_surgery, horizontal=True, x_label="Reviews")
+            st.bar_chart(per_surgery, horizontal=True, x_label="Reviews", color="#007185")
 
 with tab_topics:
     col1, col2 = st.columns(2)
@@ -194,7 +194,7 @@ with tab_topics:
         with st.container(border=True):
             st.subheader("Staff groups mentioned")
             staff_counts = df["jev_staff_group"].value_counts()
-            st.bar_chart(staff_counts, horizontal=True, x_label="Reviews")
+            st.bar_chart(staff_counts, horizontal=True, x_label="Reviews", color="#565959")
 
     with st.container(border=True):
         st.subheader("Topic × sentiment")
