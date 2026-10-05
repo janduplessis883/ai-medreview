@@ -61,7 +61,7 @@ logger.add("/tmp/ai_medreview_v4_debug.log", rotation="5000 KB")
 # --- Configuration ---------------------------------------------------------------------------------
 
 DATE_FLOOR = "2026-01-01"  # only process reviews submitted on/after this date
-MIN_WORDS = 8  # combined reviews shorter than this are dropped
+MIN_WORDS = 6  # combined reviews shorter than this are dropped
 OUTPUT_CSV = f"{DATA_PATH}/data_v4.csv"
 CHECKPOINT_CSV = f"{DATA_PATH}/data_v4_checkpoint.csv"
 JEV_MODEL = "jev-latest"
