@@ -37,3 +37,15 @@ def test_review_scores_use_their_matching_confidence_fields():
         "Actionability: 2 / 3 (confidence 0.82)",
         "Urgency: 1 / 3 (confidence 0.73)",
     ]
+
+
+def test_review_score_progress_bar_uses_zero_to_three_scale():
+    options_builder = getattr(presentation, "review_score_progress_options", None)
+
+    assert options_builder is not None, "progress-bar options builder is missing"
+    assert options_builder("Actionability") == {
+        "label": "Actionability",
+        "min_value": 0,
+        "max_value": 3,
+        "format": "%d",
+    }

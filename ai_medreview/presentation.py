@@ -38,3 +38,12 @@ def format_review_scores(row: Mapping[str, float]) -> list[str]:
             row["jev_urgency_confidence"],
         ),
     ]
+
+
+def review_score_progress_options(label: str) -> dict[str, object]:
+    return {
+        "label": label,
+        "min_value": 0,
+        "max_value": 3,
+        "format": "%d",
+    }

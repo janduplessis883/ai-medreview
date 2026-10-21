@@ -12,7 +12,11 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from ai_medreview.presentation import format_flag_score, format_review_scores
+from ai_medreview.presentation import (
+    format_flag_score,
+    format_review_scores,
+    review_score_progress_options,
+)
 
 # Resolve relative to this file so the app works both locally and on
 # Streamlit Cloud (params.DATA_PATH is home-directory based and local-only).
@@ -342,8 +346,12 @@ with tab_browser:
             "jev_sentiment": "Sentiment",
             "jev_primary_topic": "Topic",
             "jev_staff_group": "Staff group",
-            "jev_actionability": st.column_config.NumberColumn("Action", format="%d"),
-            "jev_urgency": st.column_config.NumberColumn("Urgency", format="%d"),
+            "jev_actionability": st.column_config.ProgressColumn(
+                **review_score_progress_options("Actionability")
+            ),
+            "jev_urgency": st.column_config.ProgressColumn(
+                **review_score_progress_options("Urgency")
+            ),
             "jev_dignity_or_inclusion_concern": st.column_config.CheckboxColumn(
                 "Inclusion / dignity"
             ),
