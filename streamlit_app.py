@@ -12,6 +12,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from ai_medreview.data_cleaning import deduplicate_reviews
 from ai_medreview.presentation import (
     format_flag_score,
     format_review_scores,
@@ -72,7 +73,7 @@ div[data-testid="stChatMessage"] div[data-testid="stAvatar"][aria-label="user"] 
 
 @st.cache_data(ttl="5m", show_spinner="Loading data_v4.csv …")
 def load_data() -> pd.DataFrame:
-    df = pd.read_csv(DATA_FILE)
+    df = deduplicate_reviews(pd.read_csv(DATA_FILE))
     df["time"] = pd.to_datetime(df["time"], errors="coerce")
     df["month"] = df["time"].dt.to_period("M").dt.to_timestamp()
     df["jev_secondary_topics"] = df["jev_secondary_topics"].fillna("")
