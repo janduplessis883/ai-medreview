@@ -12,6 +12,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from ai_medreview.presentation import format_flag_score, format_review_scores
+
 # Resolve relative to this file so the app works both locally and on
 # Streamlit Cloud (params.DATA_PATH is home-directory based and local-only).
 DATA_FILE = str(Path(__file__).parent / "ai_medreview" / "data" / "data_v4.csv")
@@ -20,7 +22,7 @@ SENTIMENTS = ["Positive", "Neutral or Mixed", "Negative"]
 SENTIMENT_COLORS = ["#2e9e5b", "#e8a13c", "#d64545"]
 
 st.set_page_config(
-    page_title="FFT review analysis v4",
+    page_title="AI_MedReview",
     page_icon=":material/clinical_notes:",
     layout="wide",
 )
@@ -57,6 +59,7 @@ df_all = load_data()
 
 with st.sidebar:
     st.header(":material/filter_alt: Filters")
+    st.logo('images/symbol-white.png', size='large')
 
     min_date = df_all["time"].min().date()
     max_date = df_all["time"].max().date()
@@ -97,9 +100,9 @@ if alerts_only:
 df = df_all[mask]
 
 # --- Header & KPIs -----------------------------------------------------------------------------------
-
-st.title(":material/clinical_notes: AI MedReview (Analysis with Jev)")
-st.caption(f"{len(df):,} of {len(df_all):,} reviews · source: data_v4.csv")
+st.image('images/header_white.png', width=350)
+st.caption(f"{len(df):,} of {len(df_all):,} reviews · source: data_v4.csv - FFT Analysis using TypeSafe SystemOne AI (model Jev)")
+st.caption("")
 
 n = max(len(df), 1)
 monthly_counts = df.groupby("month").size().sort_index()
@@ -353,29 +356,55 @@ with tab_browser:
         row = browser.iloc[event.selection.rows[0]]
         with st.container(border=True):
             st.subheader("Review detail")
-            st.markdown(f"> {row['review']}")
+            st.markdown(f"#### {row['review']}")
             st.caption(
                 f"{row['time']:%d %b %Y %H:%M} · {row['surgery']} · "
                 f"rating {row['rating_score']:.0f}/5 · {row['review_len']} words"
             )
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.markdown("**Classification**")
-                st.write(f"Sentiment: {row['jev_sentiment']} ({row['jev_sentiment_confidence']:.2f})")
-                st.write(f"Topic: {row['jev_primary_topic']} ({row['jev_primary_topic_confidence']:.2f})")
-                if row["jev_secondary_topics"]:
-                    st.write(f"Secondary: {row['jev_secondary_topics']}")
-                st.write(f"Staff: {row['jev_staff_group']} ({row['jev_staff_group_confidence']:.2f})")
-            with col2:
-                st.markdown("**Scores** (0-indexed)")
-                st.write(f"Sentiment strength: {row['jev_sentiment_strength']:.0f} / 4")
-                st.write(f"Actionability: {row['jev_actionability']:.0f} / 3")
-                st.write(f"Urgency: {row['jev_urgency']:.0f} / 3")
-            with col3:
-                st.markdown("**Flags**")
-                st.write(f"Clinical safety: {'⚠️' if row['jev_clinical_safety_concern'] else '—'} ({row['jev_clinical_safety_score']:.2f})")
-                st.write(f"Dignity/inclusion: {'⚠️' if row['jev_dignity_or_inclusion_concern'] else '—'} ({row['jev_dignity_or_inclusion_score']:.2f})")
-                st.write(f"Leaving risk: {'⚠️' if row['jev_leaving_risk'] else '—'} ({row['jev_leaving_risk_score']:.2f})")
+            topic = (
+                f"Topic: {row['jev_primary_topic']} "
+                f"({row['jev_primary_topic_confidence']:.2f})"
+            )
+            if row["jev_secondary_topics"]:
+                topic += f" · Secondary: {row['jev_secondary_topics']}"
+
+            review_summary = pd.DataFrame(
+                {
+                    "Classification": [
+                        f"Sentiment: {row['jev_sentiment']} "
+                        f"({row['jev_sentiment_confidence']:.2f})",
+                        topic,
+                        f"Staff: {row['jev_staff_group']} "
+                        f"({row['jev_staff_group_confidence']:.2f})",
+                    ],
+                    "Scores (0-indexed)": format_review_scores(row),
+                    "Flags": [
+                        format_flag_score(
+                            "Clinical safety",
+                            row["jev_clinical_safety_concern"],
+                            row["jev_clinical_safety_score"],
+                        ),
+                        format_flag_score(
+                            "Dignity/inclusion",
+                            row["jev_dignity_or_inclusion_concern"],
+                            row["jev_dignity_or_inclusion_score"],
+                        ),
+                        format_flag_score(
+                            "Leaving risk",
+                            row["jev_leaving_risk"],
+                            row["jev_leaving_risk_score"],
+                        ),
+                    ],
+                }
+            )
+            st.dataframe(
+                review_summary,
+                hide_index=True,
+                column_config={
+                    column: st.column_config.TextColumn(width="large")
+                    for column in review_summary.columns
+                },
+            )
 
             jev_fields = [column for column in browser.columns if column.startswith("jev_")]
             with st.expander("Complete Jev output (JSON)"):
