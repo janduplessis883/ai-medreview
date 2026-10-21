@@ -11,25 +11,9 @@ import seaborn as sns
 from fpdf import FPDF
 from wordcloud import WordCloud
 import streamlit as st
-from groq import Groq
 
-# Initialize the Groq client
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-
-
-@st.cache_resource
-def ask_groq(prompt: str, model: str = "openai/gpt-oss-120b"):
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-        model=model,
-    )
-
-    return chat_completion.choices[0].message.content
+# Use the unified LLM client (supports both external LLM and Groq)
+from llm_client import ask_groq
 
 
 def generate_sns_countplot(df, column, filename="reports/rating.png"):

@@ -18,6 +18,9 @@ from ai_medreview.presentation import (
     review_score_progress_options,
 )
 
+# Import the LLM client for external LLM integration
+from ai_medreview.llm_client import ask_llm
+
 # Resolve relative to this file so the app works both locally and on
 # Streamlit Cloud (params.DATA_PATH is home-directory based and local-only).
 DATA_FILE = str(Path(__file__).parent / "ai_medreview" / "data" / "data_v4.csv")
@@ -29,6 +32,38 @@ st.set_page_config(
     page_title="AI_MedReview",
     page_icon=":material/clinical_notes:",
     layout="wide",
+)
+
+# Custom CSS for chat avatar colors
+st.markdown(
+    """
+<style>
+/* User/Human avatar background color */
+.stChatMessage[data-testid="chatAvatarIcon-user"] svg,
+.stChatMessage[data-testid="chatAvatarIcon-user"] .stAvatar {
+    background-color: #306f83 !important;
+}
+
+/* Alternative selector for user avatar */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) [data-testid="stAvatar"] {
+    background-color: #306f83 !important;
+}
+
+/* Target the user message avatar circle */
+.stChatMessage[data-testid="stChatMessage"]:has([aria-label="user"]) [data-testid="stAvatar"],
+.stChatMessage[aria-label="user"] [data-testid="stAvatar"],
+div[data-testid="stChatMessage"] div[data-testid="stAvatar"][aria-label="user"] {
+    background-color: #306f83 !important;
+}
+
+/* More specific targeting for user avatar */
+.st-emotion-cache-1c7y2kd[aria-label="user"],
+.st-emotion-cache-1c7y2kd[data-testid="stAvatar"][aria-label="user"] {
+    background-color: #306f83 !important;
+}
+</style>
+""",
+    unsafe_allow_html=True,
 )
 
 
@@ -140,12 +175,13 @@ with st.container(horizontal=True):
 
 # --- Tabs --------------------------------------------------------------------------------------------
 
-tab_overview, tab_topics, tab_alerts, tab_browser = st.tabs(
+tab_overview, tab_topics, tab_alerts, tab_browser, tab_chat = st.tabs(
     [
         ":material/monitoring: Overview",
         ":material/category: Topics & staff",
         ":material/notification_important: Alerts",
         ":material/search: Review browser",
+        ":material/chat: Chat with AI",
     ]
 )
 
@@ -417,3 +453,105 @@ with tab_browser:
             jev_fields = [column for column in browser.columns if column.startswith("jev_")]
             with st.expander("Complete Jev output (JSON)"):
                 st.json(json.loads(row[jev_fields].to_json()))
+
+
+# --- Chat with AI tab --------------------------------------------------------------------------------
+
+with tab_chat:
+    st.header(":material/chat: Chat with AI about the reviews")
+    st.caption(
+        "Ask questions about the filtered reviews. The AI will consider the selected reviews as context. "
+        "Use the slider to control how many reviews are included if the dataset is large."
+    )
+
+    # Check if there are any reviews to chat about
+    if len(df) == 0:
+        st.warning("No reviews match the current filters. Adjust the filters in the sidebar to chat about reviews.")
+    else:
+        # Slider to control how many reviews to include in context
+        max_reviews = len(df)
+        # Default to using all reviews if under 50, otherwise use 50
+        default_reviews = min(max_reviews, 50)
+
+        num_reviews = st.slider(
+            "Number of reviews to include in context",
+            min_value=1,
+            max_value=max_reviews,
+            value=default_reviews,
+            step=1,
+            help=f"Adjust how many of the {max_reviews} filtered reviews the AI should consider. "
+                 "Lower values make responses faster but less comprehensive.",
+        )
+
+        # Select the most recent reviews (or all if under the limit)
+        context_reviews = df.head(num_reviews)
+
+        # Build context string from reviews
+        context_parts = []
+        for idx, row in context_reviews.iterrows():
+            review_text = row["review"]
+            surgery = row["surgery"]
+            sentiment = row["jev_sentiment"]
+            topic = row["jev_primary_topic"]
+            rating = row["rating_score"]
+
+            context_parts.append(
+                f"Review from {surgery} (Rating: {rating}/5, Sentiment: {sentiment}, Topic: {topic}):\n"
+                f"{review_text}"
+            )
+
+        context = "\n\n---\n\n".join(context_parts)
+
+        # Initialize chat history
+        if "chat_messages" not in st.session_state:
+            st.session_state.chat_messages = []
+
+        # Display chat messages
+        for message in st.session_state.chat_messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        # Chat input
+        if prompt := st.chat_input("Ask a question about the reviews..."):
+            # Add user message to history
+            st.session_state.chat_messages.append({"role": "user", "content": prompt})
+
+            # Display user message
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            # Build system prompt with context
+            system_prompt = (
+                "You are a helpful AI assistant analyzing patient feedback from GP surgeries. "
+                "You have been provided with a set of patient reviews as context. "
+                "Use this context to answer questions about the reviews. "
+                "If the answer cannot be determined from the context, say so. "
+                "Be concise and focus on insights from the reviews.\n\n"
+                f"Context ({num_reviews} reviews):\n{context}"
+            )
+
+            # Get AI response
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    try:
+                        response = ask_llm(
+                            prompt=prompt,
+                            system_prompt=system_prompt,
+                            temperature=0.7,
+                        )
+                        st.markdown(response)
+                        # Add assistant response to history
+                        st.session_state.chat_messages.append(
+                            {"role": "assistant", "content": response}
+                        )
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+                        st.info(
+                            "Make sure the LLM API is configured correctly in .streamlit/secrets.toml. "
+                            "You may need to set LLM_API_KEY and LLM_BASE_URL."
+                        )
+
+        # Clear chat button
+        if st.button("Clear Chat", key="clear_chat"):
+            st.session_state.chat_messages = []
+            st.rerun()

@@ -12,37 +12,16 @@ import seaborn as sns
 import streamlit as st
 import streamlit_shadcn_ui as ui
 from matplotlib.patches import Patch
-from openai import OpenAI
 from wordcloud import WordCloud
-from groq import Groq
 import json
 import re
 
-# Initialize OpenAI API
-# client = OpenAI()
+# Use the unified LLM client (supports both external LLM and Groq)
+from llm_client import ask_groq
 
 # Loading my OWN FUNCTIONS
 from utils import *
 from reports import *
-
-# Initialize the Groq client
-client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-
-
-# Simple function to get a response from Groq
-@st.cache_resource
-def ask_groq(prompt: str, model: str = "openai/gpt-oss-120b"):
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-        model=model,
-    )
-
-    return chat_completion.choices[0].message.content
 
 
 st.set_page_config(page_title="AI MedReview")
