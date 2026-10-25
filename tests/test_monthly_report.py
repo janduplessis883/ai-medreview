@@ -554,17 +554,19 @@ def test_streamlit_app_generates_download_from_monthly_report_tab() -> None:
 
 
 def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
+    package_lines = (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
     packages = {
         line.strip()
-        for line in (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
+        for line in package_lines
         if line.strip() and not line.lstrip().startswith("#")
     }
 
+    assert all(line.strip() and not line.lstrip().startswith("#") for line in package_lines)
     assert {
         "libcairo2",
         "libffi-dev",
-        "libglib2.0-0",
-        "libgdk-pixbuf2.0-0",
+        "libglib2.0-0t64",
+        "libgdk-pixbuf-2.0-0",
         "libharfbuzz-subset0",
         "libpango-1.0-0",
         "libpangoft2-1.0-0",
