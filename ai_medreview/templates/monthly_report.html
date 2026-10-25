@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ surgery }} - {{ month_label }} review report</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm;
+      @bottom-right {
+        color: #64748b;
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: Arial, sans-serif;
+        font-size: 8pt;
+      }
+    }
+
+    :root {
+      --navy: #123247;
+      --teal: #0f7886;
+      --orange: #f28c28;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #dbe4e9;
+      --wash: #f5f8fa;
+      --blue-wash: #eef6f8;
+      --warn-wash: #fff6eb;
+      --risk: #9f2d3f;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      margin: 0;
+      padding: 0;
+    }
+
+    body { counter-reset: review; }
+
+    .report-footer {
+      bottom: -13mm;
+      color: var(--muted);
+      font-size: 8pt;
+      left: 0;
+      position: fixed;
+    }
+
+    .hero {
+      background: var(--navy);
+      color: white;
+      margin: -18mm -16mm 11mm;
+      padding: 17mm 16mm 12mm;
+    }
+
+    .eyebrow {
+      color: #9bd6de;
+      font-size: 8pt;
+      font-weight: bold;
+      letter-spacing: 1.2pt;
+      margin: 0 0 5mm;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 26pt;
+      letter-spacing: -0.5pt;
+      line-height: 1.08;
+      margin: 0 0 3mm;
+    }
+
+    .hero-month {
+      color: #d9eef1;
+      font-size: 14pt;
+      margin: 0 0 7mm;
+    }
+
+    .hero-meta {
+      border-top: 0.3mm solid rgba(255, 255, 255, 0.24);
+      display: table;
+      padding-top: 4mm;
+      width: 100%;
+    }
+
+    .hero-meta > div { display: table-cell; width: 33.333%; }
+    .meta-label { color: #9bd6de; display: block; font-size: 7.5pt; text-transform: uppercase; }
+    .meta-value { display: block; font-size: 11pt; font-weight: bold; margin-top: 1mm; }
+
+    section { margin: 0 0 10mm; }
+
+    h2 {
+      color: var(--navy);
+      font-size: 15pt;
+      line-height: 1.2;
+      margin: 0 0 2mm;
+    }
+
+    .section-intro { color: var(--muted); margin: 0 0 5mm; }
+
+    .rating-grid, .summary-grid {
+      border-collapse: separate;
+      border-spacing: 2.5mm;
+      margin: -2.5mm;
+      table-layout: fixed;
+      width: calc(100% + 5mm);
+    }
+
+    .rating-card, .summary-card {
+      background: var(--wash);
+      border: 0.25mm solid var(--line);
+      border-radius: 2mm;
+      padding: 4mm;
+      vertical-align: top;
+    }
+
+    .rating-label, .card-label { color: var(--muted); font-size: 8pt; font-weight: bold; text-transform: uppercase; }
+    .rating-number { color: var(--navy); font-size: 20pt; font-weight: bold; line-height: 1; margin: 2mm 0 1mm; }
+    .rating-stars { color: var(--orange); font-size: 8.5pt; font-weight: bold; }
+
+    .bar-track {
+      background: #e4eaee;
+      border-radius: 2mm;
+      height: 2mm;
+      margin-top: 2.5mm;
+      overflow: hidden;
+    }
+
+    .bar-fill { background: var(--teal); height: 100%; }
+
+    .card-value { color: var(--navy); font-size: 17pt; font-weight: bold; margin: 2mm 0; }
+    .card-copy { color: var(--muted); font-size: 8.5pt; margin: 0; }
+
+    .observation {
+      background: var(--blue-wash);
+      border-left: 1mm solid var(--teal);
+      margin: 5mm 0;
+      padding: 3.5mm 4mm;
+    }
+
+    .observation p { margin: 0 0 1.5mm; }
+    .observation p:last-child { margin-bottom: 0; }
+
+    .distribution { margin-top: 4mm; }
+    .distribution-row, .topic-row {
+      border-bottom: 0.2mm solid var(--line);
+      display: table;
+      padding: 2.5mm 0;
+      width: 100%;
+    }
+
+    .distribution-row:last-child, .topic-row:last-child { border-bottom: 0; }
+    .row-label { display: table-cell; font-weight: bold; width: 53%; }
+    .row-value { color: var(--muted); display: table-cell; text-align: right; width: 47%; }
+
+    .page-break { break-before: page; }
+
+    .review-card {
+      border: 0.25mm solid var(--line);
+      border-radius: 2mm;
+      break-inside: avoid;
+      counter-increment: review;
+      margin: 0 0 4mm;
+      overflow-wrap: anywhere;
+      padding: 4mm;
+    }
+
+    .review-topline { color: var(--muted); display: table; font-size: 8pt; width: 100%; }
+    .review-date { display: table-cell; }
+    .review-rating { color: var(--orange); display: table-cell; font-weight: bold; text-align: right; }
+    .review-text { color: var(--ink); font-size: 10.5pt; margin: 3mm 0; white-space: pre-wrap; }
+    .review-meta { color: var(--muted); font-size: 8pt; }
+
+    .badge {
+      background: var(--blue-wash);
+      border-radius: 3mm;
+      color: var(--teal);
+      display: inline-block;
+      font-size: 7.5pt;
+      font-weight: bold;
+      margin: 2.5mm 1.5mm 0 0;
+      padding: 1.2mm 2.5mm;
+    }
+
+    .badge-risk { background: #fae9ec; color: var(--risk); }
+  </style>
+</head>
+<body>
+  <div class="report-footer">{{ surgery }} · {{ month_label }}</div>
+
+  <header class="hero">
+    <p class="eyebrow">AI MedReview · Monthly patient feedback</p>
+    <h1>{{ surgery }}</h1>
+    <p class="hero-month">{{ month_label }}</p>
+    <div class="hero-meta">
+      <div><span class="meta-label">Reviews</span><span class="meta-value">{{ total_reviews }}</span></div>
+      <div><span class="meta-label">Reporting period</span><span class="meta-value">{{ month_label }}</span></div>
+      <div><span class="meta-label">Generated</span><span class="meta-value">{{ generated_on }}</span></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Rating overview</h2>
+    <p class="section-intro">Friends and Family Test responses for this surgery and reporting month.</p>
+    <table class="rating-grid"><tr>
+      {% for rating in ratings %}
+      <td class="rating-card">
+        <div class="rating-label">{{ rating.label }}</div>
+        <div class="rating-number">{{ rating.count }}</div>
+        <div class="rating-stars">{{ rating.stars }} stars · {{ '%.1f'|format(rating.percentage) }}%</div>
+        <div class="bar-track"><div class="bar-fill" style="width: {{ rating.percentage }}%"></div></div>
+      </td>
+      {% endfor %}
+    </tr></table>
+  </section>
+
+  <section>
+    <h2>Classification summary</h2>
+    <p class="section-intro">A deterministic summary of the classifications assigned to this month's reviews.</p>
+    <table class="summary-grid"><tr>
+      <td class="summary-card">
+        <div class="card-label">Actionability</div>
+        <div class="card-value">{{ actionability.elevated_count }}</div>
+        <p class="card-copy">Moderate or high · {{ '%.1f'|format(actionability.elevated_percentage) }}%</p>
+      </td>
+      <td class="summary-card">
+        <div class="card-label">Urgency</div>
+        <div class="card-value">{{ urgency.elevated_count }}</div>
+        <p class="card-copy">Moderate or high · {{ '%.1f'|format(urgency.elevated_percentage) }}%</p>
+      </td>
+      <td class="summary-card">
+        <div class="card-label">Dignity and inclusion</div>
+        <div class="card-value">{{ dignity_inclusion.count }}</div>
+        <p class="card-copy">Flagged · {{ '%.1f'|format(dignity_inclusion.percentage) }}%</p>
+      </td>
+      <td class="summary-card">
+        <div class="card-label">Leaving risk</div>
+        <div class="card-value">{{ leaving_risk.count }}</div>
+        <p class="card-copy">Flagged · {{ '%.1f'|format(leaving_risk.percentage) }}%</p>
+      </td>
+    </tr></table>
+
+    <div class="observation">
+      <p>{{ actionability.summary }}</p>
+      <p>{{ urgency.summary }}</p>
+      <p>{{ dignity_inclusion.summary }}</p>
+      <p>{{ leaving_risk.summary }}</p>
+    </div>
+
+    <table class="summary-grid"><tr>
+      <td class="summary-card">
+        <div class="card-label">Actionability distribution</div>
+        <div class="distribution">
+          {% for item in actionability.distribution %}
+          <div class="distribution-row"><span class="row-label">{{ item.score }} · {{ item.label }}</span><span class="row-value">{{ item.count }} ({{ '%.1f'|format(item.percentage) }}%)</span></div>
+          {% endfor %}
+        </div>
+      </td>
+      <td class="summary-card">
+        <div class="card-label">Urgency distribution</div>
+        <div class="distribution">
+          {% for item in urgency.distribution %}
+          <div class="distribution-row"><span class="row-label">{{ item.score }} · {{ item.label }}</span><span class="row-value">{{ item.count }} ({{ '%.1f'|format(item.percentage) }}%)</span></div>
+          {% endfor %}
+        </div>
+      </td>
+    </tr></table>
+  </section>
+
+  <section>
+    <h2>Categories and themes</h2>
+    <p class="section-intro">{{ theme_summary }}</p>
+    {% for topic in topics %}
+    <div class="topic-row"><span class="row-label">{{ topic.label }}</span><span class="row-value">{{ topic.count }} reviews · {{ '%.1f'|format(topic.percentage) }}%</span></div>
+    {% endfor %}
+  </section>
+
+  <section class="page-break">
+    <h2>Review list</h2>
+    <p class="section-intro">All reviews for {{ surgery }} in {{ month_label }}, newest first.</p>
+    {% for review in reviews %}
+    <article class="review-card">
+      <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{{ review.rating_label }} · {% if review.stars %}{{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
+      <p class="review-text">{{ review.text }}</p>
+      <div class="review-meta">{{ review.topic }} · Actionability: {{ review.actionability.label }}{% if review.actionability.score is not none %} ({{ review.actionability.score }}){% endif %} · Urgency: {{ review.urgency.label }}{% if review.urgency.score is not none %} ({{ review.urgency.score }}){% endif %}</div>
+      {% if review.dignity_inclusion %}<span class="badge badge-risk">Dignity / inclusion concern</span>{% endif %}
+      {% if review.leaving_risk %}<span class="badge badge-risk">Leaving risk</span>{% endif %}
+    </article>
+    {% endfor %}
+  </section>
+</body>
+</html>

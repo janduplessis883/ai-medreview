@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
 import re
 import unicodedata
 
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 import pandas as pd
 
 
@@ -17,6 +19,7 @@ RATINGS = (
     ("Very poor", 1),
 )
 SCORE_LABELS = {0: "None", 1: "Low", 2: "Moderate", 3: "High"}
+TEMPLATE_DIRECTORY = Path(__file__).parent / "templates"
 
 
 def _month_period(month: str | pd.Period) -> pd.Period:
@@ -225,3 +228,29 @@ def safe_report_filename(surgery: str, month: str | pd.Period) -> str:
     )
     slug = re.sub(r"[^a-z0-9]+", "-", ascii_name.lower()).strip("-")
     return f"{slug or 'surgery'}-reviews-{_month_period(month)}.pdf"
+
+
+def render_report_html(context: dict[str, object]) -> str:
+    """Render a self-contained monthly report HTML document."""
+
+    environment = Environment(
+        loader=FileSystemLoader(TEMPLATE_DIRECTORY),
+        autoescape=select_autoescape(enabled_extensions=("html", "xml"), default=True),
+    )
+    return environment.get_template("monthly_report.html").render(**context)
+
+
+def generate_monthly_report_pdf(
+    reviews: pd.DataFrame,
+    surgery: str,
+    month: str | pd.Period,
+    generated_on: date | None = None,
+) -> bytes:
+    """Generate an in-memory PDF for a surgery's monthly reviews."""
+
+    from weasyprint import HTML
+
+    scoped = filter_report_reviews(reviews, surgery, month)
+    context = build_report_context(scoped, surgery, month, generated_on=generated_on)
+    html = render_report_html(context)
+    return HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).write_pdf()

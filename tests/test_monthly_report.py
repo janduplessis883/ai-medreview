@@ -4,10 +4,15 @@ import pandas as pd
 import pytest
 
 from datetime import date
+from io import BytesIO
+
+from pypdf import PdfReader
 
 from ai_medreview.monthly_report import (
     build_report_context,
     filter_report_reviews,
+    generate_monthly_report_pdf,
+    render_report_html,
     report_selection_key,
     safe_report_filename,
 )
@@ -196,3 +201,78 @@ def test_safe_report_filename_and_selection_key_are_stable() -> None:
         "Oak Medical Centre",
         "2026-10",
     )
+
+
+def test_render_report_html_contains_report_sections_and_ordered_reviews() -> None:
+    source = classified_reviews()
+    source.loc[source["review"] == "Thank you.", "review"] = (
+        "Use <script>alert('x')</script> & confirm"
+    )
+    reviews = filter_report_reviews(source, "Oak Medical Centre", "2026-10")
+    context = build_report_context(
+        reviews,
+        "Oak Medical Centre",
+        "2026-10",
+        generated_on=date(2026, 10, 25),
+    )
+
+    html = render_report_html(context)
+
+    assert "Oak Medical Centre" in html
+    assert "October 2026" in html
+    for label in (
+        "Very good",
+        "Good",
+        "Neither good nor poor",
+        "Poor",
+        "Very poor",
+        "Actionability",
+        "Urgency",
+        "Dignity and inclusion",
+        "Leaving risk",
+        "Review list",
+    ):
+        assert label in html
+    assert html.index("Very helpful reception team.") < html.index(
+        "The appointment process could be clearer."
+    )
+    assert "&lt;script&gt;alert" in html
+    assert "<script>alert" not in html
+    assert "&amp; confirm" in html
+    assert "http://" not in html
+    assert "https://" not in html
+
+
+def test_generate_monthly_report_pdf_contains_only_selected_surgery() -> None:
+    other_surgery = classified_reviews().iloc[[0]].copy()
+    other_surgery["surgery"] = "River Surgery"
+    other_surgery["review"] = "RIVER-SURGERY-UNIQUE-REVIEW"
+    source = pd.concat([classified_reviews(), other_surgery], ignore_index=True)
+
+    pdf_bytes = generate_monthly_report_pdf(
+        source,
+        "Oak Medical Centre",
+        "2026-10",
+        generated_on=date(2026, 10, 25),
+    )
+    extracted = "\n".join(
+        page.extract_text() or "" for page in PdfReader(BytesIO(pdf_bytes)).pages
+    )
+
+    assert pdf_bytes.startswith(b"%PDF")
+    assert len(pdf_bytes) > 5_000
+    assert "Oak Medical Centre" in extracted
+    assert "Very helpful reception team." in extracted
+    assert "RIVER-SURGERY-UNIQUE-REVIEW" not in extracted
+
+
+def test_generate_monthly_report_pdf_handles_long_unbroken_review() -> None:
+    source = classified_reviews().iloc[[0]].copy()
+    source["review"] = "A" * 2_000
+
+    pdf_bytes = generate_monthly_report_pdf(
+        source, "Oak Medical Centre", "2026-10"
+    )
+
+    assert pdf_bytes.startswith(b"%PDF")
+    assert len(PdfReader(BytesIO(pdf_bytes)).pages) >= 2
