@@ -226,6 +226,42 @@ def test_report_context_staff_sentiment_defaults_when_fields_are_missing() -> No
     assert context["staff_groups"] == []
 
 
+def test_people_and_sentiment_page_renders_summary_and_staff_cards() -> None:
+    context = build_report_context(
+        staff_sentiment_reviews(), "Oak Medical Centre", "2026-10"
+    )
+
+    html = render_report_html(context)
+
+    for expected in (
+        "People and sentiment",
+        "Positive",
+        "Neutral or Mixed",
+        "Negative",
+        "Overall sentiment",
+        "Average sentiment strength",
+        "Staff groups mentioned",
+        "GP",
+        "Receptionist",
+        "No specific staff mentioned",
+    ):
+        assert expected in html
+
+
+def test_people_and_sentiment_page_has_not_classified_fallback_in_pdf() -> None:
+    source = classified_reviews().drop(
+        columns=["jev_sentiment", "jev_sentiment_strength", "jev_staff_group"],
+        errors="ignore",
+    )
+    pdf_bytes = generate_monthly_report_pdf(source, "Oak Medical Centre", "2026-10")
+    reader = PdfReader(BytesIO(pdf_bytes))
+    extracted = "\n".join(page.extract_text() or "" for page in reader.pages)
+
+    assert len(reader.pages) >= 4
+    assert "People and sentiment" in extracted
+    assert "Not classified" in extracted
+
+
 def test_build_report_context_calculates_ratings_and_classifications() -> None:
     reviews = filter_report_reviews(
         classified_reviews(), "Oak Medical Centre", "2026-10"
