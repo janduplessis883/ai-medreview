@@ -9,6 +9,8 @@ setup(
     name="ai_medreview",
     description="Analysis of Friends and Family Test responses received from individuals",
     packages=find_packages(),  # It will find all packages in your directory
+    include_package_data=True,
+    package_data={"ai_medreview": ["templates/*.html"]},
     install_requires=requirements,  # This is the key line to install dependencies
     version="2.0.1",
 )

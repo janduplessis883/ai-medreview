@@ -6,6 +6,9 @@ import pytest
 from datetime import date
 from io import BytesIO
 from pathlib import Path
+import subprocess
+import sys
+import zipfile
 
 from pypdf import PdfReader
 from streamlit.testing.v1 import AppTest
@@ -192,6 +195,34 @@ def test_build_report_context_uses_neutral_defaults_for_missing_values() -> None
     assert missing["leaving_risk"] is False
 
 
+def test_malformed_classifications_use_neutral_defaults() -> None:
+    source = classified_reviews().iloc[:2].copy()
+    source["jev_actionability"] = [2.9, float("inf")]
+    source["jev_urgency"] = [True, "urgent"]
+    source["jev_dignity_or_inclusion_concern"] = ["False", "not-a-bool"]
+    source["jev_leaving_risk"] = ["0", "unknown"]
+    source["jev_primary_topic"] = ["   ", pd.NA]
+
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+
+    assert context["actionability"]["elevated_count"] == 0
+    assert context["urgency"]["elevated_count"] == 0
+    assert context["dignity_inclusion"]["count"] == 0
+    assert context["leaving_risk"]["count"] == 0
+    assert context["topics"] == [
+        {"label": "Not classified", "count": 2, "percentage": 100.0}
+    ]
+    for review in context["reviews"]:
+        assert review["topic"] == "Not classified"
+        assert review["actionability"] == {
+            "score": None,
+            "label": "Not classified",
+        }
+        assert review["urgency"] == {"score": None, "label": "Not classified"}
+        assert review["dignity_inclusion"] is False
+        assert review["leaving_risk"] is False
+
+
 def test_safe_report_filename_and_selection_key_are_stable() -> None:
     assert safe_report_filename("St John's & West", "2026-10") == (
         "st-john-s-west-reviews-2026-10.pdf"
@@ -321,3 +352,54 @@ def test_streamlit_app_generates_download_from_monthly_report_tab() -> None:
 
     assert not app.exception
     assert "Download PDF" in [button.label for button in app.download_button]
+
+    month_selector = next(
+        selectbox for selectbox in app.selectbox if selectbox.label == "Reporting month"
+    )
+    assert len(month_selector.options) > 1
+    month_selector.set_value(month_selector.options[1]).run(timeout=30)
+    assert not app.download_button
+
+    next(button for button in app.button if button.label == "Generate report").click().run(
+        timeout=60
+    )
+    assert "Download PDF" in [button.label for button in app.download_button]
+
+    surgery_selector = next(
+        selectbox for selectbox in app.selectbox if selectbox.label == "Report surgery"
+    )
+    surgery_selector.set_value(surgery_selector.options[1]).run(timeout=30)
+    assert not app.download_button
+
+
+def test_built_wheel_includes_monthly_report_template(tmp_path: Path) -> None:
+    project_root = Path(__file__).parents[1]
+    dist_dir = tmp_path / "dist"
+    egg_dir = tmp_path / "egg"
+    dist_dir.mkdir()
+    egg_dir.mkdir()
+    subprocess.run(
+        [
+            sys.executable,
+            "setup.py",
+            "egg_info",
+            "--egg-base",
+            str(egg_dir),
+            "build",
+            "--build-base",
+            str(tmp_path / "build"),
+            "bdist_wheel",
+            "--bdist-dir",
+            str(tmp_path / "bdist"),
+            "--dist-dir",
+            str(dist_dir),
+        ],
+        cwd=project_root,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    wheel_path = next(dist_dir.glob("*.whl"))
+
+    with zipfile.ZipFile(wheel_path) as wheel:
+        assert "ai_medreview/templates/monthly_report.html" in wheel.namelist()

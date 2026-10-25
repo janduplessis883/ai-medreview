@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from datetime import date
+import math
+from numbers import Real
 from pathlib import Path
 import re
 import unicodedata
@@ -63,12 +65,15 @@ def _percentage(count: int, total: int) -> float:
 
 
 def _score_value(value: object) -> int | None:
-    if pd.isna(value):
+    if pd.api.types.is_bool(value) or pd.isna(value):
         return None
     try:
-        score = int(float(value))
-    except (TypeError, ValueError):
+        numeric = float(value)
+    except (TypeError, ValueError, OverflowError):
         return None
+    if not math.isfinite(numeric) or not numeric.is_integer():
+        return None
+    score = int(numeric)
     return score if score in SCORE_LABELS else None
 
 
@@ -80,8 +85,27 @@ def _score_info(value: object) -> dict[str, int | str | None]:
     }
 
 
-def _is_true(value: object) -> bool:
-    return False if pd.isna(value) else bool(value)
+def normalize_boolean_flag(value: object) -> bool:
+    """Strictly normalize supported boolean representations."""
+
+    if pd.api.types.is_bool(value):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1"}:
+            return True
+        if normalized in {"false", "0"}:
+            return False
+        return False
+    if isinstance(value, Real) and not pd.isna(value):
+        return float(value) == 1.0
+    return False
+
+
+def _topic_label(value: object) -> str:
+    if not isinstance(value, str) or not value.strip():
+        return "Not classified"
+    return value.strip()
 
 
 def _score_summary(
@@ -117,7 +141,7 @@ def _flag_summary(
     reviews: pd.DataFrame, column: str, description: str
 ) -> dict[str, object]:
     values = reviews[column] if column in reviews else pd.Series(False, index=reviews.index)
-    count = int(values.map(_is_true).sum())
+    count = int(values.map(normalize_boolean_flag).sum())
     percentage = _percentage(count, len(reviews))
     return {
         "count": count,
@@ -156,8 +180,7 @@ def build_report_context(
 
     topics = scoped.get(
         "jev_primary_topic", pd.Series(index=scoped.index, dtype="object")
-    ).fillna("Not classified")
-    topics = topics.replace("", "Not classified")
+    ).map(_topic_label)
     topic_counts = topics.value_counts(sort=True)
     topic_summaries = [
         {
@@ -179,8 +202,7 @@ def build_report_context(
     for index, row in scoped.iterrows():
         score_value = pd.to_numeric(row.get("rating_score"), errors="coerce")
         stars = int(score_value) if pd.notna(score_value) and score_value in rating_labels else None
-        topic = row.get("jev_primary_topic")
-        topic = "Not classified" if pd.isna(topic) or not str(topic).strip() else str(topic)
+        topic = _topic_label(row.get("jev_primary_topic"))
         review_entries.append(
             {
                 "date": row["time"].strftime("%d %B %Y"),
@@ -190,10 +212,10 @@ def build_report_context(
                 "topic": topic,
                 "actionability": _score_info(row.get("jev_actionability")),
                 "urgency": _score_info(row.get("jev_urgency")),
-                "dignity_inclusion": _is_true(
+                "dignity_inclusion": normalize_boolean_flag(
                     row.get("jev_dignity_or_inclusion_concern")
                 ),
-                "leaving_risk": _is_true(row.get("jev_leaving_risk")),
+                "leaving_risk": normalize_boolean_flag(row.get("jev_leaving_risk")),
             }
         )
 
