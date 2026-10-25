@@ -25,6 +25,7 @@ from ai_medreview.monthly_report import (
     build_report_context,
     filter_report_reviews,
     generate_monthly_report_pdf,
+    normalize_boolean_flag,
     report_selection_key,
     safe_report_filename,
 )
@@ -89,7 +90,7 @@ def load_data() -> pd.DataFrame:
         "jev_dignity_or_inclusion_concern",
         "jev_leaving_risk",
     ):
-        df[flag] = df[flag].fillna(False).astype(bool)
+        df[flag] = df[flag].map(normalize_boolean_flag)
     # Alert = anything a human should look at soon.
     df["is_alert"] = (
         (df["jev_urgency"] >= 2)
