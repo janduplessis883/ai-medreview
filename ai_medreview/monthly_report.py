@@ -218,6 +218,7 @@ def build_report_context(
                 "leaving_risk": normalize_boolean_flag(row.get("jev_leaving_risk")),
             }
         )
+    review_entries.sort(key=lambda review: str(review["topic"]).casefold())
 
     return {
         "surgery": surgery,

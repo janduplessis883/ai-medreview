@@ -6,12 +6,14 @@ import pytest
 from datetime import date
 from io import BytesIO
 from pathlib import Path
+import re
 import subprocess
 import sys
 import zipfile
 
 from pypdf import PdfReader
 from streamlit.testing.v1 import AppTest
+from weasyprint import HTML
 
 from ai_medreview.monthly_report import (
     build_report_context,
@@ -20,6 +22,7 @@ from ai_medreview.monthly_report import (
     render_report_html,
     report_selection_key,
     safe_report_filename,
+    TEMPLATE_DIRECTORY,
 )
 
 
@@ -266,8 +269,8 @@ def test_render_report_html_contains_report_sections_and_ordered_reviews() -> No
         "Review list",
     ):
         assert label in html
-    assert html.index("Very helpful reception team.") < html.index(
-        "The appointment process could be clearer."
+    assert html.index("The appointment process could be clearer.") < html.index(
+        "Very helpful reception team."
     )
     assert "&lt;script&gt;alert" in html
     assert "<script>alert" not in html
@@ -319,7 +322,7 @@ def test_review_classification_pills_show_every_criterion_and_severity() -> None
 
     assert html.count('class="pill ') == 25
     for expected in (
-        "Category: A very long category label that needs to wrap safely inside its pill",
+        "A very long category label that needs to wrap safely inside its pill",
         "Actionability: None",
         "Actionability: Low",
         "Actionability: Moderate",
@@ -336,18 +339,107 @@ def test_review_classification_pills_show_every_criterion_and_severity() -> None
         "Leaving risk: Indicated",
     ):
         assert expected in html
-    for severity_class in (
-        "pill-category",
-        "severity-0",
-        "severity-1",
-        "severity-2",
-        "severity-3",
-        "severity-unclassified",
-        "risk-inactive",
-        "risk-active",
-    ):
-        assert severity_class in html
-    assert "overflow-wrap: anywhere" in html
+    cards = re.findall(
+        r'<article class="review-card">(.*?)</article>', html, flags=re.DOTALL
+    )
+    cards_by_state = {
+        state: next(card for card in cards if f"Pill state {state}" in card)
+        for state in range(5)
+    }
+
+    def pill_class(card: str, text: str) -> str:
+        match = re.search(
+            rf'<span class="pill ([^"]+)">{re.escape(text)}</span>', card
+        )
+        assert match is not None
+        return match.group(1)
+
+    expected_score_classes = {
+        0: ("None", "severity-0"),
+        1: ("Low", "severity-1"),
+        2: ("Moderate", "severity-2"),
+        3: ("High", "severity-3"),
+        4: ("Not classified", "severity-unclassified"),
+    }
+    for state, (label, expected_class) in expected_score_classes.items():
+        card = cards_by_state[state]
+        assert pill_class(card, f"Actionability: {label}") == expected_class
+        assert pill_class(card, f"Urgency: {label}") == expected_class
+        category_text = (
+            "A very long category label that needs to wrap safely inside its pill"
+            if state == 0
+            else "Access"
+        )
+        assert pill_class(card, category_text) == "pill-category"
+
+    assert "Category:" not in html
+
+    assert pill_class(cards_by_state[0], "Dignity / inclusion: No concern") == (
+        "risk-inactive"
+    )
+    assert pill_class(cards_by_state[0], "Leaving risk: Not indicated") == (
+        "risk-inactive"
+    )
+    assert pill_class(cards_by_state[3], "Dignity / inclusion: Concern") == (
+        "risk-active"
+    )
+    assert pill_class(cards_by_state[3], "Leaving risk: Indicated") == "risk-active"
+
+
+def test_long_category_pill_wraps_within_review_card_bounds() -> None:
+    source = classified_reviews().iloc[[0]].copy()
+    source["jev_primary_topic"] = "A" * 220
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+    html = render_report_html(context)
+
+    document = HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).render()
+    review_box = None
+    category_pill = None
+    for page in document.pages:
+        stack = [page._page_box]
+        while stack:
+            box = stack.pop()
+            element = getattr(box, "element", None)
+            classes = element.get("class", "") if element is not None else ""
+            if classes == "review-card" and type(box).__name__ == "BlockBox":
+                review_box = box
+            if classes == "pill pill-category" and type(box).__name__ == (
+                "InlineBlockBox"
+            ):
+                category_pill = box
+            stack.extend(reversed(list(box.all_children())))
+
+    assert review_box is not None
+    assert category_pill is not None
+    assert category_pill.position_x >= review_box.position_x
+    assert category_pill.position_x + category_pill.width <= (
+        review_box.position_x + review_box.width
+    )
+    assert category_pill.height > 20
+
+
+def test_inactive_pill_text_matches_its_outline_colour() -> None:
+    source = pill_reviews().iloc[[0]]
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+    html = render_report_html(context)
+
+    document = HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).render()
+    inactive_pills = []
+    for page in document.pages:
+        stack = [page._page_box]
+        while stack:
+            box = stack.pop()
+            element = getattr(box, "element", None)
+            classes = element.get("class", "") if element is not None else ""
+            if type(box).__name__ == "InlineBlockBox" and (
+                "severity-0" in classes or "risk-inactive" in classes
+            ):
+                inactive_pills.append(box)
+            stack.extend(reversed(list(box.all_children())))
+
+    assert len(inactive_pills) == 4
+    for pill in inactive_pills:
+        assert pill.style["color"] == pill.style["border_top_color"]
 
 
 def test_generate_monthly_report_pdf_contains_only_selected_surgery() -> None:

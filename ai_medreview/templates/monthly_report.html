@@ -206,7 +206,7 @@
     .severity-0, .risk-inactive {
       background: white;
       border-color: #cbd5dc;
-      color: #657480;
+      color: #cbd5dc;
     }
 
     .severity-1 {
@@ -341,13 +341,13 @@
 
   <section class="page-break">
     <h2>Review list</h2>
-    <p class="section-intro">All reviews for {{ surgery }} in {{ month_label }}, newest first.</p>
+    <p class="section-intro">All reviews for {{ surgery }} in {{ month_label }}, sorted by category and then newest first.</p>
     {% for review in reviews %}
     <article class="review-card">
       <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
       <p class="review-text">{{ review.text }}</p>
       <div class="pill-row">
-        <span class="pill pill-category">Category: {{ review.topic }}</span>
+        <span class="pill pill-category">{{ review.topic }}</span>
         <span class="pill {% if review.actionability.score is none %}severity-unclassified{% else %}severity-{{ review.actionability.score }}{% endif %}">Actionability: {{ review.actionability.label }}</span>
         <span class="pill {% if review.urgency.score is none %}severity-unclassified{% else %}severity-{{ review.urgency.score }}{% endif %}">Urgency: {{ review.urgency.label }}</span>
         <span class="pill {% if review.dignity_inclusion %}risk-active{% else %}risk-inactive{% endif %}">Dignity / inclusion: {% if review.dignity_inclusion %}Concern{% else %}No concern{% endif %}</span>
