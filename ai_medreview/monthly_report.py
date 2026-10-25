@@ -182,6 +182,7 @@ def build_report_context(
         "jev_primary_topic", pd.Series(index=scoped.index, dtype="object")
     ).map(_topic_label)
     topic_counts = topics.value_counts(sort=True)
+    topic_frequency = {str(label): int(count) for label, count in topic_counts.items()}
     topic_summaries = [
         {
             "label": str(label),
@@ -218,7 +219,12 @@ def build_report_context(
                 "leaving_risk": normalize_boolean_flag(row.get("jev_leaving_risk")),
             }
         )
-    review_entries.sort(key=lambda review: str(review["topic"]).casefold())
+    review_entries.sort(
+        key=lambda review: (
+            -topic_frequency.get(str(review["topic"]), 0),
+            str(review["topic"]).casefold(),
+        )
+    )
 
     return {
         "surgery": surgery,

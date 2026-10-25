@@ -269,14 +269,29 @@ def test_render_report_html_contains_report_sections_and_ordered_reviews() -> No
         "Review list",
     ):
         assert label in html
-    assert html.index("The appointment process could be clearer.") < html.index(
-        "Very helpful reception team."
+    assert html.index("Very helpful reception team.") < html.index(
+        "The appointment process could be clearer."
     )
     assert "&lt;script&gt;alert" in html
     assert "<script>alert" not in html
     assert "&amp; confirm" in html
     assert "http://" not in html
     assert "https://" not in html
+
+
+def test_review_entries_group_by_category_frequency_then_keep_newest_first() -> None:
+    context = build_report_context(classified_reviews(), "Oak Medical Centre", "2026-10")
+
+    assert [review["topic"] for review in context["reviews"]] == [
+        "Overall service",
+        "Overall service",
+        "Access",
+        "Not classified",
+    ]
+    assert [review["text"] for review in context["reviews"][:2]] == [
+        "Very helpful reception team.",
+        "I felt dismissed and may change practice.",
+    ]
 
 
 def pill_reviews() -> pd.DataFrame:
