@@ -5,8 +5,10 @@ import pytest
 
 from datetime import date
 from io import BytesIO
+from pathlib import Path
 
 from pypdf import PdfReader
+from streamlit.testing.v1 import AppTest
 
 from ai_medreview.monthly_report import (
     build_report_context,
@@ -276,3 +278,46 @@ def test_generate_monthly_report_pdf_handles_long_unbroken_review() -> None:
 
     assert pdf_bytes.startswith(b"%PDF")
     assert len(PdfReader(BytesIO(pdf_bytes)).pages) >= 2
+
+
+def test_pdf_starts_score_distributions_on_a_fresh_page() -> None:
+    pdf_bytes = generate_monthly_report_pdf(
+        classified_reviews(), "Oak Medical Centre", "2026-10"
+    )
+    pages = PdfReader(BytesIO(pdf_bytes)).pages
+    first_page = pages[0].extract_text() or ""
+    second_page = pages[1].extract_text() or ""
+
+    assert "Actionability distribution" not in first_page
+    assert "Score distributions" in second_page
+    assert "0 · None" in second_page
+    assert "3 · High" in second_page
+
+
+def test_unrated_review_uses_a_single_user_friendly_label() -> None:
+    source = classified_reviews().iloc[[0]].copy()
+    source["rating"] = pd.NA
+    source["rating_score"] = pd.NA
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+
+    html = render_report_html(context)
+
+    assert "Not rated · Not rated" not in html
+    assert ">Not rated<" in html
+
+
+def test_streamlit_app_generates_download_from_monthly_report_tab() -> None:
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(
+        timeout=30
+    )
+
+    assert not app.exception
+    assert any(tab.label.endswith("Monthly report") for tab in app.tabs)
+    assert "Report surgery" in [selectbox.label for selectbox in app.selectbox]
+    assert "Reporting month" in [selectbox.label for selectbox in app.selectbox]
+
+    generate = next(button for button in app.button if button.label == "Generate report")
+    generate.click().run(timeout=60)
+
+    assert not app.exception
+    assert "Download PDF" in [button.label for button in app.download_button]

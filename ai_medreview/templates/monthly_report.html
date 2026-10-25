@@ -103,9 +103,8 @@
     .rating-grid, .summary-grid {
       border-collapse: separate;
       border-spacing: 2.5mm;
-      margin: -2.5mm;
       table-layout: fixed;
-      width: calc(100% + 5mm);
+      width: 100%;
     }
 
     .rating-card, .summary-card {
@@ -249,6 +248,11 @@
       <p>{{ leaving_risk.summary }}</p>
     </div>
 
+  </section>
+
+  <section class="classification-detail page-break">
+    <h2>Score distributions</h2>
+    <p class="section-intro">The complete actionability and urgency score profile for the reporting month.</p>
     <table class="summary-grid"><tr>
       <td class="summary-card">
         <div class="card-label">Actionability distribution</div>
@@ -282,7 +286,7 @@
     <p class="section-intro">All reviews for {{ surgery }} in {{ month_label }}, newest first.</p>
     {% for review in reviews %}
     <article class="review-card">
-      <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{{ review.rating_label }} · {% if review.stars %}{{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
+      <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
       <p class="review-text">{{ review.text }}</p>
       <div class="review-meta">{{ review.topic }} · Actionability: {{ review.actionability.label }}{% if review.actionability.score is not none %} ({{ review.actionability.score }}){% endif %} · Urgency: {{ review.urgency.label }}{% if review.urgency.score is not none %} ({{ review.urgency.score }}){% endif %}</div>
       {% if review.dignity_inclusion %}<span class="badge badge-risk">Dignity / inclusion concern</span>{% endif %}

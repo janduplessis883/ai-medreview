@@ -21,6 +21,13 @@ from ai_medreview.presentation import (
 
 # Import the LLM client for external LLM integration
 from ai_medreview.llm_client import ask_llm
+from ai_medreview.monthly_report import (
+    build_report_context,
+    filter_report_reviews,
+    generate_monthly_report_pdf,
+    report_selection_key,
+    safe_report_filename,
+)
 
 # Resolve relative to this file so the app works both locally and on
 # Streamlit Cloud (params.DATA_PATH is home-directory based and local-only).
@@ -176,13 +183,14 @@ with st.container(horizontal=True):
 
 # --- Tabs --------------------------------------------------------------------------------------------
 
-tab_overview, tab_topics, tab_alerts, tab_browser, tab_chat = st.tabs(
+tab_overview, tab_topics, tab_alerts, tab_browser, tab_chat, tab_report = st.tabs(
     [
         ":material/monitoring: Overview",
         ":material/category: Topics & staff",
         ":material/notification_important: Alerts",
         ":material/search: Review browser",
         ":material/chat: Chat with AI",
+        ":material/picture_as_pdf: Monthly report",
     ]
 )
 
@@ -454,6 +462,110 @@ with tab_browser:
             jev_fields = [column for column in browser.columns if column.startswith("jev_")]
             with st.expander("Complete Jev output (JSON)"):
                 st.json(json.loads(row[jev_fields].to_json()))
+
+
+# --- Monthly PDF report tab -------------------------------------------------------------------------
+
+with tab_report:
+    st.header(":material/picture_as_pdf: Monthly report")
+    st.caption(
+        "Create a downloadable report for one surgery and one calendar month. "
+        "This report uses the complete dataset and is independent of the sidebar filters."
+    )
+
+    report_surgeries = sorted(df_all["surgery"].dropna().astype(str).unique())
+    if not report_surgeries:
+        st.warning("No surgeries are available for reporting.")
+    else:
+        report_surgery = st.selectbox(
+            "Report surgery",
+            report_surgeries,
+            key="monthly_report_surgery",
+        )
+        surgery_times = pd.to_datetime(
+            df_all.loc[df_all["surgery"] == report_surgery, "time"], errors="coerce"
+        ).dropna()
+        report_months = sorted(
+            surgery_times.dt.to_period("M").unique(), reverse=True
+        )
+
+        if not report_months:
+            st.warning("This surgery has no valid reporting months.")
+        else:
+            report_month = st.selectbox(
+                "Reporting month",
+                report_months,
+                format_func=lambda period: period.strftime("%B %Y"),
+                key="monthly_report_month",
+            )
+            active_report_key = report_selection_key(report_surgery, report_month)
+
+            if st.session_state.get("monthly_report_pdf_key") != active_report_key:
+                st.session_state.pop("monthly_report_pdf_bytes", None)
+                st.session_state.pop("monthly_report_pdf_filename", None)
+                st.session_state.pop("monthly_report_pdf_key", None)
+
+            try:
+                report_reviews = filter_report_reviews(
+                    df_all, report_surgery, report_month
+                )
+                report_preview = build_report_context(
+                    report_reviews, report_surgery, report_month
+                )
+            except ValueError as error:
+                st.warning(str(error))
+                report_reviews = pd.DataFrame()
+                report_preview = None
+
+            if report_preview is not None:
+                st.subheader("Report preview")
+                st.caption(
+                    f"{report_preview['total_reviews']:,} reviews for "
+                    f"{report_surgery} in {report_preview['month_label']}"
+                )
+                with st.container(horizontal=True):
+                    for rating in report_preview["ratings"]:
+                        st.metric(
+                            f"{rating['label']} · {rating['stars']} stars",
+                            f"{rating['count']:,}",
+                            f"{rating['percentage']:.1f}%",
+                            border=True,
+                        )
+
+                if st.button(
+                    "Generate report",
+                    type="primary",
+                    icon=":material/picture_as_pdf:",
+                    key="generate_monthly_report",
+                ):
+                    try:
+                        with st.spinner("Creating your PDF report..."):
+                            pdf_bytes = generate_monthly_report_pdf(
+                                df_all, report_surgery, report_month
+                            )
+                        st.session_state["monthly_report_pdf_bytes"] = pdf_bytes
+                        st.session_state["monthly_report_pdf_filename"] = (
+                            safe_report_filename(report_surgery, report_month)
+                        )
+                        st.session_state["monthly_report_pdf_key"] = active_report_key
+                        st.success("Your monthly report is ready to download.")
+                    except Exception as error:
+                        st.error(f"The report could not be created: {error}")
+
+                if (
+                    st.session_state.get("monthly_report_pdf_key")
+                    == active_report_key
+                    and st.session_state.get("monthly_report_pdf_bytes")
+                ):
+                    st.download_button(
+                        "Download PDF",
+                        data=st.session_state["monthly_report_pdf_bytes"],
+                        file_name=st.session_state["monthly_report_pdf_filename"],
+                        mime="application/pdf",
+                        icon=":material/download:",
+                        type="primary",
+                        key="download_monthly_report",
+                    )
 
 
 # --- Chat with AI tab --------------------------------------------------------------------------------
