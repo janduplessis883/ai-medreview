@@ -276,6 +276,80 @@ def test_render_report_html_contains_report_sections_and_ordered_reviews() -> No
     assert "https://" not in html
 
 
+def pill_reviews() -> pd.DataFrame:
+    base = classified_reviews().iloc[[0]].copy()
+    rows = []
+    for index, score in enumerate([0, 1, 2, 3, pd.NA]):
+        row = base.copy()
+        row["time"] = f"2026-10-{20 - index:02d} 12:00:00"
+        row["review"] = f"Pill state {index}"
+        row["jev_actionability"] = score
+        row["jev_urgency"] = score
+        row["jev_primary_topic"] = (
+            "A very long category label that needs to wrap safely inside its pill"
+            if index == 0
+            else "Access"
+        )
+        row["jev_dignity_or_inclusion_concern"] = index == 3
+        row["jev_leaving_risk"] = index == 3
+        rows.append(row)
+    return pd.concat(rows, ignore_index=True)
+
+
+def test_rating_card_geometry_widens_middle_card_and_keeps_label_on_one_line() -> None:
+    context = build_report_context(
+        pill_reviews(), "Oak Medical Centre", "2026-10"
+    )
+
+    html = render_report_html(context)
+
+    assert html.count('<col class="rating-col rating-col-side">') == 4
+    assert html.count('<col class="rating-col rating-col-middle">') == 1
+    assert "rating-label rating-label-single-line" in html
+    assert "white-space: nowrap" in html
+    assert "height: 34mm" in html
+
+
+def test_review_classification_pills_show_every_criterion_and_severity() -> None:
+    context = build_report_context(
+        pill_reviews(), "Oak Medical Centre", "2026-10"
+    )
+
+    html = render_report_html(context)
+
+    assert html.count('class="pill ') == 25
+    for expected in (
+        "Category: A very long category label that needs to wrap safely inside its pill",
+        "Actionability: None",
+        "Actionability: Low",
+        "Actionability: Moderate",
+        "Actionability: High",
+        "Actionability: Not classified",
+        "Urgency: None",
+        "Urgency: Low",
+        "Urgency: Moderate",
+        "Urgency: High",
+        "Urgency: Not classified",
+        "Dignity / inclusion: No concern",
+        "Dignity / inclusion: Concern",
+        "Leaving risk: Not indicated",
+        "Leaving risk: Indicated",
+    ):
+        assert expected in html
+    for severity_class in (
+        "pill-category",
+        "severity-0",
+        "severity-1",
+        "severity-2",
+        "severity-3",
+        "severity-unclassified",
+        "risk-inactive",
+        "risk-active",
+    ):
+        assert severity_class in html
+    assert "overflow-wrap: anywhere" in html
+
+
 def test_generate_monthly_report_pdf_contains_only_selected_surgery() -> None:
     other_surgery = classified_reviews().iloc[[0]].copy()
     other_surgery["surgery"] = "River Surgery"

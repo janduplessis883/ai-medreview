@@ -107,6 +107,9 @@
       width: 100%;
     }
 
+    .rating-col-side { width: 17.5%; }
+    .rating-col-middle { width: 30%; }
+
     .rating-card, .summary-card {
       background: var(--wash);
       border: 0.25mm solid var(--line);
@@ -115,7 +118,14 @@
       vertical-align: top;
     }
 
+    .rating-card { height: 34mm; }
+
     .rating-label, .card-label { color: var(--muted); font-size: 8pt; font-weight: bold; text-transform: uppercase; }
+    .rating-label-single-line {
+      font-size: 7.4pt;
+      letter-spacing: -0.1pt;
+      white-space: nowrap;
+    }
     .rating-number { color: var(--navy); font-size: 20pt; font-weight: bold; line-height: 1; margin: 2mm 0 1mm; }
     .rating-stars { color: var(--orange); font-size: 8.5pt; font-weight: bold; }
 
@@ -170,20 +180,59 @@
     .review-date { display: table-cell; }
     .review-rating { color: var(--orange); display: table-cell; font-weight: bold; text-align: right; }
     .review-text { color: var(--ink); font-size: 10.5pt; margin: 3mm 0; white-space: pre-wrap; }
-    .review-meta { color: var(--muted); font-size: 8pt; }
+    .pill-row { margin-top: 2.8mm; }
 
-    .badge {
-      background: var(--blue-wash);
-      border-radius: 3mm;
-      color: var(--teal);
+    .pill {
+      border: 0.25mm solid transparent;
+      border-radius: 4mm;
       display: inline-block;
       font-size: 7.5pt;
       font-weight: bold;
-      margin: 2.5mm 1.5mm 0 0;
-      padding: 1.2mm 2.5mm;
+      line-height: 1.25;
+      margin: 0 1.4mm 1.4mm 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      padding: 1.4mm 2.7mm;
+      vertical-align: top;
+      white-space: normal;
     }
 
-    .badge-risk { background: #fae9ec; color: var(--risk); }
+    .pill-category {
+      background: #e9f4f7;
+      border-color: #b9dce2;
+      color: #176273;
+    }
+
+    .severity-0, .risk-inactive {
+      background: white;
+      border-color: #cbd5dc;
+      color: #657480;
+    }
+
+    .severity-1 {
+      background: #edf0f2;
+      border-color: #d3d9de;
+      color: #48545d;
+    }
+
+    .severity-2 {
+      background: #fff3cd;
+      border-color: #ead58a;
+      color: #775900;
+    }
+
+    .severity-3, .risk-active {
+      background: #fae7ea;
+      border-color: #edbec6;
+      color: var(--risk);
+    }
+
+    .severity-unclassified {
+      background: white;
+      border-color: #cbd5dc;
+      border-style: dashed;
+      color: #657480;
+    }
   </style>
 </head>
 <body>
@@ -203,16 +252,25 @@
   <section>
     <h2>Rating overview</h2>
     <p class="section-intro">Friends and Family Test responses for this surgery and reporting month.</p>
-    <table class="rating-grid"><tr>
+    <table class="rating-grid">
+      <colgroup>
+        <col class="rating-col rating-col-side">
+        <col class="rating-col rating-col-side">
+        <col class="rating-col rating-col-middle">
+        <col class="rating-col rating-col-side">
+        <col class="rating-col rating-col-side">
+      </colgroup>
+      <tr>
       {% for rating in ratings %}
       <td class="rating-card">
-        <div class="rating-label">{{ rating.label }}</div>
+        <div class="rating-label{% if loop.index0 == 2 %} rating-label-single-line{% endif %}">{{ rating.label }}</div>
         <div class="rating-number">{{ rating.count }}</div>
         <div class="rating-stars">{{ rating.stars }} stars · {{ '%.1f'|format(rating.percentage) }}%</div>
         <div class="bar-track"><div class="bar-fill" style="width: {{ rating.percentage }}%"></div></div>
       </td>
       {% endfor %}
-    </tr></table>
+      </tr>
+    </table>
   </section>
 
   <section>
@@ -288,9 +346,13 @@
     <article class="review-card">
       <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
       <p class="review-text">{{ review.text }}</p>
-      <div class="review-meta">{{ review.topic }} · Actionability: {{ review.actionability.label }}{% if review.actionability.score is not none %} ({{ review.actionability.score }}){% endif %} · Urgency: {{ review.urgency.label }}{% if review.urgency.score is not none %} ({{ review.urgency.score }}){% endif %}</div>
-      {% if review.dignity_inclusion %}<span class="badge badge-risk">Dignity / inclusion concern</span>{% endif %}
-      {% if review.leaving_risk %}<span class="badge badge-risk">Leaving risk</span>{% endif %}
+      <div class="pill-row">
+        <span class="pill pill-category">Category: {{ review.topic }}</span>
+        <span class="pill {% if review.actionability.score is none %}severity-unclassified{% else %}severity-{{ review.actionability.score }}{% endif %}">Actionability: {{ review.actionability.label }}</span>
+        <span class="pill {% if review.urgency.score is none %}severity-unclassified{% else %}severity-{{ review.urgency.score }}{% endif %}">Urgency: {{ review.urgency.label }}</span>
+        <span class="pill {% if review.dignity_inclusion %}risk-active{% else %}risk-inactive{% endif %}">Dignity / inclusion: {% if review.dignity_inclusion %}Concern{% else %}No concern{% endif %}</span>
+        <span class="pill {% if review.leaving_risk %}risk-active{% else %}risk-inactive{% endif %}">Leaving risk: {% if review.leaving_risk %}Indicated{% else %}Not indicated{% endif %}</span>
+      </div>
     </article>
     {% endfor %}
   </section>
