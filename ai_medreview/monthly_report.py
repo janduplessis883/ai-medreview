@@ -21,6 +21,7 @@ RATINGS = (
     ("Very poor", 1),
 )
 SCORE_LABELS = {0: "None", 1: "Low", 2: "Moderate", 3: "High"}
+SENTIMENT_LABELS = ("Positive", "Neutral or Mixed", "Negative")
 TEMPLATE_DIRECTORY = Path(__file__).parent / "templates"
 
 
@@ -106,6 +107,75 @@ def _topic_label(value: object) -> str:
     if not isinstance(value, str) or not value.strip():
         return "Not classified"
     return value.strip()
+
+
+def _sentiment_label(value: object) -> str | None:
+    return value.strip() if isinstance(value, str) and value.strip() in SENTIMENT_LABELS else None
+
+
+def _staff_label(value: object) -> str:
+    if not isinstance(value, str) or not value.strip():
+        return "No specific staff mentioned"
+    return value.strip()
+
+
+def _sentiment_summary(reviews: pd.DataFrame) -> dict[str, object]:
+    values = reviews["jev_sentiment"] if "jev_sentiment" in reviews else pd.Series(index=reviews.index)
+    sentiments = values.map(_sentiment_label)
+    counts = sentiments.value_counts().reindex(SENTIMENT_LABELS, fill_value=0).astype(int)
+    distribution = [
+        {
+            "label": label,
+            "count": int(counts[label]),
+            "percentage": _percentage(int(counts[label]), len(reviews)),
+        }
+        for label in SENTIMENT_LABELS
+    ]
+    dominant_label = "Not classified"
+    dominant_count = 0
+    if int(counts.sum()) > 0:
+        dominant_label = next(label for label in SENTIMENT_LABELS if counts[label] == counts.max())
+        dominant_count = int(counts[dominant_label])
+
+    strength_values = reviews["jev_sentiment_strength"] if "jev_sentiment_strength" in reviews else pd.Series(index=reviews.index)
+    numeric_strength = pd.to_numeric(strength_values, errors="coerce")
+    valid_strength = numeric_strength[numeric_strength.notna() & numeric_strength.between(0, 4) & (numeric_strength % 1 == 0)]
+    average_strength = round(float(valid_strength.mean()), 1) if not valid_strength.empty else None
+    return {
+        "distribution": distribution,
+        "dominant_label": dominant_label,
+        "dominant_count": dominant_count,
+        "classified_count": int(counts.sum()),
+        "average_strength": average_strength,
+    }
+
+
+def _staff_summary(reviews: pd.DataFrame) -> list[dict[str, object]]:
+    if "jev_staff_group" not in reviews:
+        return []
+    values = reviews["jev_staff_group"]
+    staff = values.map(_staff_label)
+    sentiments = (
+        reviews["jev_sentiment"].map(_sentiment_label)
+        if "jev_sentiment" in reviews
+        else pd.Series(index=reviews.index)
+    )
+    counts = staff.value_counts()
+    ordered_labels = sorted(counts.index, key=lambda label: (-int(counts[label]), str(label).casefold()))
+    groups = []
+    for label in ordered_labels:
+        mask = staff == label
+        groups.append(
+            {
+                "label": str(label),
+                "count": int(mask.sum()),
+                "percentage": _percentage(int(mask.sum()), len(reviews)),
+                "positive_count": int((sentiments[mask] == "Positive").sum()),
+                "neutral_count": int((sentiments[mask] == "Neutral or Mixed").sum()),
+                "negative_count": int((sentiments[mask] == "Negative").sum()),
+            }
+        )
+    return groups
 
 
 def _score_summary(
@@ -245,6 +315,8 @@ def build_report_context(
         ),
         "topics": topic_summaries,
         "theme_summary": theme_summary,
+        "sentiment": _sentiment_summary(scoped),
+        "staff_groups": _staff_summary(scoped),
         "reviews": review_entries,
     }
 
