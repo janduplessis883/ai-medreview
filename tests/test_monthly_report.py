@@ -137,6 +137,140 @@ def classified_reviews() -> pd.DataFrame:
     )
 
 
+def staff_sentiment_reviews() -> pd.DataFrame:
+    source = classified_reviews().iloc[[0]].copy()
+    rows = []
+    values = [
+        ("Positive", 4, "GP"),
+        ("Positive", 2, "GP"),
+        ("Positive", 9, "GP"),
+        ("Neutral or Mixed", 3, "Receptionist"),
+        ("Neutral or Mixed", "bad", "Receptionist"),
+        ("Negative", 0, ""),
+        ("Unexpected label", 1, ""),
+    ]
+    for index, (sentiment, strength, staff) in enumerate(values):
+        row = source.copy()
+        row["time"] = f"2026-10-{20 - index:02d} 12:00:00"
+        row["review"] = f"Staff sentiment review {index}"
+        row["jev_sentiment"] = sentiment
+        row["jev_sentiment_strength"] = strength
+        row["jev_staff_group"] = staff
+        rows.append(row)
+    return pd.concat(rows, ignore_index=True)
+
+
+def test_report_context_summarizes_sentiment_and_staff_for_the_month() -> None:
+    context = build_report_context(
+        staff_sentiment_reviews(), "Oak Medical Centre", "2026-10"
+    )
+
+    sentiment = context["sentiment"]
+    assert sentiment["distribution"] == [
+        {"label": "Positive", "count": 3, "percentage": 42.9},
+        {"label": "Neutral or Mixed", "count": 2, "percentage": 28.6},
+        {"label": "Negative", "count": 1, "percentage": 14.3},
+    ]
+    assert sentiment["dominant_label"] == "Positive"
+    assert sentiment["dominant_count"] == 3
+    assert sentiment["classified_count"] == 6
+    assert sentiment["average_strength"] == 2.0
+
+    assert context["staff_groups"] == [
+        {
+            "label": "GP",
+            "count": 3,
+            "percentage": 42.9,
+            "positive_count": 3,
+            "neutral_count": 0,
+            "negative_count": 0,
+        },
+        {
+            "label": "No specific staff mentioned",
+            "count": 2,
+            "percentage": 28.6,
+            "positive_count": 0,
+            "neutral_count": 0,
+            "negative_count": 1,
+        },
+        {
+            "label": "Receptionist",
+            "count": 2,
+            "percentage": 28.6,
+            "positive_count": 0,
+            "neutral_count": 2,
+            "negative_count": 0,
+        },
+    ]
+
+
+def test_report_context_staff_sentiment_defaults_when_fields_are_missing() -> None:
+    source = classified_reviews().drop(
+        columns=["jev_sentiment", "jev_sentiment_strength", "jev_staff_group"],
+        errors="ignore",
+    )
+
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+
+    assert context["sentiment"] == {
+        "distribution": [
+            {"label": "Positive", "count": 0, "percentage": 0.0},
+            {"label": "Neutral or Mixed", "count": 0, "percentage": 0.0},
+            {"label": "Negative", "count": 0, "percentage": 0.0},
+        ],
+        "dominant_label": "Not classified",
+        "dominant_count": 0,
+        "classified_count": 0,
+        "average_strength": None,
+    }
+    assert context["staff_groups"] == []
+
+
+def test_report_context_ignores_boolean_sentiment_strength_values() -> None:
+    source = staff_sentiment_reviews().iloc[[0, 1]].copy()
+    source["jev_sentiment_strength"] = [True, False]
+
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+
+    assert context["sentiment"]["average_strength"] is None
+
+
+def test_people_and_sentiment_page_renders_summary_and_staff_cards() -> None:
+    context = build_report_context(
+        staff_sentiment_reviews(), "Oak Medical Centre", "2026-10"
+    )
+
+    html = render_report_html(context)
+
+    for expected in (
+        "People and sentiment",
+        "Positive",
+        "Neutral or Mixed",
+        "Negative",
+        "Overall sentiment",
+        "Average sentiment strength",
+        "Staff groups mentioned",
+        "GP",
+        "Receptionist",
+        "No specific staff mentioned",
+    ):
+        assert expected in html
+
+
+def test_people_and_sentiment_page_has_not_classified_fallback_in_pdf() -> None:
+    source = classified_reviews().drop(
+        columns=["jev_sentiment", "jev_sentiment_strength", "jev_staff_group"],
+        errors="ignore",
+    )
+    pdf_bytes = generate_monthly_report_pdf(source, "Oak Medical Centre", "2026-10")
+    reader = PdfReader(BytesIO(pdf_bytes))
+    extracted = "\n".join(page.extract_text() or "" for page in reader.pages)
+
+    assert len(reader.pages) >= 4
+    assert "People and sentiment" in extracted
+    assert "Not classified" in extracted
+
+
 def test_build_report_context_calculates_ratings_and_classifications() -> None:
     reviews = filter_report_reviews(
         classified_reviews(), "Oak Medical Centre", "2026-10"

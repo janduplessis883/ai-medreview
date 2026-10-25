@@ -152,6 +152,61 @@
     .observation p { margin: 0 0 1.5mm; }
     .observation p:last-child { margin-bottom: 0; }
 
+    .sentiment-hero {
+      background: var(--navy);
+      border-radius: 2mm;
+      color: white;
+      margin: 5mm 0;
+      padding: 5mm 6mm;
+    }
+
+    .sentiment-hero-label { color: #9bd6de; font-size: 7.5pt; letter-spacing: 0.8pt; text-transform: uppercase; }
+    .sentiment-hero-value { font-size: 20pt; font-weight: bold; margin: 1mm 0; }
+    .sentiment-hero-copy { color: #d9eef1; margin: 0; }
+
+    .sentiment-grid, .staff-grid {
+      border-collapse: separate;
+      border-spacing: 2.5mm;
+      table-layout: fixed;
+      width: 100%;
+    }
+
+    .sentiment-card {
+      background: var(--wash);
+      border: 0.25mm solid var(--line);
+      border-radius: 2mm;
+      padding: 4mm;
+      vertical-align: top;
+    }
+
+    .sentiment-card-positive { border-top: 1.2mm solid #2e9e5b; }
+    .sentiment-card-neutral { border-top: 1.2mm solid #e8a13c; }
+    .sentiment-card-negative { border-top: 1.2mm solid #d64545; }
+    .sentiment-label { color: var(--muted); font-size: 8pt; font-weight: bold; }
+    .sentiment-count { color: var(--navy); font-size: 18pt; font-weight: bold; margin: 1.5mm 0 0.5mm; }
+    .sentiment-percentage { color: var(--muted); font-size: 8.5pt; }
+
+    .strength-callout {
+      background: var(--blue-wash);
+      border-left: 1mm solid var(--teal);
+      margin: 4mm 0 7mm;
+      padding: 3.5mm 4mm;
+    }
+
+    .strength-callout strong { color: var(--navy); font-size: 12pt; }
+    .strength-callout span { color: var(--muted); display: block; font-size: 8.5pt; }
+    .staff-heading { margin-top: 6mm; }
+    .staff-row { border-bottom: 0.2mm solid var(--line); display: table; padding: 3mm 0; width: 100%; }
+    .staff-row:last-child { border-bottom: 0; }
+    .staff-name { display: table-cell; font-weight: bold; width: 48%; }
+    .staff-count { color: var(--muted); display: block; font-size: 8pt; font-weight: normal; margin-top: 0.8mm; }
+    .staff-mix { display: table-cell; text-align: right; vertical-align: middle; width: 52%; }
+    .mix-positive, .mix-neutral, .mix-negative { border-radius: 3mm; display: inline-block; font-size: 7.5pt; font-weight: bold; margin-left: 1mm; padding: 1.2mm 2mm; }
+    .mix-positive { background: #e4f4e8; color: #247d47; }
+    .mix-neutral { background: #fff1d9; color: #96620b; }
+    .mix-negative { background: #fde4e6; color: #a72f3b; }
+    .staff-empty { color: var(--muted); font-style: italic; margin: 3mm 0; }
+
     .distribution { margin-top: 4mm; }
     .distribution-row, .topic-row {
       border-bottom: 0.2mm solid var(--line);
@@ -337,6 +392,55 @@
     {% for topic in topics %}
     <div class="topic-row"><span class="row-label">{{ topic.label }}</span><span class="row-value">{{ topic.count }} reviews · {{ '%.1f'|format(topic.percentage) }}%</span></div>
     {% endfor %}
+  </section>
+
+  <section class="page-break">
+    <h2>People and sentiment</h2>
+    <p class="section-intro">Who was mentioned and how the month’s reviews felt overall.</p>
+
+    <div class="sentiment-hero">
+      <div class="sentiment-hero-label">Overall sentiment</div>
+      <div class="sentiment-hero-value">{{ sentiment.dominant_label }}</div>
+      <p class="sentiment-hero-copy">
+        {% if sentiment.dominant_count %}The most common sentiment appeared in {{ sentiment.dominant_count }} of {{ total_reviews }} reviews.{% else %}No sentiment was classified for this month.{% endif %}
+      </p>
+    </div>
+
+    <table class="sentiment-grid"><tr>
+      {% for item in sentiment.distribution %}
+      <td class="sentiment-card {% if item.label == 'Positive' %}sentiment-card-positive{% elif item.label == 'Negative' %}sentiment-card-negative{% else %}sentiment-card-neutral{% endif %}">
+        <div class="sentiment-label">{{ item.label }}</div>
+        <div class="sentiment-count">{{ item.count }}</div>
+        <div class="sentiment-percentage">{{ '%.1f'|format(item.percentage) }}% of reviews</div>
+      </td>
+      {% endfor %}
+    </tr></table>
+
+    <div class="strength-callout">
+      {% if sentiment.average_strength is not none %}
+      <strong>{{ '%.1f'|format(sentiment.average_strength) }} / 4</strong>
+      <span>Average sentiment strength across classified reviews</span>
+      {% else %}
+      <strong>Not classified</strong>
+      <span>No valid sentiment-strength scores were available for this month.</span>
+      {% endif %}
+    </div>
+
+    <h2 class="staff-heading">Staff groups mentioned</h2>
+    {% if staff_groups %}
+      {% for staff in staff_groups %}
+      <div class="staff-row">
+        <div class="staff-name">{{ staff.label }}<span class="staff-count">{{ staff.count }} reviews · {{ '%.1f'|format(staff.percentage) }}%</span></div>
+        <div class="staff-mix">
+          {% if staff.positive_count %}<span class="mix-positive">Positive {{ staff.positive_count }}</span>{% endif %}
+          {% if staff.neutral_count %}<span class="mix-neutral">Neutral {{ staff.neutral_count }}</span>{% endif %}
+          {% if staff.negative_count %}<span class="mix-negative">Negative {{ staff.negative_count }}</span>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="staff-empty">No staff groups were classified for this month.</p>
+    {% endif %}
   </section>
 
   <section class="page-break">
