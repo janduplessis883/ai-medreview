@@ -564,7 +564,7 @@ def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
         "libcairo2",
         "libffi-dev",
         "libglib2.0-0",
-        "libgdk-pixbuf-2.0-0",
+        "libgdk-pixbuf2.0-0",
         "libharfbuzz-subset0",
         "libpango-1.0-0",
         "libpangoft2-1.0-0",
