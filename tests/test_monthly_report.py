@@ -553,6 +553,26 @@ def test_streamlit_app_generates_download_from_monthly_report_tab() -> None:
     assert not app.download_button
 
 
+def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
+    packages = {
+        line.strip()
+        for line in (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+
+    assert {
+        "libcairo2",
+        "libffi-dev",
+        "libglib2.0-0",
+        "libgdk-pixbuf2.0-0",
+        "libharfbuzz-subset0",
+        "libpango-1.0-0",
+        "libpangoft2-1.0-0",
+        "libpangocairo-1.0-0",
+        "shared-mime-info",
+    } <= packages
+
+
 def test_built_wheel_includes_monthly_report_template(tmp_path: Path) -> None:
     project_root = Path(__file__).parents[1]
     dist_dir = tmp_path / "dist"
