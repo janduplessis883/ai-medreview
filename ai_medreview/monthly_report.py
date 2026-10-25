@@ -138,7 +138,10 @@ def _sentiment_summary(reviews: pd.DataFrame) -> dict[str, object]:
         dominant_count = int(counts[dominant_label])
 
     strength_values = reviews["jev_sentiment_strength"] if "jev_sentiment_strength" in reviews else pd.Series(index=reviews.index)
-    numeric_strength = pd.to_numeric(strength_values, errors="coerce")
+    non_boolean_strength = ~strength_values.map(pd.api.types.is_bool)
+    numeric_strength = pd.to_numeric(
+        strength_values.where(non_boolean_strength), errors="coerce"
+    )
     valid_strength = numeric_strength[numeric_strength.notna() & numeric_strength.between(0, 4) & (numeric_strength % 1 == 0)]
     average_strength = round(float(valid_strength.mean()), 1) if not valid_strength.empty else None
     return {

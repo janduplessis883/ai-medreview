@@ -226,6 +226,15 @@ def test_report_context_staff_sentiment_defaults_when_fields_are_missing() -> No
     assert context["staff_groups"] == []
 
 
+def test_report_context_ignores_boolean_sentiment_strength_values() -> None:
+    source = staff_sentiment_reviews().iloc[[0, 1]].copy()
+    source["jev_sentiment_strength"] = [True, False]
+
+    context = build_report_context(source, "Oak Medical Centre", "2026-10")
+
+    assert context["sentiment"]["average_strength"] is None
+
+
 def test_people_and_sentiment_page_renders_summary_and_staff_cards() -> None:
     context = build_report_context(
         staff_sentiment_reviews(), "Oak Medical Centre", "2026-10"
