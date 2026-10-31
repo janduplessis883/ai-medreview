@@ -778,6 +778,32 @@ def test_pdf_service_failure_shows_recovery_message_without_crashing(summary_ser
     assert "switch PDF AI provider" in app.error[0].value
 
 
+@pytest.mark.parametrize("show_names", [False, True])
+def test_pdf_names_are_opt_in_and_not_sent_to_ai(summary_service, show_names):
+    source = classified_reviews().copy()
+    source["review_PER"] = "['Alice Example', 'Bob Example', 'Alice Example']"
+    pdf = generate_monthly_report_pdf(source, "Oak Medical Centre", "2026-10", show_names=show_names)
+    text = "\n".join(page.extract_text() or "" for page in PdfReader(BytesIO(pdf)).pages)
+    assert ("People mentioned: Alice Example, Bob Example" in text) == show_names
+    assert ("Alice Example" in text) == show_names
+    assert "Alice Example" not in str(summary_service.call_args)
+
+
+def test_names_toggle_defaults_off_and_invalidates_pdf():
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
+    toggle = app.sidebar.toggle(key="show_review_names")
+    assert toggle.value is False
+    next(button for button in app.button if button.label == "Generate report").click().run(timeout=60)
+    assert app.download_button
+    app.sidebar.toggle(key="show_review_names").set_value(True).run(timeout=30)
+    assert not app.exception
+    assert not app.download_button
+    assert any(
+        frame.value["review"].str.contains("People mentioned:", regex=False, na=False).any()
+        for frame in app.dataframe if "review" in frame.value
+    )
+
+
 def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
     package_lines = (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
     packages = {

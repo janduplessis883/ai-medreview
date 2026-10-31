@@ -1,3 +1,6 @@
+import pandas as pd
+import pytest
+
 from ai_medreview import presentation
 from ai_medreview.presentation import format_flag_score
 
@@ -49,3 +52,22 @@ def test_review_score_progress_bar_uses_zero_to_three_scale():
         "max_value": 3,
         "format": "%d",
     }
+@pytest.mark.parametrize("value, expected", [
+    ("['Alice', 'Bob', 'Alice']", ["Alice", "Bob"]),
+    (["Alice", " Alice ", ""], ["Alice"]),
+    (None, []), (float("nan"), []), ("[]", []),
+    ("malformed [", []), ("{'Alice': 1}", []),
+])
+def test_review_people_handles_csv_lists_and_missing_values(value, expected):
+    from ai_medreview.presentation import review_people
+    assert review_people(value) == expected
+
+
+def test_review_display_adds_names_only_when_enabled_without_changing_source():
+    from ai_medreview.presentation import reviews_for_display
+    source = pd.DataFrame({"review": ["Helpful PERSON", "No names"], "review_PER": ["['Alice']", None]})
+    assert reviews_for_display(source, False)["review"].tolist() == source["review"].tolist()
+    assert reviews_for_display(source, True)["review"].tolist() == [
+        "Helpful PERSON\n\nPeople mentioned: Alice", "No names",
+    ]
+    assert source.iloc[0]["review"] == "Helpful PERSON"

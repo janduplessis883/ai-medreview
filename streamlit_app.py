@@ -17,6 +17,8 @@ from ai_medreview.presentation import (
     format_flag_score,
     format_review_scores,
     review_score_progress_options,
+    review_people,
+    reviews_for_display,
 )
 
 # Import the LLM client for external LLM integration
@@ -125,6 +127,10 @@ with st.sidebar:
     picked_staff = st.multiselect("Staff group", staff_groups)
 
     alerts_only = st.toggle("Alerts only", value=False)
+    show_review_names = st.toggle(
+        "Show people mentioned", value=False, key="show_review_names",
+        help="Show names from review_PER beneath reviews and include them in PDF reports.",
+    )
 
     st.caption(
         "Alert = urgency ≥ 2, or a clinical-safety, dignity/inclusion, "
@@ -331,7 +337,7 @@ with tab_alerts:
     with st.container(border=True):
         st.subheader("Alert reviews")
         st.dataframe(
-            alerts[
+            reviews_for_display(alerts, show_review_names)[
                 [
                     "time",
                     "surgery",
@@ -346,6 +352,7 @@ with tab_alerts:
                 ]
             ],
             hide_index=True,
+            row_height=100 if show_review_names else None,
             column_config={
                 "time": st.column_config.DatetimeColumn("Date", format="DD MMM YYYY"),
                 "review": st.column_config.TextColumn("Review", width="large"),
@@ -376,7 +383,7 @@ with tab_browser:
     st.caption(f"{len(browser):,} matching reviews")
 
     event = st.dataframe(
-        browser[
+        reviews_for_display(browser, show_review_names)[
             [
                 "time",
                 "surgery",
@@ -394,6 +401,7 @@ with tab_browser:
         ],
         hide_index=True,
         on_select="rerun",
+        row_height=100 if show_review_names else None,
         selection_mode="single-row",
         column_config={
             "time": st.column_config.DatetimeColumn("Date", format="DD MMM YYYY"),
@@ -421,6 +429,10 @@ with tab_browser:
         with st.container(border=True):
             st.subheader("Review detail")
             st.markdown(f"#### {row['review']}")
+            if show_review_names:
+                names = review_people(row.get("review_PER"))
+                if names:
+                    st.text(f"People mentioned: {', '.join(names)}")
             st.caption(
                 f"{row['time']:%d %b %Y %H:%M} · {row['surgery']} · "
                 f"rating {row['rating_score']:.0f}/5 · {row['review_len']} words"
@@ -511,6 +523,7 @@ with tab_report:
             )
             active_report_key = (
                 report_selection_key(report_surgery, report_month), report_provider,
+                show_review_names,
             )
 
             if st.session_state.get("monthly_report_pdf_key") != active_report_key:
@@ -559,6 +572,7 @@ with tab_report:
                             pdf_bytes = generate_monthly_report_pdf(
                                 df_all, report_surgery, report_month,
                                 use_groq=report_provider == "Groq",
+                                show_names=show_review_names,
                             )
                         st.session_state["monthly_report_pdf_bytes"] = pdf_bytes
                         st.session_state["monthly_report_pdf_filename"] = (

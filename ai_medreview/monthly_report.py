@@ -12,6 +12,8 @@ import unicodedata
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import pandas as pd
 
+from ai_medreview.presentation import review_people
+
 
 RATINGS = (
     ("Very good", 5),
@@ -231,6 +233,8 @@ def build_report_context(
     surgery: str,
     month: str | pd.Period,
     generated_on: date | None = None,
+    *,
+    show_names: bool = False,
 ) -> dict[str, object]:
     """Build deterministic, template-ready monthly report data."""
 
@@ -281,6 +285,7 @@ def build_report_context(
             {
                 "date": row["time"].strftime("%d %B %Y"),
                 "text": "" if pd.isna(row.get("review")) else str(row.get("review")),
+                "mentioned_names": review_people(row.get("review_PER")) if show_names else [],
                 "rating_label": rating_labels.get(stars, "Not rated"),
                 "stars": stars,
                 "topic": topic,
@@ -354,6 +359,7 @@ def generate_monthly_report_pdf(
     generated_on: date | None = None,
     *,
     use_groq: bool = False,
+    show_names: bool = False,
 ) -> bytes:
     """Generate an in-memory PDF for a surgery's monthly reviews."""
 
@@ -361,7 +367,9 @@ def generate_monthly_report_pdf(
     from ai_medreview.monthly_summary import generate_ai_summary
 
     scoped = filter_report_reviews(reviews, surgery, month)
-    context = build_report_context(scoped, surgery, month, generated_on=generated_on)
+    context = build_report_context(
+        scoped, surgery, month, generated_on=generated_on, show_names=show_names,
+    )
     context["ai_summary"] = generate_ai_summary(context, use_groq=use_groq)
     html = render_report_html(context)
     return HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).write_pdf()

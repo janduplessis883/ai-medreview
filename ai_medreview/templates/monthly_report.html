@@ -488,6 +488,9 @@
     <article class="review-card">
       <div class="review-topline"><span class="review-date">{{ review.reference }} · {{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
       <p class="review-text">{{ review.text }}</p>
+      {% if review.mentioned_names %}
+      <p class="review-text">People mentioned: {{ review.mentioned_names | join(', ') }}</p>
+      {% endif %}
       <div class="pill-row">
         <span class="pill pill-category">{{ review.topic }}</span>
         <span class="pill {% if review.actionability.score is none %}severity-unclassified{% else %}severity-{{ review.actionability.score }}{% endif %}">Actionability: {{ review.actionability.label }}</span>

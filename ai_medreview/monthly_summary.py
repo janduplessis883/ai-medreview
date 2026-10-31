@@ -125,7 +125,10 @@ def generate_ai_summary(
 ) -> dict[str, object]:
     """Use the selected provider; fail rather than return partial insights."""
 
-    reviews = [review for review in context["reviews"] if review["text"].strip()]
+    reviews = [
+        {key: value for key, value in review.items() if key != "mentioned_names"}
+        for review in context["reviews"] if review["text"].strip()
+    ]
     if not reviews:
         raise ValueError("AI summary needs written feedback; this month has none.")
     payload = {
