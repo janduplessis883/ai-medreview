@@ -13,12 +13,11 @@ import pandas as pd
 import streamlit as st
 
 from ai_medreview.data_cleaning import deduplicate_reviews
+from ai_medreview.review_names import review_people, reviews_for_display
 from ai_medreview.presentation import (
     format_flag_score,
     format_review_scores,
     review_score_progress_options,
-    review_people,
-    reviews_for_display,
 )
 
 # Import the LLM client for external LLM integration

@@ -59,12 +59,12 @@ def test_review_score_progress_bar_uses_zero_to_three_scale():
     ("malformed [", []), ("{'Alice': 1}", []),
 ])
 def test_review_people_handles_csv_lists_and_missing_values(value, expected):
-    from ai_medreview.presentation import review_people
+    from ai_medreview.review_names import review_people
     assert review_people(value) == expected
 
 
 def test_review_display_adds_names_only_when_enabled_without_changing_source():
-    from ai_medreview.presentation import reviews_for_display
+    from ai_medreview.review_names import reviews_for_display
     source = pd.DataFrame({"review": ["Helpful PERSON", "No names"], "review_PER": ["['Alice']", None]})
     assert reviews_for_display(source, False)["review"].tolist() == source["review"].tolist()
     assert reviews_for_display(source, True)["review"].tolist() == [

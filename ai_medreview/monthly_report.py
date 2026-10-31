@@ -12,7 +12,7 @@ import unicodedata
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import pandas as pd
 
-from ai_medreview.presentation import review_people
+from ai_medreview.review_names import review_people
 
 
 RATINGS = (

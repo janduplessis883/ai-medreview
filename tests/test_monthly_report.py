@@ -804,6 +804,21 @@ def test_names_toggle_defaults_off_and_invalidates_pdf():
     )
 
 
+def test_app_starts_with_previous_presentation_module_loaded(monkeypatch):
+    from ai_medreview import presentation
+
+    # Emulate a running server retaining the module from before the names feature.
+    monkeypatch.delattr(presentation, "review_people", raising=False)
+    monkeypatch.delattr(presentation, "reviews_for_display", raising=False)
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
+    assert not app.exception
+    app.sidebar.toggle(key="show_review_names").set_value(True).run(timeout=30)
+    assert not app.exception
+    next(button for button in app.button if button.label == "Generate report").click().run(timeout=60)
+    assert not app.exception
+    assert app.download_button
+
+
 def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
     package_lines = (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
     packages = {
