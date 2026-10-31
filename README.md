@@ -23,3 +23,16 @@ Looking to enhance patient feedback in your PCN or ICB with cutting-edge AI? ðŸš
 #HealthcareInnovation #AI #primarycare
 
 ![Image](images/aimed2.gif)
+
+## Monthly PDF AI provider
+
+In `streamlit_app.py`, choose **PDF reports â†’ PDF AI provider** in the sidebar
+before clicking **Generate report**. FreeLLMAPI uses the existing `LLM_API_KEY`,
+`LLM_BASE_URL` (OpenAI-compatible base URL) and `LLM_MODEL` settings. Groq uses
+`GROQ_API_KEY` and the optional `GROQ_MODEL` setting (default:
+`openai/gpt-oss-120b`). Configure these in Streamlit secrets or environment
+variables. Groq's base URL follows its [OpenAI compatibility documentation](https://console.groq.com/docs/openai).
+
+If a service fails, choose the other provider and generate again. Changing
+provider clears the previous PDF download; each report uses only the selected
+provider, including any summary correction attempt.

@@ -352,6 +352,8 @@ def generate_monthly_report_pdf(
     surgery: str,
     month: str | pd.Period,
     generated_on: date | None = None,
+    *,
+    use_groq: bool = False,
 ) -> bytes:
     """Generate an in-memory PDF for a surgery's monthly reviews."""
 
@@ -360,6 +362,6 @@ def generate_monthly_report_pdf(
 
     scoped = filter_report_reviews(reviews, surgery, month)
     context = build_report_context(scoped, surgery, month, generated_on=generated_on)
-    context["ai_summary"] = generate_ai_summary(context)
+    context["ai_summary"] = generate_ai_summary(context, use_groq=use_groq)
     html = render_report_html(context)
     return HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).write_pdf()

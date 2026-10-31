@@ -62,7 +62,7 @@ def call_llm(
         config = get_groq_config()
         api_key = config["api_key"]
         model = model or config["model"]
-        base_url = "https://api.groq.com/openai"
+        base_url = "https://api.groq.com/openai/v1"
     else:
         config = get_llm_config()
         api_key = config["api_key"]

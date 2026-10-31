@@ -132,6 +132,16 @@ with st.sidebar:
         "sentiment strength 0–4)."
     )
 
+    st.divider()
+    st.subheader("PDF reports")
+    report_provider = st.selectbox(
+        "PDF AI provider",
+        ["FreeLLMAPI", "Groq"],
+        key="monthly_report_provider",
+        help="Choose the AI service for the monthly PDF summary. Each uses its configured model.",
+    )
+    st.caption("If report generation fails, try the other provider and generate again.")
+
 mask = df_all["surgery"].isin(picked_surgeries)
 if isinstance(date_range, tuple) and len(date_range) == 2:
     start, end = date_range
@@ -499,7 +509,9 @@ with tab_report:
                 format_func=lambda period: period.strftime("%B %Y"),
                 key="monthly_report_month",
             )
-            active_report_key = report_selection_key(report_surgery, report_month)
+            active_report_key = (
+                report_selection_key(report_surgery, report_month), report_provider,
+            )
 
             if st.session_state.get("monthly_report_pdf_key") != active_report_key:
                 st.session_state.pop("monthly_report_pdf_bytes", None)
@@ -543,9 +555,10 @@ with tab_report:
                     st.session_state.pop("monthly_report_pdf_filename", None)
                     st.session_state.pop("monthly_report_pdf_key", None)
                     try:
-                        with st.spinner("Analysing feedback and creating your PDF report..."):
+                        with st.spinner(f"Analysing feedback with {report_provider} and creating your PDF report..."):
                             pdf_bytes = generate_monthly_report_pdf(
-                                df_all, report_surgery, report_month
+                                df_all, report_surgery, report_month,
+                                use_groq=report_provider == "Groq",
                             )
                         st.session_state["monthly_report_pdf_bytes"] = pdf_bytes
                         st.session_state["monthly_report_pdf_filename"] = (
@@ -554,7 +567,10 @@ with tab_report:
                         st.session_state["monthly_report_pdf_key"] = active_report_key
                         st.success("Your monthly report is ready to download.", icon=":material/check:")
                     except Exception as error:
-                        st.error(title=f" The report could not be created due to an AI error - Try again.:", body=f"{error}", icon=":material/cancel:")
+                        st.error(
+                            f"The report could not be created using {report_provider}. {error}",
+                            icon=":material/cancel:",
+                        )
 
                 if (
                     st.session_state.get("monthly_report_pdf_key")

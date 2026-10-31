@@ -113,6 +113,29 @@ def test_preview_does_not_call_llm(monkeypatch):
     client.assert_not_called()
 
 
+@pytest.mark.parametrize("use_groq", [False, True])
+def test_selected_provider_is_used_for_summary_and_correction(monkeypatch, use_groq):
+    from ai_medreview.monthly_summary import generate_ai_summary
+
+    client = Mock(side_effect=["not JSON", json.dumps(valid_summary())])
+    monkeypatch.setattr(llm_client, "call_llm", client)
+    assert generate_ai_summary(report_context(), use_groq=use_groq) == valid_summary()
+    assert all(call.kwargs["use_groq"] == use_groq for call in client.call_args_list)
+
+
+def test_groq_requests_use_versioned_chat_endpoint(monkeypatch):
+    monkeypatch.setattr(llm_client, "get_groq_config", lambda: {
+        "api_key": "test-key", "model": "configured-model",
+    })
+    response = Mock()
+    response.json.return_value = {"choices": [{"message": {"content": "summary"}}]}
+    post = Mock(return_value=response)
+    monkeypatch.setattr(llm_client.requests, "post", post)
+    assert llm_client.call_llm([{"role": "user", "content": "test"}], use_groq=True) == "summary"
+    assert post.call_args.args[0] == "https://api.groq.com/openai/v1/chat/completions"
+    assert post.call_args.kwargs["json"]["model"] == "configured-model"
+
+
 @pytest.mark.parametrize("fence", ["```json\n{}\n```", "```\n{}\n```", "```JSON\n{}\n```"])
 def test_summary_accepts_json_code_fences(monkeypatch, fence):
     from ai_medreview.monthly_summary import generate_ai_summary

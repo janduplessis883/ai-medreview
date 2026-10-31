@@ -120,8 +120,10 @@ def _validate_summary(raw: str, references: set[str]) -> dict[str, object]:
     return result
 
 
-def generate_ai_summary(context: dict[str, object]) -> dict[str, object]:
-    """Use the configured external LLM; fail rather than return partial insights."""
+def generate_ai_summary(
+    context: dict[str, object], *, use_groq: bool = False,
+) -> dict[str, object]:
+    """Use the selected provider; fail rather than return partial insights."""
 
     reviews = [review for review in context["reviews"] if review["text"].strip()]
     if not reviews:
@@ -143,11 +145,14 @@ def generate_ai_summary(context: dict[str, object]) -> dict[str, object]:
     references = {review["reference"] for review in reviews}
     for attempt in range(2):
         try:
-            raw = llm_client.call_llm(messages=messages, temperature=0.2)
+            raw = llm_client.call_llm(
+                messages=messages, temperature=0.2, use_groq=use_groq,
+            )
         except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
             raise ValueError(
                 "AI summary could not be generated. Click Generate report to retry. "
-                "If this continues, check the AI service configuration or availability."
+                "If this continues, switch PDF AI provider in the sidebar or check "
+                "the selected service's configuration and availability."
             ) from exc
         try:
             return _validate_summary(raw, references)

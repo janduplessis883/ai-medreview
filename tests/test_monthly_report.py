@@ -750,6 +750,34 @@ def test_streamlit_app_generates_download_from_monthly_report_tab() -> None:
     assert not app.download_button
 
 
+def test_sidebar_provider_controls_pdf_generation_and_invalidates_download(summary_service):
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
+    provider = next(widget for widget in app.sidebar.selectbox if widget.label == "PDF AI provider")
+    assert provider.value == "FreeLLMAPI"
+    assert provider.options == ["FreeLLMAPI", "Groq"]
+    next(button for button in app.button if button.label == "Generate report").click().run(timeout=60)
+    assert not app.exception
+    assert app.download_button
+    assert summary_service.call_args.kwargs["use_groq"] is False
+
+    app.sidebar.selectbox(key="monthly_report_provider").set_value("Groq").run(timeout=30)
+    assert not app.download_button
+    next(button for button in app.button if button.label == "Generate report").click().run(timeout=60)
+    assert not app.exception
+    assert app.download_button
+    assert summary_service.call_args.kwargs["use_groq"] is True
+
+
+def test_pdf_service_failure_shows_recovery_message_without_crashing(summary_service):
+    summary_service.side_effect = ValueError("Service unavailable")
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
+    next(button for button in app.button if button.label == "Generate report").click().run(timeout=60)
+    assert not app.exception
+    assert not app.download_button
+    assert "FreeLLMAPI" in app.error[0].value
+    assert "switch PDF AI provider" in app.error[0].value
+
+
 def test_streamlit_cloud_declares_weasyprint_system_dependencies() -> None:
     package_lines = (Path(__file__).parents[1] / "packages.txt").read_text().splitlines()
     packages = {
