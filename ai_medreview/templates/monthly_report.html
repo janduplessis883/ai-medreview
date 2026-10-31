@@ -288,6 +288,21 @@
       border-style: dashed;
       color: #657480;
     }
+
+    .insight-group {
+      border-left: 1mm solid var(--teal);
+      padding: 3mm 4mm;
+      margin: 0 0 4mm;
+      background: var(--blue-wash);
+      overflow-wrap: anywhere;
+    }
+    .insight-group.concerns { border-color: var(--orange); background: var(--warn-wash); }
+    .insight-group.responses { border-color: var(--navy); background: var(--wash); }
+    .insight-group h3 { color: var(--navy); font-size: 11pt; margin: 0 0 2mm; }
+    .insight-group ul { margin: 0; padding-left: 5mm; }
+    .insight-group li { margin: 0 0 2mm; break-inside: avoid; }
+    .insight-references { color: var(--muted); font-size: 8pt; }
+    .insight-note { color: var(--muted); font-size: 8.5pt; overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
@@ -443,12 +458,35 @@
     {% endif %}
   </section>
 
+  {% if ai_summary is defined %}
+  <section class="page-break">
+    <h2>AI summary</h2>
+    <p class="section-intro">Insights from {{ month_label }} feedback and suggested responses for the practice.</p>
+    <p class="insight-note">{{ ai_summary.evidence_note }}</p>
+    {% for key, heading in [('strengths', 'What patients value'), ('concerns', 'Where patients experience difficulties'), ('responses', 'Suggested practical responses')] %}
+    <div class="insight-group {{ key }}">
+      <h3>{{ heading }}</h3>
+      {% if ai_summary[key] %}
+      <ul>
+        {% for insight in ai_summary[key] %}
+        <li>{{ insight.text }} <span class="insight-references">[{{ insight.references|join(', ') }}]</span></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No supported {{ 'strengths' if key == 'strengths' else 'concerns' }} identified in the written feedback.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <p class="insight-note">AI-generated interpretation of reported experiences. Suggestions support the practice’s decisions and require human review. References such as R1 point to the review list.</p>
+  </section>
+  {% endif %}
+
   <section class="page-break">
     <h2>Review list</h2>
     <p class="section-intro">All reviews for {{ surgery }} in {{ month_label }}, sorted by category and then newest first.</p>
     {% for review in reviews %}
     <article class="review-card">
-      <div class="review-topline"><span class="review-date">{{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
+      <div class="review-topline"><span class="review-date">{{ review.reference }} · {{ review.date }}</span><span class="review-rating">{% if review.stars %}{{ review.rating_label }} · {{ review.stars }} stars{% else %}Not rated{% endif %}</span></div>
       <p class="review-text">{{ review.text }}</p>
       <div class="pill-row">
         <span class="pill pill-category">{{ review.topic }}</span>

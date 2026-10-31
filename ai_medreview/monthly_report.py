@@ -284,6 +284,7 @@ def build_report_context(
                 "rating_label": rating_labels.get(stars, "Not rated"),
                 "stars": stars,
                 "topic": topic,
+                "sentiment": _sentiment_label(row.get("jev_sentiment")) or "Not classified",
                 "actionability": _score_info(row.get("jev_actionability")),
                 "urgency": _score_info(row.get("jev_urgency")),
                 "dignity_inclusion": normalize_boolean_flag(
@@ -298,6 +299,8 @@ def build_report_context(
             str(review["topic"]).casefold(),
         )
     )
+    for number, review in enumerate(review_entries, start=1):
+        review["reference"] = f"R{number}"
 
     return {
         "surgery": surgery,
@@ -353,8 +356,10 @@ def generate_monthly_report_pdf(
     """Generate an in-memory PDF for a surgery's monthly reviews."""
 
     from weasyprint import HTML
+    from ai_medreview.monthly_summary import generate_ai_summary
 
     scoped = filter_report_reviews(reviews, surgery, month)
     context = build_report_context(scoped, surgery, month, generated_on=generated_on)
+    context["ai_summary"] = generate_ai_summary(context)
     html = render_report_html(context)
     return HTML(string=html, base_url=str(TEMPLATE_DIRECTORY)).write_pdf()

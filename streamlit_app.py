@@ -539,8 +539,11 @@ with tab_report:
                     icon=":material/picture_as_pdf:",
                     key="generate_monthly_report",
                 ):
+                    st.session_state.pop("monthly_report_pdf_bytes", None)
+                    st.session_state.pop("monthly_report_pdf_filename", None)
+                    st.session_state.pop("monthly_report_pdf_key", None)
                     try:
-                        with st.spinner("Creating your PDF report..."):
+                        with st.spinner("Analysing feedback and creating your PDF report..."):
                             pdf_bytes = generate_monthly_report_pdf(
                                 df_all, report_surgery, report_month
                             )
@@ -549,9 +552,9 @@ with tab_report:
                             safe_report_filename(report_surgery, report_month)
                         )
                         st.session_state["monthly_report_pdf_key"] = active_report_key
-                        st.success("Your monthly report is ready to download.")
+                        st.success("Your monthly report is ready to download.", icon=":material/check:")
                     except Exception as error:
-                        st.error(f"The report could not be created: {error}")
+                        st.error(title=f" The report could not be created due to an AI error - Try again.:", body=f"{error}", icon=":material/cancel:")
 
                 if (
                     st.session_state.get("monthly_report_pdf_key")

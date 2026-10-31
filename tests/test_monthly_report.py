@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import pandas as pd
 import pytest
+import json
+from unittest.mock import Mock
 
 from datetime import date
 from io import BytesIO
@@ -24,6 +26,67 @@ from ai_medreview.monthly_report import (
     safe_report_filename,
     TEMPLATE_DIRECTORY,
 )
+
+
+@pytest.fixture(autouse=True)
+def summary_service(monkeypatch):
+    """Keep PDF and app integration tests off the real patient-data service."""
+    from ai_medreview import llm_client
+
+    service = Mock(return_value=json.dumps({
+        "evidence_note": "AI interpretation of this month's written feedback.",
+        "strengths": [{"text": "Patients valued helpful support.", "references": ["R1"]}],
+        "concerns": [],
+        "responses": [{"text": "Consider preserving helpful support.", "references": ["R1"]}],
+    }))
+    monkeypatch.setattr(llm_client, "call_llm", service)
+    return service
+
+
+def test_pdf_contains_evidence_linked_ai_summary_in_requested_order(summary_service):
+    pdf = generate_monthly_report_pdf(classified_reviews(), "Oak Medical Centre", "2026-10")
+    text = "\n".join(page.extract_text() or "" for page in PdfReader(BytesIO(pdf)).pages)
+    assert text.index("People and sentiment") < text.index("AI summary") < text.index("Review list")
+    assert "What patients value" in text
+    assert "Where patients experience difficulties" in text
+    assert "Suggested practical responses" in text
+    assert "Consider preserving helpful support." in text
+    assert text.count("R1") >= 3
+    assert "R2" in text
+    summary_service.assert_called_once()
+
+
+def test_ai_summary_html_is_escaped():
+    context = build_report_context(classified_reviews(), "Oak Medical Centre", "2026-10")
+    context["ai_summary"] = {
+        "evidence_note": "<script>private()</script>",
+        "strengths": [{"text": "<img src='https://example.com'>", "references": ["R1"]}],
+        "concerns": [],
+        "responses": [{"text": "Consider checking instructions & wording.", "references": ["R1"]}],
+    }
+    html = render_report_html(context)
+    assert "&lt;script&gt;private()&lt;/script&gt;" in html
+    assert "&lt;img" in html
+    assert "<img src=" not in html
+    assert "instructions &amp; wording" in html
+
+
+def test_failed_retry_removes_previous_download_and_can_recover(summary_service):
+    app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
+    assert not app.exception
+    summary_service.assert_not_called()
+    app.button(key="generate_monthly_report").click().run(timeout=60)
+    assert app.download_button
+    summary_service.side_effect = ValueError("private provider details")
+    app.button(key="generate_monthly_report").click().run(timeout=60)
+    assert not app.exception
+    assert not app.download_button
+    assert any("Generate report" in error.value for error in app.error)
+    assert all("private provider details" not in error.value for error in app.error)
+    summary_service.side_effect = None
+    app.button(key="generate_monthly_report").click().run(timeout=60)
+    assert not app.exception
+    assert app.download_button
 
 
 def mixed_reviews() -> pd.DataFrame:
