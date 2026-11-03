@@ -71,6 +71,25 @@ def test_ai_summary_html_is_escaped():
     assert "instructions &amp; wording" in html
 
 
+def test_monthly_report_uses_editorial_brand_system():
+    html = render_report_html(build_report_context(classified_reviews(), "Oak Medical Centre", "2026-10"))
+    assert "ai-medreview-logo.png" in html
+    assert "--paper: #f4f1e8" in html
+    assert "--accent: #ff641f" in html
+    assert "prompt-card" in html
+
+
+def test_monthly_report_uses_a_dedicated_cover_page(summary_service):
+    pdf = generate_monthly_report_pdf(classified_reviews(), "Oak Medical Centre", "2026-10")
+    pages = PdfReader(BytesIO(pdf)).pages
+    cover = pages[0].extract_text() or ""
+    page_two = pages[1].extract_text() or ""
+    assert "Oak Medical Centre" in cover
+    assert "REVIEWS" in cover.upper()
+    assert "Rating overview" not in cover
+    assert page_two.index("Rating overview") < page_two.index("Classification summary")
+
+
 def test_failed_retry_removes_previous_download_and_can_recover(summary_service):
     app = AppTest.from_file(Path(__file__).parents[1] / "streamlit_app.py").run(timeout=30)
     assert not app.exception
@@ -695,12 +714,15 @@ def test_pdf_starts_score_distributions_on_a_fresh_page() -> None:
     )
     pages = PdfReader(BytesIO(pdf_bytes)).pages
     first_page = pages[0].extract_text() or ""
-    second_page = pages[1].extract_text() or ""
+    distribution_page = next(
+        (page.extract_text() or "" for page in pages if "Score distributions" in (page.extract_text() or "")),
+        "",
+    )
 
     assert "Actionability distribution" not in first_page
-    assert "Score distributions" in second_page
-    assert "0 · None" in second_page
-    assert "3 · High" in second_page
+    assert "Score distributions" in distribution_page
+    assert "0 · None" in distribution_page
+    assert "3 · High" in distribution_page
 
 
 def test_unrated_review_uses_a_single_user_friendly_label() -> None:

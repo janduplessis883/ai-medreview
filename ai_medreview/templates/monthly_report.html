@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <title>{{ surgery }} - {{ month_label }} review report</title>
   <style>
+    @font-face {
+      font-family: "Doto";
+      src: url("assets/Doto-ROND-wght.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 100 900;
+    }
+
     @page {
+      background: #f4f1e8;
       size: A4;
       margin: 18mm 16mm 20mm;
       @bottom-right {
@@ -303,12 +311,131 @@
     .insight-group li { margin: 0 0 2mm; break-inside: avoid; }
     .insight-references { color: var(--muted); font-size: 8pt; }
     .insight-note { color: var(--muted); font-size: 8.5pt; overflow-wrap: anywhere; }
+
+    /* Editorial visual system inspired by the supplied reference PDFs. */
+    :root {
+      --paper: #f4f1e8;
+      --panel: #fbf9f3;
+      --accent: #ff641f;
+      --ink: #1d1c18;
+      --body: #3f3c34;
+      --muted: #777266;
+      --line: #d5d1c7;
+      --shadow: #b2b0a8;
+      --green: #3c9a61;
+      --yellow: #f2aa20;
+      --danger: #c44235;
+    }
+
+    @page {
+      size: A4;
+      margin: 16mm 16mm 18mm;
+      @bottom-left {
+        color: var(--muted);
+        content: "AI MEDREVIEW · MONTHLY SURGERY REPORT";
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        font-size: 7.5pt;
+        letter-spacing: 1.2pt;
+      }
+      @bottom-right {
+        color: var(--muted);
+        content: counter(page);
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        font-size: 8pt;
+        font-weight: bold;
+      }
+    }
+
+    html, body {
+      background: var(--paper);
+      color: var(--body);
+      font-family: "Outfit", "Avenir Next", "Trebuchet MS", Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+    .report-footer { display: none; }
+    .hero { background: transparent; break-after: page; color: var(--ink); margin: 0; min-height: 245mm; padding: 0; position: relative; }
+    .hero::after { background: var(--accent); content: ""; display: block; height: 1.4mm; margin-top: 18mm; width: 30mm; }
+    .hero-logo { height: 13mm; object-fit: contain; object-position: left center; width: 13mm; }
+    .hero-mark { height: 16mm; position: absolute; right: 0; top: 0; width: 16mm; }
+    .eyebrow, .meta-label, .card-label, .sentiment-hero-label, .rating-label { color: var(--accent); font-size: 7.5pt; font-weight: bold; letter-spacing: 1.8pt; text-transform: uppercase; }
+    .eyebrow { margin: 35mm 0 7mm; }
+    h1 { color: var(--accent); font-family: "Doto", "Trebuchet MS", Arial, sans-serif; font-size: 34pt; font-weight: 900; letter-spacing: -1.5pt; line-height: 0.98; margin: 0 0 4mm; max-width: 155mm; }
+    .hero-month { color: var(--ink); font-size: 15pt; font-weight: 600; margin: 0 0 7mm; }
+    .hero-meta { border-top: 0.35mm solid var(--ink); margin-top: 18mm; padding-top: 4mm; }
+    .meta-label { color: var(--muted); letter-spacing: 1.1pt; }
+    .meta-value { color: var(--muted); font-size: 12pt; font-weight: 400; margin-top: 1mm; }
+    section { margin: 0 0 12mm; }
+    h2 { color: var(--ink); font-size: 21pt; letter-spacing: -0.8pt; line-height: 1.05; margin: 0 0 3mm; }
+    h3 { color: var(--ink); }
+    .section-intro { color: var(--muted); font-size: 10.5pt; margin: 0 0 6mm; }
+    .rating-grid, .summary-grid, .sentiment-grid, .staff-grid { border-spacing: 2mm; }
+    .rating-card, .summary-card, .sentiment-card { background: var(--panel); border: 0.3mm solid var(--line); border-radius: 2.5mm; box-shadow: 1.4mm 1.4mm 0 var(--shadow); padding: 4mm; }
+    .rating-card, .summary-card { border: 0.6mm solid var(--ink); border-radius: 3mm; box-shadow: none; }
+    .rating-card { height: 35mm; }
+    .rating-label, .card-label { color: var(--muted); letter-spacing: 0.8pt; }
+    .rating-number, .card-value, .sentiment-count { color: var(--ink); }
+    .rating-number { font-size: 22pt; margin: 2mm 0 1mm; }
+    .rating-stars { color: var(--accent); font-size: 8.5pt; }
+    .bar-track { background: #e3dfd4; }
+    .bar-fill { background: var(--accent); }
+    .card-value { font-size: 22pt; }
+    .card-copy, .sentiment-percentage { color: var(--muted); }
+    .prompt-card, .observation, .strength-callout, .insight-group { background: var(--panel); border: 0.7mm solid var(--accent); border-left-width: 0.7mm; border-radius: 3mm; box-shadow: 2.5mm 2.5mm 0 var(--accent); margin: 6mm 0 8mm; padding: 5mm 6mm; }
+    .observation p { margin: 0 0 2mm; }
+    .observation p:last-child { margin-bottom: 0; }
+    .sentiment-hero { background: var(--ink); border-radius: 3mm; box-shadow: 2.5mm 2.5mm 0 var(--accent); margin: 6mm 0; padding: 6mm; }
+    .sentiment-hero-label { color: var(--accent); }
+    .sentiment-hero-value { font-size: 23pt; }
+    .sentiment-hero-copy { color: #ece8dc; }
+    .sentiment-card-positive { border-top: 1.2mm solid var(--green); }
+    .sentiment-card-neutral { border-top: 1.2mm solid var(--yellow); }
+    .sentiment-card-negative { border-top: 1.2mm solid var(--danger); }
+    .strength-callout { border-color: var(--green); box-shadow: 2.5mm 2.5mm 0 var(--green); }
+    .strength-callout strong { color: var(--ink); }
+    .strength-callout span { color: var(--muted); }
+    .distribution-row, .topic-row, .staff-row { border-bottom-color: var(--line); padding: 3mm 0; }
+    .topic-row { border-bottom-style: dotted; }
+    .row-label, .staff-name { color: var(--ink); }
+    .row-value, .staff-count { color: var(--muted); }
+    .staff-row { padding: 3.5mm 0; }
+    .staff-name { font-size: 11.5pt; }
+    .staff-count { font-size: 9.5pt; margin-top: 1mm; }
+    .page-break { break-before: page; }
+    .classification-detail { break-before: page; }
+    .insight-group { border-left-width: 0.7mm; margin-bottom: 7mm; }
+    .insight-group.strengths { border-color: var(--green); box-shadow: 2.5mm 2.5mm 0 var(--green); }
+    .insight-group.concerns { border-color: var(--accent); box-shadow: 2.5mm 2.5mm 0 var(--accent); }
+    .insight-group.responses { border-color: var(--ink); box-shadow: 2.5mm 2.5mm 0 var(--shadow); }
+    .insight-group h3 { font-size: 12pt; }
+    .insight-group li::marker { color: var(--accent); }
+    .insight-note { color: var(--muted); }
+    .review-card { background: var(--panel); border: 0.3mm solid var(--line); border-radius: 2.5mm; box-shadow: 1.5mm 1.5mm 0 var(--shadow); padding: 4mm 5mm; }
+    .review-date { color: var(--ink); font-weight: bold; }
+    .review-rating { color: var(--accent); }
+    .review-text { color: var(--body); font-size: 10.5pt; }
+    .pill { border-radius: 1mm; font-size: 7.3pt; letter-spacing: 0.2pt; }
+    .pill-category { background: #e4f1e5; border-color: #b8d5bc; color: #2e7347; }
+    .severity-0, .risk-inactive { background: transparent; border-color: var(--muted); border-style: dotted; color: var(--muted); }
+    .severity-1 { background: #eeece4; border-color: #d7d2c6; color: var(--body); }
+    .severity-2 { background: #fff0cf; border-color: #e7c775; color: #7d5d0d; }
+    .severity-3, .risk-active { background: #ffe2d7; border-color: #f0a98c; color: #a63d20; }
+    .severity-unclassified { background: transparent; border-color: var(--line); border-style: dotted; color: var(--muted); }
+    .mix-positive, .mix-neutral, .mix-negative { background: var(--panel); border: 0.3mm solid; border-radius: 1.5mm; font-size: 8pt; margin-left: 1.5mm; padding: 1.4mm 2.7mm; }
+    .mix-positive { border-color: var(--green); color: #2e7d4e; }
+    .mix-neutral { border-color: var(--yellow); color: #9a6500; }
+    .mix-negative { border-color: var(--danger); color: #b03029; }
   </style>
 </head>
 <body>
   <div class="report-footer">{{ surgery }} · {{ month_label }}</div>
 
   <header class="hero">
+    <img class="hero-logo" src="assets/ai-medreview-logo.png" alt="AI MedReview logo">
+    <svg class="hero-mark" viewBox="0 0 100 100" aria-hidden="true">
+      <polygon points="50,4 92,20 98,64 74,94 28,86 8,50 14,20" fill="#ff641f"></polygon>
+      <polygon points="92,20 98,64 74,94 77,82 91,58 86,25" fill="#ffad73"></polygon>
+    </svg>
     <p class="eyebrow">AI MedReview · Monthly patient feedback</p>
     <h1>{{ surgery }}</h1>
     <p class="hero-month">{{ month_label }}</p>
@@ -369,7 +496,7 @@
       </td>
     </tr></table>
 
-    <div class="observation">
+    <div class="observation prompt-card">
       <p>{{ actionability.summary }}</p>
       <p>{{ urgency.summary }}</p>
       <p>{{ dignity_inclusion.summary }}</p>
