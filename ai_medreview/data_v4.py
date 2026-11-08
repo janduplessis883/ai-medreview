@@ -25,20 +25,14 @@ import hashlib
 import json
 import math
 import os
+import re
+import unicodedata
 import warnings
 from typing import Any
 
 import numpy as np
 import pandas as pd
 from colorama import init
-from nlpretext import Preprocessor
-from nlpretext.basic.preprocess import (
-    normalize_whitespace,
-    remove_eol_characters,
-    remove_punct,
-    replace_phone_numbers,
-)
-from nlpretext.social.preprocess import remove_hashtag, remove_mentions
 from tqdm import tqdm
 from transformers import pipeline
 
@@ -486,26 +480,28 @@ def anonymize_reviews(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-# --- Text preprocessing (retained from data_v2 — keeps phone-number masking) ------------------------
+# --- Text preprocessing ---------------------------------------------------------------------------
+
+_SOCIAL_TAG = re.compile(r"[@#]\w*")
+# Preserve the previous pipeline's default phone matching rule (from textacy).
+_PHONE_NUMBER = re.compile(
+    r"(?<![\w)])(?:\+?1[ .-]?)?(?:\(?\d{3}\)?[ .-]?)?"
+    r"\d{3}[ .-]?\d{4}(?:\s?(?:ext\.?|[#x-])\s?\d{2,6})?(?!\w)"
+)
 
 
 def text_preprocessing(text: str) -> str:
-    preprocessor = Preprocessor()
-    preprocessor.pipe(remove_mentions)
-    preprocessor.pipe(remove_hashtag)
-    preprocessor.pipe(remove_eol_characters)
-    preprocessor.pipe(remove_punct)
-    preprocessor.pipe(normalize_whitespace)
-    preprocessor.pipe(
-        replace_phone_numbers,
-        args={"country_to_detect": ["GB", "FR"], "replace_with": "[*PHONE*]"},
+    text = _SOCIAL_TAG.sub("", text)
+    text = "".join(
+        " " if unicodedata.category(char).startswith("P") else char for char in text
     )
-    return preprocessor.run(text)
+    text = " ".join(text.split())
+    return _PHONE_NUMBER.sub("[*PHONE*]", text)
 
 
 @time_it
 def preprocess_reviews(data: pd.DataFrame) -> pd.DataFrame:
-    logger.info("📗 Text Preprocessing with *NLPretext")
+    logger.info("📗 Clean review text and mask phone numbers")
     data["review"] = data["review"].apply(
         lambda x: text_preprocessing(str(x)) if not pd.isna(x) else np.nan
     )
@@ -644,6 +640,21 @@ async def jev_analyze_reviews(
                     axis=1,
                 )
             logger.info(f"♻️ Resumed {len(done)} JEV results from checkpoint.")
+
+    # Both empty columns and CSV checkpoint values can infer the wrong dtype.
+    result_dtypes = {
+        "jev_sentiment": "string",
+        "jev_primary_topic": "string",
+        "jev_secondary_topics": "string",
+        "jev_topic_probabilities": "string",
+        "jev_staff_group": "string",
+        "jev_clinical_safety_concern": "boolean",
+        "jev_dignity_or_inclusion_concern": "boolean",
+        "jev_leaving_risk": "boolean",
+    }
+    data = data.astype(
+        {column: result_dtypes.get(column, "float64") for column in JEV_COLUMNS}
+    )
 
     pending = data[data["jev_primary_topic"].isna()]
     if pending.empty:
