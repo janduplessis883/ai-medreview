@@ -9,7 +9,7 @@ from google.oauth2 import service_account
 # # Load the .env file
 # load_dotenv()
 
-secret_path = "/Users/janduplessis/code/janduplessis883/ai-medreview/secret/google_sheets_secret.json"
+secret_path = "/Users/janduplessis/code/janduplessis883/ai-medreview/secret/aimedreview-sheet-0194a3e5d1b5.json"
 
 
 class SheetHelper:
